@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Assessment Copilot - Dosen Dashboard">
+  <title>Dashboard Dosen - AI Assessment Copilot</title>
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+
+  <!-- Tailwind CSS v4 CDN & Custom Theme Tokens -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-primary-green: #16A36A;
+      --color-dark-green: #087A4F;
+      --color-light-green: #E8F7F0;
+      --color-green-hover: #138959;
+      --color-main-bg: #F5F7F6;
+      --color-card-bg: #FFFFFF;
+      --color-sidebar-bg: #FFFFFF;
+      --color-topbar-bg: #FFFFFF;
+      --color-text-primary: #1F2933;
+      --color-text-secondary: #6B7280;
+      --color-text-muted: #9CA3AF;
+      --color-text-on-primary: #FFFFFF;
+      --color-border-color: #E5E7EB;
+      --color-border-light: #F0F2F4;
+      --color-status-active-bg: #E8F7F0;
+      --color-status-active-text: #087A4F;
+      --color-status-submitted-bg: #EFF6FF;
+      --color-status-submitted-text: #2563EB;
+      --color-status-pending-bg: #FEF3C7;
+      --color-status-pending-text: #D97706;
+      --color-status-graded-bg: #ECFDF5;
+      --color-status-graded-text: #059669;
+      --color-status-danger-bg: #FEE2E2;
+      --color-status-danger-text: #DC2626;
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  </style>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-main-bg text-text-primary antialiased font-sans">
+
+  <div class="app-layout flex min-h-screen bg-main-bg relative">
+    
+    <!-- Mobile Drawer Backdrop -->
+    <div id="drawerBackdrop" class="drawer-backdrop"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar w-[260px] bg-sidebar-bg border-r border-border-color flex flex-col fixed top-0 bottom-0 left-0 z-100 transition-transform">
+      <div class="sidebar-header p-5 md:py-6 md:px-5 border-b border-border-light">
+        <a href="dosen.html" class="brand-logo flex items-center gap-3 no-underline">
+          <div class="brand-icon w-9.5 h-9.5 rounded-[10px] bg-light-green text-primary-green flex items-center justify-center font-bold text-lg shadow-xs shrink-0">
+            <i data-lucide="check-check" style="width: 20px; height: 20px;"></i>
+          </div>
+          <div class="brand-text flex flex-col">
+            <span class="brand-name text-base font-bold text-text-primary tracking-tight leading-tight">AI Assessment</span>
+            <span class="brand-tagline text-[11px] text-text-secondary font-normal mt-0.5">Dosen Portal</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="sidebar-nav-container flex-1 overflow-y-auto py-5 px-3.5">
+        <!-- MAIN Section -->
+        <div class="nav-section mb-6">
+          <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">MAIN</div>
+          <ul class="nav-menu list-none flex flex-col gap-1">
+            <li>
+              <a href="dosen.html" class="nav-link active flex items-center gap-3 py-2 px-3 rounded-md bg-light-green text-dark-green text-[13.5px] font-semibold transition">
+                <i data-lucide="layout-dashboard" class="nav-icon w-4.5 h-4.5 text-primary-green"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- ASSESSMENT Section -->
+        <div class="nav-section mb-6">
+          <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">ASSESSMENT</div>
+          <ul class="nav-menu list-none flex flex-col gap-1">
+            <li>
+              <a href="classes.html" id="navClassesLink" class="nav-link flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary">
+                <i data-lucide="graduation-cap" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Classes</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Rubrics">
+                <i data-lucide="file-check-2" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Rubrics</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Assignments">
+                <i data-lucide="file-text" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Assignments</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Assessments">
+                <i data-lucide="clipboard-check" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Assessments</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- GENERAL Section -->
+        <div class="nav-section mb-6">
+          <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">GENERAL</div>
+          <ul class="nav-menu list-none flex flex-col gap-1">
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Settings">
+                <i data-lucide="settings" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Help & Support">
+                <i data-lucide="help-circle" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Help</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link nav-link-logout js-logout-btn flex items-center gap-3 py-2 px-3 rounded-md text-status-danger-text text-[13.5px] font-medium transition hover:bg-status-danger-bg">
+                <i data-lucide="log-out" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sidebar-footer py-4 px-5 border-t border-border-light text-[11px] text-text-muted">
+        <span>AI Assessment Copilot &copy; 2026</span>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper flex-1 ml-0 md:ml-[260px] flex flex-col min-w-0 transition-[margin]">
+      
+      <!-- TOPBAR -->
+      <header class="topbar h-[68px] bg-topbar-bg border-b border-border-color flex items-center justify-between px-4 md:px-8 sticky top-0 z-90">
+        <div class="topbar-left flex items-center gap-4 flex-1 max-w-[420px]">
+          <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Open Sidebar Menu">
+            <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
+          </button>
+          
+          <div class="search-box relative flex items-center w-full">
+            <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);" class="absolute left-3"></i>
+            <input type="text" id="topbarSearchInput" placeholder="Search classes, assignments, or students..." aria-label="Search" class="w-full pl-9 pr-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-md focus:outline-none focus:border-primary-green focus:bg-white transition">
+          </div>
+        </div>
+
+        <div class="topbar-right flex items-center gap-3.5">
+          <!-- Notification Button -->
+          <button type="button" class="icon-btn js-future-feature relative p-2 rounded-md text-text-secondary hover:bg-slate-50 hover:text-text-primary transition" data-title="Notifications" aria-label="View notifications">
+            <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+            <span class="badge-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-status-danger-text"></span>
+          </button>
+
+          <!-- User Profile Dropdown -->
+          <div class="profile-dropdown-container relative">
+            <button type="button" id="profileDropdownTrigger" class="profile-trigger flex items-center gap-2.5 p-1.5 rounded-md hover:bg-slate-50 transition cursor-pointer" aria-haspopup="true" aria-expanded="false" aria-label="User profile menu">
+              <div class="profile-avatar js-user-avatar w-8.5 h-8.5 rounded-full bg-light-green text-primary-green font-bold text-xs flex items-center justify-center">DS</div>
+              <div class="profile-info hidden sm:flex flex-col text-left">
+                <span class="profile-name js-user-name text-xs font-semibold text-text-primary">Dr. Budi Santoso</span>
+                <span class="profile-role-tag js-user-role text-[10.5px] text-text-secondary">Dosen</span>
+              </div>
+              <i data-lucide="chevron-down" style="width: 14px; height: 14px; color: var(--text-muted); margin-left: 2px;"></i>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div id="profileDropdownMenu" class="dropdown-menu">
+              <div class="dropdown-user-header">
+                <div class="full-name js-user-name">Dr. Budi Santoso</div>
+                <div class="user-email js-user-email">dosen@example.com</div>
+              </div>
+              <button type="button" class="dropdown-item js-future-feature" data-title="My Profile">
+                <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                <span>Profile</span>
+              </button>
+              <button type="button" class="dropdown-item js-future-feature" data-title="Account Settings">
+                <i data-lucide="sliders" style="width: 16px; height: 16px;"></i>
+                <span>Settings</span>
+              </button>
+              <div style="height: 1px; background-color: var(--border-light); margin: 4px 0;"></div>
+              <button type="button" class="dropdown-item text-danger js-logout-btn">
+                <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <main class="main-content flex-1 p-5 md:p-8">
+
+        <!-- Header Section -->
+        <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-7">
+          <div>
+            <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Welcome back, <span class="js-user-name">Dr. Budi Santoso</span></h1>
+            <p class="page-subtitle text-sm text-text-secondary mt-1">Monitor your classes and assessment activities.</p>
+          </div>
+          <div class="header-actions flex flex-wrap items-center gap-2.5">
+            <button type="button" data-component="button" data-variant="secondary" data-size="md" class="btn btn-secondary js-future-feature" data-title="Create Rubric">
+              <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+              <span>Create Rubric</span>
+            </button>
+            <button type="button" data-component="button" data-variant="secondary" data-size="md" class="btn btn-secondary js-future-feature" data-title="Upload Assignment">
+              <i data-lucide="upload-cloud" style="width: 16px; height: 16px;"></i>
+              <span>Upload Assignment</span>
+            </button>
+            <button type="button" id="createClassBtn" data-component="button" data-variant="primary" data-size="md" class="btn btn-primary" data-title="Create Class">
+              <i data-lucide="folder-plus" style="width: 16px; height: 16px;"></i>
+              <span>Create Class</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Summary Cards -->
+        <section class="stats-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8" aria-label="Summary Statistics">
+          <!-- Card 1: Total Classes -->
+          <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
+            <div class="stat-info flex flex-col">
+              <span class="stat-label text-xs text-text-secondary font-medium mb-1">Total Classes</span>
+              <span class="stat-value text-2xl font-bold text-text-primary tracking-tight">5</span>
+              <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-text-secondary mt-1">
+                <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
+                Active semester
+              </span>
+            </div>
+            <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-light-green text-primary-green flex items-center justify-center shrink-0">
+              <i data-lucide="book-open" style="width: 22px; height: 22px;"></i>
+            </div>
+          </div>
+
+          <!-- Card 2: Total Assignments -->
+          <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
+            <div class="stat-info flex flex-col">
+              <span class="stat-label text-xs text-text-secondary font-medium mb-1">Total Assignments</span>
+              <span class="stat-value text-2xl font-bold text-text-primary tracking-tight">24</span>
+              <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-text-secondary mt-1">
+                <i data-lucide="file-check" style="width: 12px; height: 12px;"></i>
+                Across 5 classes
+              </span>
+            </div>
+            <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <i data-lucide="file-text" style="width: 22px; height: 22px;"></i>
+            </div>
+          </div>
+
+          <!-- Card 3: Pending Reviews -->
+          <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
+            <div class="stat-info flex flex-col">
+              <span class="stat-label text-xs text-text-secondary font-medium mb-1">Pending Reviews</span>
+              <span class="stat-value text-2xl font-bold text-text-primary tracking-tight">8</span>
+              <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-amber-600 mt-1">
+                <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                Requires attention
+              </span>
+            </div>
+            <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+              <i data-lucide="alert-circle" style="width: 22px; height: 22px;"></i>
+            </div>
+          </div>
+
+          <!-- Card 4: Completed Assessments -->
+          <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
+            <div class="stat-info flex flex-col">
+              <span class="stat-label text-xs text-text-secondary font-medium mb-1">Completed Assessments</span>
+              <span class="stat-value text-2xl font-bold text-text-primary tracking-tight">16</span>
+              <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-text-secondary mt-1">
+                <i data-lucide="check-circle" style="width: 12px; height: 12px;"></i>
+                Finalized & released
+              </span>
+            </div>
+            <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <i data-lucide="award" style="width: 22px; height: 22px;"></i>
+            </div>
+          </div>
+        </section>
+
+        <!-- Main Dashboard Content Grid -->
+        <div class="dashboard-grid grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Recent Classes (Dynamic via apiService & CRUD) -->
+          <div class="section-card bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+            <div class="section-header flex items-center justify-between px-6 py-4.5 border-b border-border-light">
+              <h2 class="section-title text-base font-bold text-text-primary">Recent Classes</h2>
+              <a href="classes.html" class="section-action-link text-xs font-semibold text-primary-green hover:text-dark-green transition">View all</a>
+            </div>
+            <div class="section-body p-6">
+              <div class="item-list flex flex-col gap-3" id="classesListContainer">
+                <!-- Classes will be loaded dynamically via apiService.fetchClasses() -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity Timeline (Dynamic via apiService) -->
+          <div class="section-card bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+            <div class="section-header flex items-center justify-between px-6 py-4.5 border-b border-border-light">
+              <h2 class="section-title text-base font-bold text-text-primary">Recent Activity</h2>
+              <button type="button" class="section-action-link js-future-feature text-xs font-semibold text-primary-green hover:text-dark-green transition cursor-pointer bg-transparent border-0" data-title="Activity Logs">History</button>
+            </div>
+            <div class="section-body p-6">
+              <div class="timeline-list flex flex-col gap-4" id="activitiesListContainer">
+                <!-- Activities will be loaded dynamically via apiService.fetchActivities() -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- Real CRUD Class Modal (Langkah 5) -->
+  <div id="classModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="classModalTitle">
+    <div class="modal-card class-modal-card">
+      <!-- Modal Header -->
+      <div class="class-modal-header">
+        <div class="class-modal-title-wrap">
+          <div class="class-modal-icon-badge" aria-hidden="true">
+            <i data-lucide="graduation-cap" style="width: 18px; height: 18px;"></i>
+          </div>
+          <h3 class="modal-title" id="classModalTitle">Create New Class</h3>
+        </div>
+        <button type="button" id="closeClassModalBtn" class="class-modal-close-btn" aria-label="Tutup">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body: Form -->
+      <form id="classForm" novalidate class="class-modal-body">
+        <input type="hidden" id="classIdInput" name="id">
+
+        <!-- Nama Kelas -->
+        <div class="form-group">
+          <label class="form-label" for="classNameInput">
+            Nama Kelas / Mata Kuliah <span class="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="classNameInput"
+            name="className"
+            required
+            autocomplete="off"
+            class="form-control"
+            placeholder="Contoh: Pemrograman Web Lanjut"
+          >
+          <div id="classNameFeedback" class="input-feedback" role="alert"></div>
+        </div>
+
+        <!-- Jumlah Mahasiswa & Tugas -->
+        <div class="class-modal-grid">
+          <div class="form-group">
+            <label class="form-label" for="classStudentsInput">
+              Jumlah Mahasiswa <span class="required">*</span>
+            </label>
+            <input
+              type="number"
+              id="classStudentsInput"
+              name="studentsCount"
+              min="1"
+              required
+              class="form-control"
+              placeholder="30"
+            >
+            <div id="classStudentsFeedback" class="input-feedback" role="alert"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="classAssignmentsInput">
+              Jumlah Tugas <span class="required">*</span>
+            </label>
+            <input
+              type="number"
+              id="classAssignmentsInput"
+              name="assignmentsCount"
+              min="1"
+              required
+              class="form-control"
+              placeholder="4"
+            >
+            <div id="classAssignmentsFeedback" class="input-feedback" role="alert"></div>
+          </div>
+        </div>
+
+        <!-- Semester -->
+        <div class="form-group">
+          <label class="form-label" for="classSemesterInput">
+            Semester
+          </label>
+          <input
+            type="text"
+            id="classSemesterInput"
+            name="semester"
+            class="form-control"
+            placeholder="Semester Genap 2025/2026"
+          >
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="class-modal-footer">
+          <button type="button" id="cancelClassModalBtn" class="btn btn-secondary">Batal</button>
+          <button type="submit" id="saveClassBtn" class="btn btn-primary">
+            <i data-lucide="save" style="width: 15px; height: 15px;"></i>
+            <span>Simpan Kelas</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/components/button.js"></script>
+  <script src="../js/components/badge.js"></script>
+  <script src="../js/services/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initDashboard('dosen');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Assessment Copilot - Smarter Assessment, Better Feedback</title>
+  <link rel="stylesheet" href="css/global.css">
+  <script src="js/auth.js"></script>
+  <script>
+    // Immediate auto-redirect
+    (function() {
+      const user = getCurrentUser();
+      if (user) {
+        if (user.role === 'dosen') {
+          window.location.replace('dashboard/dosen.html');
+        } else if (user.role === 'mahasiswa') {
+          window.location.replace('dashboard/mahasiswa.html');
+        } else {
+          window.location.replace('login.html');
+        }
+      } else {
+        window.location.replace('login.html');
+      }
+    })();
+  </script>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; height: 100vh;">
+  <div style="text-align: center;">
+    <p style="color: var(--text-secondary); margin-bottom: 12px;">Memuat AI Assessment Copilot...</p>
+    <a href="login.html" class="btn btn-primary">Buka Halaman Login</a>
+  </div>
+</body>
+</html>

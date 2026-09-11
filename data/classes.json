@@ -1,0 +1,34 @@
+[
+  {
+    "id": "cls-001",
+    "name": "Pemrograman Web",
+    "studentsCount": 32,
+    "assignmentsCount": 4,
+    "status": "active",
+    "semester": "Semester Genap 2025/2026"
+  },
+  {
+    "id": "cls-002",
+    "name": "Basis Data",
+    "studentsCount": 28,
+    "assignmentsCount": 3,
+    "status": "active",
+    "semester": "Semester Genap 2025/2026"
+  },
+  {
+    "id": "cls-003",
+    "name": "Object Oriented Programming",
+    "studentsCount": 30,
+    "assignmentsCount": 5,
+    "status": "active",
+    "semester": "Semester Genap 2025/2026"
+  },
+  {
+    "id": "cls-004",
+    "name": "Kecerdasan Buatan",
+    "studentsCount": 25,
+    "assignmentsCount": 2,
+    "status": "active",
+    "semester": "Semester Genap 2025/2026"
+  }
+]

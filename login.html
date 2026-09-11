@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Assessment Copilot - Sign in to your account. Smarter Assessment, Better Feedback.">
+  <title>Login - AI Assessment Copilot</title>
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/auth.css">
+
+  <!-- Tailwind CSS v4 CDN & Custom Theme Tokens -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-primary-green: #16A36A;
+      --color-dark-green: #087A4F;
+      --color-light-green: #E8F7F0;
+      --color-green-hover: #138959;
+      --color-main-bg: #F5F7F6;
+      --color-card-bg: #FFFFFF;
+      --color-sidebar-bg: #FFFFFF;
+      --color-topbar-bg: #FFFFFF;
+      --color-text-primary: #1F2933;
+      --color-text-secondary: #6B7280;
+      --color-text-muted: #9CA3AF;
+      --color-text-on-primary: #FFFFFF;
+      --color-border-color: #E5E7EB;
+      --color-border-light: #F0F2F4;
+      --color-status-active-bg: #E8F7F0;
+      --color-status-active-text: #087A4F;
+      --color-status-submitted-bg: #EFF6FF;
+      --color-status-submitted-text: #2563EB;
+      --color-status-pending-bg: #FEF3C7;
+      --color-status-pending-text: #D97706;
+      --color-status-graded-bg: #ECFDF5;
+      --color-status-graded-text: #059669;
+      --color-status-danger-bg: #FEE2E2;
+      --color-status-danger-text: #DC2626;
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  </style>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-main-bg text-text-primary antialiased font-sans">
+
+  <div class="auth-wrapper min-h-screen flex flex-col justify-center items-center py-8 px-4 bg-main-bg">
+    <div class="auth-container w-full max-w-[440px]">
+
+      <!-- Brand Header (Semantic HTML5) -->
+      <header class="auth-header text-center mb-7">
+        <div class="brand-logo flex items-center justify-center gap-3 no-underline">
+          <div class="brand-icon w-11 h-11 rounded-[10px] bg-light-green text-primary-green flex items-center justify-center font-bold text-xl shadow-xs shrink-0">
+            <i data-lucide="check-check" style="width: 22px; height: 22px;"></i>
+          </div>
+          <div class="brand-text flex flex-col text-left">
+            <span class="brand-name text-[19px] font-bold text-text-primary tracking-tight leading-tight">AI Assessment Copilot</span>
+            <span class="brand-tagline text-xs text-text-secondary font-normal mt-0.5">Smarter Assessment, Better Feedback.</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Auth Card (Semantic HTML5 Main) -->
+      <main class="auth-card bg-card-bg rounded-2xl border border-border-color shadow-sm p-8 md:p-9" id="main-content">
+        <h1 class="auth-title text-[22px] font-bold text-text-primary tracking-tight mb-1.5">Welcome Back</h1>
+        <p class="auth-subtitle text-sm text-text-secondary mb-6">Sign in to continue to your account.</p>
+
+        <!-- Dynamic Alert Message -->
+        <div id="loginAlert" class="auth-alert auth-alert-error hidden p-3 rounded-md text-[13px] mb-5 items-center gap-2.5 bg-status-danger-bg text-status-danger-text border border-red-200" role="alert" aria-live="polite">
+          <i data-lucide="alert-circle" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+          <span id="alertMessage">Email atau password salah.</span>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" novalidate>
+          <!-- Email Input -->
+          <div class="form-group mb-4.5">
+            <label class="form-label block text-[13px] font-medium text-text-primary mb-1.5" for="email">
+              Email <span class="required text-status-danger-text">*</span>
+            </label>
+            <div class="input-wrap relative flex items-center">
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="form-control w-full py-2.5 px-3.5 text-sm text-text-primary bg-white border border-border-color rounded-md transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted" 
+                placeholder="nama@kampus.ac.id" 
+                autocomplete="email"
+                required
+              >
+            </div>
+            <div id="emailFeedback" class="input-feedback hidden text-xs text-status-danger-text mt-1" role="alert">Email wajib diisi.</div>
+          </div>
+
+          <!-- Password Input with Show/Hide -->
+          <div class="form-group mb-4.5">
+            <label class="form-label block text-[13px] font-medium text-text-primary mb-1.5" for="password">
+              Password <span class="required text-status-danger-text">*</span>
+            </label>
+            <div class="input-wrap relative flex items-center">
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                class="form-control w-full py-2.5 px-3.5 text-sm text-text-primary bg-white border border-border-color rounded-md transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted" 
+                placeholder="Masukkan password Anda" 
+                autocomplete="current-password"
+                required
+              >
+              <button 
+                type="button" 
+                id="togglePassword" 
+                class="btn-password-toggle absolute right-3 p-1 text-text-muted hover:text-text-primary transition flex items-center justify-center cursor-pointer" 
+                aria-label="Toggle password visibility"
+                title="Show/Hide Password"
+              >
+                <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
+            <div id="passwordFeedback" class="input-feedback hidden text-xs text-status-danger-text mt-1" role="alert">Password wajib diisi.</div>
+          </div>
+
+          <!-- Submit Button (CVA Headless Component) -->
+          <div class="auth-actions mt-6">
+            <button type="submit" id="submitBtn" data-component="button" data-variant="primary" data-size="lg" data-block class="btn btn-primary btn-block w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-md font-medium text-sm bg-primary-green text-white hover:bg-green-hover shadow-xs transition cursor-pointer">
+              <span>Sign In</span>
+              <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- Switch to Register -->
+        <div class="auth-footer text-center mt-5 text-[13px] text-text-secondary">
+          Don't have an account? <a href="register.html" class="text-primary-green font-semibold hover:text-dark-green transition">Register</a>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/components/button.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
+  <script>
+    // Check if redirected from successful registration
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('registered') === '1') {
+      const alertBox = document.getElementById('loginAlert');
+      const alertMsg = document.getElementById('alertMessage');
+      alertBox.classList.remove('auth-alert-error');
+      alertBox.classList.add('auth-alert-success', 'show');
+      alertMsg.textContent = 'Registrasi berhasil! Silakan masuk dengan akun baru Anda.';
+    }
+  </script>
+</body>
+</html>

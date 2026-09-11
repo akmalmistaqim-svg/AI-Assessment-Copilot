@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Assessment Copilot - Manajemen Kelas Dosen">
+  <title>Manajemen Kelas - AI Assessment Copilot</title>
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+
+  <!-- Tailwind CSS v4 CDN & Custom Theme Tokens -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-primary-green: #16A36A;
+      --color-dark-green: #087A4F;
+      --color-light-green: #E8F7F0;
+      --color-green-hover: #138959;
+      --color-main-bg: #F5F7F6;
+      --color-card-bg: #FFFFFF;
+      --color-sidebar-bg: #FFFFFF;
+      --color-topbar-bg: #FFFFFF;
+      --color-text-primary: #1F2933;
+      --color-text-secondary: #6B7280;
+      --color-text-muted: #9CA3AF;
+      --color-text-on-primary: #FFFFFF;
+      --color-border-color: #E5E7EB;
+      --color-border-light: #F0F2F4;
+      --color-status-active-bg: #E8F7F0;
+      --color-status-active-text: #087A4F;
+      --color-status-submitted-bg: #EFF6FF;
+      --color-status-submitted-text: #2563EB;
+      --color-status-pending-bg: #FEF3C7;
+      --color-status-pending-text: #D97706;
+      --color-status-graded-bg: #ECFDF5;
+      --color-status-graded-text: #059669;
+      --color-status-danger-bg: #FEE2E2;
+      --color-status-danger-text: #DC2626;
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  </style>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-main-bg text-text-primary antialiased font-sans">
+
+  <div class="app-layout flex min-h-screen bg-main-bg relative">
+    
+    <!-- Mobile Drawer Backdrop -->
+    <div id="drawerBackdrop" class="drawer-backdrop"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar w-[260px] bg-sidebar-bg border-r border-border-color flex flex-col fixed top-0 bottom-0 left-0 z-100 transition-transform">
+      <div class="sidebar-header p-5 md:py-6 md:px-5 border-b border-border-light">
+        <a href="dosen.html" class="brand-logo flex items-center gap-3 no-underline">
+          <div class="brand-icon w-9.5 h-9.5 rounded-[10px] bg-light-green text-primary-green flex items-center justify-center font-bold text-lg shadow-xs shrink-0">
+            <i data-lucide="check-check" style="width: 20px; height: 20px;"></i>
+          </div>
+          <div class="brand-text flex flex-col">
+            <span class="brand-name text-base font-bold text-text-primary tracking-tight leading-tight">AI Assessment</span>
+            <span class="brand-tagline text-[11px] text-text-secondary font-normal mt-0.5">Dosen Portal</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="sidebar-nav-container flex-1 overflow-y-auto py-5 px-3.5">
+        <!-- MAIN Section -->
+        <div class="nav-section mb-6">
+          <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">MAIN</div>
+          <ul class="nav-menu list-none flex flex-col gap-1">
+            <li>
+              <a href="dosen.html" class="nav-link flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary">
+                <i data-lucide="layout-dashboard" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- ASSESSMENT Section -->
+        <div class="nav-section mb-6">
+          <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">ASSESSMENT</div>
+          <ul class="nav-menu list-none flex flex-col gap-1">
+            <li>
+              <a href="classes.html" id="navClassesLink" class="nav-link active flex items-center gap-3 py-2 px-3 rounded-md bg-light-green text-dark-green text-[13.5px] font-semibold transition">
+                <i data-lucide="graduation-cap" class="nav-icon w-4.5 h-4.5 text-primary-green"></i>
+                <span>Classes</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Rubrics">
+                <i data-lucide="file-check-2" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Rubrics</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Assignments">
+                <i data-lucide="file-text" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Assignments</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Assessments">
+                <i data-lucide="clipboard-check" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Assessments</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- GENERAL Section -->
+        <div class="nav-section mb-6">
+          <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">GENERAL</div>
+          <ul class="nav-menu list-none flex flex-col gap-1">
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Settings">
+                <i data-lucide="settings" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Help & Support">
+                <i data-lucide="help-circle" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Help</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link nav-link-logout js-logout-btn flex items-center gap-3 py-2 px-3 rounded-md text-status-danger-text text-[13.5px] font-medium transition hover:bg-status-danger-bg">
+                <i data-lucide="log-out" class="nav-icon w-4.5 h-4.5"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sidebar-footer py-4 px-5 border-t border-border-light text-[11px] text-text-muted">
+        <span>AI Assessment Copilot &copy; 2026</span>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper flex-1 ml-0 md:ml-[260px] flex flex-col min-w-0 transition-[margin]">
+      
+      <!-- TOPBAR -->
+      <header class="topbar h-[68px] bg-topbar-bg border-b border-border-color flex items-center justify-between px-4 md:px-8 sticky top-0 z-90">
+        <div class="topbar-left flex items-center gap-4 flex-1 max-w-[420px]">
+          <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Open Sidebar Menu">
+            <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
+          </button>
+          <div class="search-box relative flex items-center w-full">
+            <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);" class="absolute left-3"></i>
+            <input type="text" id="topbarSearchInput" placeholder="Cari kelas..." aria-label="Cari kelas" class="w-full pl-9 pr-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-md focus:outline-none focus:border-primary-green focus:bg-white transition">
+          </div>
+        </div>
+
+        <div class="topbar-right flex items-center gap-3.5">
+          <button type="button" class="icon-btn js-future-feature relative p-2 rounded-md text-text-secondary hover:bg-slate-50 hover:text-text-primary transition" data-title="Notifications" aria-label="View notifications">
+            <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+            <span class="badge-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-status-danger-text"></span>
+          </button>
+          <div class="profile-dropdown-container relative">
+            <button type="button" id="profileDropdownTrigger" class="profile-trigger flex items-center gap-2.5 p-1.5 rounded-md hover:bg-slate-50 transition cursor-pointer" aria-haspopup="true" aria-expanded="false" aria-label="User profile menu">
+              <div class="profile-avatar js-user-avatar w-8.5 h-8.5 rounded-full bg-light-green text-primary-green font-bold text-xs flex items-center justify-center">DS</div>
+              <div class="profile-info hidden sm:flex flex-col text-left">
+                <span class="profile-name js-user-name text-xs font-semibold text-text-primary">Dr. Budi Santoso</span>
+                <span class="profile-role-tag js-user-role text-[10.5px] text-text-secondary">Dosen</span>
+              </div>
+              <i data-lucide="chevron-down" style="width: 14px; height: 14px; color: var(--text-muted); margin-left: 2px;"></i>
+            </button>
+            <div id="profileDropdownMenu" class="dropdown-menu">
+              <div class="dropdown-user-header">
+                <div class="full-name js-user-name">Dr. Budi Santoso</div>
+                <div class="user-email js-user-email">dosen@example.com</div>
+              </div>
+              <button type="button" class="dropdown-item js-future-feature" data-title="My Profile">
+                <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                <span>Profile</span>
+              </button>
+              <button type="button" class="dropdown-item js-future-feature" data-title="Account Settings">
+                <i data-lucide="sliders" style="width: 16px; height: 16px;"></i>
+                <span>Settings</span>
+              </button>
+              <div style="height: 1px; background-color: var(--border-light); margin: 4px 0;"></div>
+              <button type="button" class="dropdown-item text-danger js-logout-btn">
+                <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <main class="main-content flex-1 p-5 md:p-8">
+
+        <!-- Page Header -->
+        <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-7">
+          <div>
+            <div class="flex items-center gap-2 text-sm text-text-secondary mb-2">
+              <a href="dosen.html" class="hover:text-primary-green transition">Dashboard</a>
+              <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+              <span class="font-semibold text-text-primary">Classes</span>
+            </div>
+            <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Manajemen Kelas</h1>
+            <p class="page-subtitle text-sm text-text-secondary mt-1">Kelola semua kelas yang Anda ampu dalam satu tempat.</p>
+          </div>
+          <div class="header-actions flex flex-wrap items-center gap-2.5">
+            <button type="button" id="createClassBtn" class="btn btn-primary">
+              <i data-lucide="folder-plus" style="width: 16px; height: 16px;"></i>
+              <span>Buat Kelas Baru</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Classes Stats Strip -->
+        <div class="flex flex-wrap items-center gap-5 mb-6 p-5 bg-card-bg rounded-xl border border-border-color shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-light-green text-primary-green flex items-center justify-center shrink-0">
+              <i data-lucide="graduation-cap" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div>
+              <div class="text-[11px] text-text-muted font-medium uppercase tracking-wide">Total Kelas</div>
+              <div class="text-2xl font-bold text-text-primary leading-tight" id="statTotalClasses">—</div>
+            </div>
+          </div>
+          <div class="w-px h-10 bg-border-light hidden sm:block"></div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div>
+              <div class="text-[11px] text-text-muted font-medium uppercase tracking-wide">Total Mahasiswa</div>
+              <div class="text-2xl font-bold text-text-primary leading-tight" id="statTotalStudents">—</div>
+            </div>
+          </div>
+          <div class="w-px h-10 bg-border-light hidden sm:block"></div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+              <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div>
+              <div class="text-[11px] text-text-muted font-medium uppercase tracking-wide">Total Tugas</div>
+              <div class="text-2xl font-bold text-text-primary leading-tight" id="statTotalAssignments">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Classes Full List Card -->
+        <div class="section-card bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+          <div class="section-header flex items-center justify-between px-6 py-4.5 border-b border-border-light">
+            <h2 class="section-title text-base font-bold text-text-primary">Semua Kelas</h2>
+            <span class="text-xs text-text-muted" id="classesCountLabel"></span>
+          </div>
+          <div class="section-body p-6">
+            <div class="item-list flex flex-col gap-3" id="classesListContainer">
+              <!-- Loaded dynamically -->
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Class CRUD Modal -->
+  <div id="classModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="classModalTitle">
+    <div class="modal-card class-modal-card">
+      <div class="class-modal-header">
+        <div class="class-modal-title-wrap">
+          <div class="class-modal-icon-badge" aria-hidden="true">
+            <i data-lucide="graduation-cap" style="width: 18px; height: 18px;"></i>
+          </div>
+          <h3 class="modal-title" id="classModalTitle">Buat Kelas Baru</h3>
+        </div>
+        <button type="button" id="closeClassModalBtn" class="class-modal-close-btn" aria-label="Tutup">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <form id="classForm" novalidate class="class-modal-body">
+        <input type="hidden" id="classIdInput" name="id">
+
+        <div class="form-group">
+          <label class="form-label" for="classNameInput">
+            Nama Kelas / Mata Kuliah <span class="required">*</span>
+          </label>
+          <input type="text" id="classNameInput" name="className" required autocomplete="off" class="form-control" placeholder="Contoh: Pemrograman Web Lanjut">
+          <div id="classNameFeedback" class="input-feedback" role="alert"></div>
+        </div>
+
+        <div class="class-modal-grid">
+          <div class="form-group">
+            <label class="form-label" for="classStudentsInput">
+              Jumlah Mahasiswa <span class="required">*</span>
+            </label>
+            <input type="number" id="classStudentsInput" name="studentsCount" min="1" required class="form-control" placeholder="30">
+            <div id="classStudentsFeedback" class="input-feedback" role="alert"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="classAssignmentsInput">
+              Jumlah Tugas <span class="required">*</span>
+            </label>
+            <input type="number" id="classAssignmentsInput" name="assignmentsCount" min="1" required class="form-control" placeholder="4">
+            <div id="classAssignmentsFeedback" class="input-feedback" role="alert"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="classSemesterInput">Semester</label>
+          <input type="text" id="classSemesterInput" name="semester" class="form-control" placeholder="Semester Genap 2025/2026">
+        </div>
+
+        <div class="class-modal-footer">
+          <button type="button" id="cancelClassModalBtn" class="btn btn-secondary">Batal</button>
+          <button type="submit" id="saveClassBtn" class="btn btn-primary">
+            <i data-lucide="save" style="width: 15px; height: 15px;"></i>
+            <span>Simpan Kelas</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/components/button.js"></script>
+  <script src="../js/components/badge.js"></script>
+  <script src="../js/services/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    // Page-level classes cache
+    let pageClasses = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Auth guard + shared sidebar/profile/coming-soon setup
+      initDashboard('dosen');
+      // Classes page specific
+      initClassesPage();
+    });
+
+    async function initClassesPage() {
+      await loadAllClasses();
+      setupClassCrudOnClassesPage();
+      setupClassesPageSearch();
+    }
+
+    async function loadAllClasses() {
+      const container = document.getElementById('classesListContainer');
+      if (!container) return;
+
+      container.innerHTML = `
+        <div class="skeleton-wrap flex flex-col gap-3" aria-busy="true">
+          <div class="h-16 rounded-lg bg-slate-100 animate-pulse"></div>
+          <div class="h-16 rounded-lg bg-slate-100 animate-pulse"></div>
+          <div class="h-16 rounded-lg bg-slate-100 animate-pulse"></div>
+          <div class="h-16 rounded-lg bg-slate-100 animate-pulse"></div>
+        </div>
+      `;
+
+      try {
+        const classes = await window.apiService.fetchClasses();
+        pageClasses = classes;
+        renderPageClasses(pageClasses);
+        updatePageStats(pageClasses);
+      } catch (error) {
+        container.innerHTML = `
+          <div class="p-4 rounded-lg bg-red-50 text-status-danger-text border border-red-200 text-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <i data-lucide="alert-circle" style="width: 18px; height: 18px;"></i>
+              <span>${error.message || 'Gagal memuat data kelas.'}</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="loadAllClasses()">Coba Lagi</button>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons({ root: container });
+      }
+    }
+
+    function renderPageClasses(classes) {
+      const container = document.getElementById('classesListContainer');
+      const countLabel = document.getElementById('classesCountLabel');
+      if (!container) return;
+
+      if (countLabel) countLabel.textContent = classes.length ? `${classes.length} kelas` : '';
+
+      if (classes.length === 0) {
+        container.innerHTML = `
+          <div class="py-16 flex flex-col items-center justify-center text-center gap-4">
+            <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-text-muted">
+              <i data-lucide="folder-open" style="width: 32px; height: 32px;"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-text-primary">Belum ada kelas</p>
+              <p class="text-xs text-text-muted mt-1 max-w-xs">Klik "Buat Kelas Baru" untuk menambahkan kelas pertama Anda.</p>
+            </div>
+            <button type="button" onclick="document.getElementById('createClassBtn').click()" class="btn btn-primary btn-sm">
+              <i data-lucide="folder-plus" style="width: 14px; height: 14px;"></i>
+              Buat Kelas Baru
+            </button>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons({ root: container });
+        return;
+      }
+
+      container.innerHTML = classes.map((cls) => {
+        const badgeHtml = window.badgeVariants
+          ? `<span class="${window.badgeVariants({ variant: cls.status || 'active', size: 'md' })}">${cls.status === 'active' ? 'Active' : cls.status}</span>`
+          : `<span class="badge badge-active">${cls.status}</span>`;
+
+        return `
+          <div class="list-item flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border border-border-light bg-white hover:bg-slate-50 hover:border-border-color transition gap-3" data-id="${cls.id}">
+            <div class="item-main flex flex-col gap-1.5 min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="item-title text-sm font-semibold text-text-primary">${escapeHtml(cls.name)}</span>
+                ${badgeHtml}
+              </div>
+              <div class="item-meta flex flex-wrap items-center gap-4 text-xs text-text-secondary">
+                <span class="item-meta-item inline-flex items-center gap-1">
+                  <i data-lucide="users" style="width: 13px; height: 13px;"></i>
+                  ${cls.studentsCount} Mahasiswa
+                </span>
+                <span class="item-meta-item inline-flex items-center gap-1">
+                  <i data-lucide="files" style="width: 13px; height: 13px;"></i>
+                  ${cls.assignmentsCount} Tugas
+                </span>
+                ${cls.semester ? `<span class="item-meta-item inline-flex items-center gap-1 text-text-muted">
+                  <i data-lucide="calendar" style="width: 13px; height: 13px;"></i>
+                  ${escapeHtml(cls.semester)}
+                </span>` : ''}
+              </div>
+            </div>
+            <div class="item-actions flex items-center gap-2 shrink-0 self-end sm:self-center">
+              <button type="button" class="js-edit-class flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-text-secondary bg-slate-100 hover:bg-light-green hover:text-dark-green rounded-md transition" aria-label="Edit ${escapeHtml(cls.name)}" data-id="${cls.id}">
+                <i data-lucide="edit-3" style="width: 13px; height: 13px;"></i> Edit
+              </button>
+              <button type="button" class="js-delete-class flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-text-secondary bg-slate-100 hover:bg-status-danger-bg hover:text-status-danger-text rounded-md transition" aria-label="Hapus ${escapeHtml(cls.name)}" data-id="${cls.id}">
+                <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i> Hapus
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) window.lucide.createIcons({ root: container });
+    }
+
+    function updatePageStats(classes) {
+      const totalEl = document.getElementById('statTotalClasses');
+      const studentsEl = document.getElementById('statTotalStudents');
+      const assignmentsEl = document.getElementById('statTotalAssignments');
+      if (totalEl) totalEl.textContent = classes.length;
+      if (studentsEl) studentsEl.textContent = classes.reduce((s, c) => s + (parseInt(c.studentsCount) || 0), 0);
+      if (assignmentsEl) assignmentsEl.textContent = classes.reduce((s, c) => s + (parseInt(c.assignmentsCount) || 0), 0);
+    }
+
+    function setupClassCrudOnClassesPage() {
+      const container = document.getElementById('classesListContainer');
+      const createBtn = document.getElementById('createClassBtn');
+      const classModal = document.getElementById('classModal');
+      const classForm = document.getElementById('classForm');
+      const closeBtn = document.getElementById('closeClassModalBtn');
+      const cancelBtn = document.getElementById('cancelClassModalBtn');
+      const modalTitle = document.getElementById('classModalTitle');
+      const classIdInput = document.getElementById('classIdInput');
+      const classNameInput = document.getElementById('classNameInput');
+      const classStudentsInput = document.getElementById('classStudentsInput');
+      const classAssignmentsInput = document.getElementById('classAssignmentsInput');
+      const classSemesterInput = document.getElementById('classSemesterInput');
+      const nameFeedback = document.getElementById('classNameFeedback');
+      const studentsFeedback = document.getElementById('classStudentsFeedback');
+      const assignmentsFeedback = document.getElementById('classAssignmentsFeedback');
+
+      let modalTrap = null;
+      let modalTrigger = null;
+
+      function showFieldError(input, feedbackEl, msg) {
+        if (input) input.classList.add('input-error');
+        if (feedbackEl) { feedbackEl.textContent = msg; feedbackEl.classList.add('show'); }
+      }
+
+      function clearFieldError(input, feedbackEl) {
+        if (input) input.classList.remove('input-error');
+        if (feedbackEl) { feedbackEl.textContent = ''; feedbackEl.classList.remove('show'); }
+      }
+
+      function openModal(mode = 'create', classData = null) {
+        modalTrigger = document.activeElement;
+        if (mode === 'edit' && classData) {
+          modalTitle.textContent = 'Edit Kelas';
+          classIdInput.value = classData.id;
+          classNameInput.value = classData.name;
+          classStudentsInput.value = classData.studentsCount;
+          classAssignmentsInput.value = classData.assignmentsCount;
+          classSemesterInput.value = classData.semester || 'Semester Genap 2025/2026';
+        } else {
+          modalTitle.textContent = 'Buat Kelas Baru';
+          classForm.reset();
+          classIdInput.value = '';
+          classStudentsInput.value = '';
+          classAssignmentsInput.value = '';
+          classSemesterInput.value = 'Semester Genap 2025/2026';
+        }
+        clearFieldError(classNameInput, nameFeedback);
+        clearFieldError(classStudentsInput, studentsFeedback);
+        clearFieldError(classAssignmentsInput, assignmentsFeedback);
+        classModal.classList.add('show');
+        if (window.lucide) window.lucide.createIcons({ root: classModal });
+        if (modalTrap) modalTrap();
+        modalTrap = trapFocusHelper(classModal, closeModal);
+        setTimeout(() => classNameInput.focus(), 60);
+      }
+
+      function closeModal() {
+        classModal.classList.remove('show');
+        if (modalTrap) { modalTrap(); modalTrap = null; }
+        if (modalTrigger) modalTrigger.focus();
+      }
+
+      if (createBtn) createBtn.addEventListener('click', () => openModal('create'));
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+      if (classModal) classModal.addEventListener('click', (e) => { if (e.target === classModal) closeModal(); });
+
+      if (container) {
+        container.addEventListener('click', async (e) => {
+          const editBtn = e.target.closest('.js-edit-class');
+          const deleteBtn = e.target.closest('.js-delete-class');
+
+          if (editBtn) {
+            const id = editBtn.getAttribute('data-id');
+            const cls = pageClasses.find((c) => c.id === id);
+            if (cls) openModal('edit', cls);
+          } else if (deleteBtn) {
+            const id = deleteBtn.getAttribute('data-id');
+            const cls = pageClasses.find((c) => c.id === id);
+            const name = cls ? cls.name : 'kelas ini';
+            if (confirm(`Hapus "${name}"?\nData akan dihapus permanen.`)) {
+              try {
+                await window.apiService.deleteClass(id);
+                pageClasses = pageClasses.filter((c) => c.id !== id);
+                renderPageClasses(pageClasses);
+                updatePageStats(pageClasses);
+                showToast(`Kelas "${name}" berhasil dihapus.`, 'success');
+              } catch (err) {
+                showToast(err.message || 'Gagal menghapus kelas.', 'error');
+              }
+            }
+          }
+        });
+      }
+
+      if (classForm) {
+        classForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = classNameInput.value.trim();
+          const studentsRaw = classStudentsInput.value.trim();
+          const assignmentsRaw = classAssignmentsInput.value.trim();
+          const semester = classSemesterInput.value.trim();
+          const editId = classIdInput.value;
+
+          let hasError = false;
+          if (!name) { showFieldError(classNameInput, nameFeedback, 'Nama kelas wajib diisi.'); hasError = true; }
+          else { clearFieldError(classNameInput, nameFeedback); }
+
+          const studentsCount = parseInt(studentsRaw, 10);
+          if (!studentsRaw || isNaN(studentsCount) || studentsCount < 1) {
+            showFieldError(classStudentsInput, studentsFeedback, 'Masukkan angka positif (min. 1).');
+            hasError = true;
+          } else { clearFieldError(classStudentsInput, studentsFeedback); }
+
+          const assignmentsCount = parseInt(assignmentsRaw, 10);
+          if (!assignmentsRaw || isNaN(assignmentsCount) || assignmentsCount < 1) {
+            showFieldError(classAssignmentsInput, assignmentsFeedback, 'Masukkan angka positif (min. 1).');
+            hasError = true;
+          } else { clearFieldError(classAssignmentsInput, assignmentsFeedback); }
+
+          if (hasError) {
+            if (classNameInput.classList.contains('input-error')) classNameInput.focus();
+            else if (classStudentsInput.classList.contains('input-error')) classStudentsInput.focus();
+            return;
+          }
+
+          try {
+            if (editId) {
+              const updated = await window.apiService.updateClass(editId, { name, studentsCount, assignmentsCount, semester });
+              const idx = pageClasses.findIndex((c) => c.id === editId);
+              if (idx !== -1) pageClasses[idx] = updated;
+              showToast(`Kelas "${name}" berhasil diperbarui.`, 'success');
+            } else {
+              const created = await window.apiService.createClass({ name, studentsCount, assignmentsCount, semester });
+              pageClasses.unshift(created);
+              showToast(`Kelas "${name}" berhasil ditambahkan.`, 'success');
+            }
+            renderPageClasses(pageClasses);
+            updatePageStats(pageClasses);
+            closeModal();
+          } catch (err) {
+            showToast(err.message || 'Gagal menyimpan kelas.', 'error');
+          }
+        });
+      }
+    }
+
+    function setupClassesPageSearch() {
+      const searchInput = document.getElementById('topbarSearchInput');
+      if (!searchInput) return;
+      searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase().trim();
+        if (!term) { renderPageClasses(pageClasses); return; }
+        const filtered = pageClasses.filter(
+          (c) => c.name.toLowerCase().includes(term) || (c.semester && c.semester.toLowerCase().includes(term))
+        );
+        renderPageClasses(filtered);
+      });
+    }
+  </script>
+</body>
+</html>

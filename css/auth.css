@@ -1,0 +1,273 @@
+/* ===================================================
+   AI ASSESSMENT COPILOT - AUTH STYLES
+   Pages: login.html, register.html
+   =================================================== */
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 16px;
+  background-color: var(--main-bg);
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 440px;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-header .brand-logo {
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.auth-header .brand-icon {
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+}
+
+.auth-header .brand-name {
+  font-size: 19px;
+}
+
+.auth-header .brand-tagline {
+  font-size: 12px;
+}
+
+.auth-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  padding: 36px 32px;
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 26px;
+}
+
+/* Alert Box */
+.auth-alert {
+  display: none;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 20px;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.auth-alert.show {
+  display: flex;
+}
+
+.auth-alert-error {
+  background-color: var(--status-danger-bg);
+  color: var(--status-danger-text);
+  border: 1px solid #FECACA;
+}
+
+.auth-alert-success {
+  background-color: var(--light-green);
+  color: var(--dark-green);
+  border: 1px solid #A7F3D0;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.form-label .required {
+  color: var(--status-danger-text);
+  margin-left: 2px;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-primary);
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(22, 163, 106, 0.15);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-control.input-error {
+  border-color: var(--status-danger-text);
+}
+
+.input-feedback {
+  font-size: 12px;
+  color: var(--status-danger-text);
+  margin-top: 4px;
+  display: none;
+}
+
+.input-feedback.show {
+  display: block;
+}
+
+/* Password Toggle Icon Button */
+.btn-password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color var(--transition-fast);
+}
+
+.btn-password-toggle:hover {
+  color: var(--text-primary);
+}
+
+/* Role Selector (Radio Cards) */
+.form-group-role {
+  margin-bottom: 14px;
+}
+
+.role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.role-option {
+  position: relative;
+}
+
+.role-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.role-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 10px;
+  min-height: 52px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: #FFFFFF;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.role-card:hover {
+  border-color: #CBD5E1;
+  background-color: #F8FAFC;
+}
+
+.role-card .role-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background-color: #F1F5F9;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.role-card .role-icon i,
+.role-card .role-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.role-card .role-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.role-option input[type="radio"]:checked + .role-card {
+  border-color: var(--primary-green);
+  background-color: var(--light-green);
+}
+
+.role-option input[type="radio"]:checked + .role-card .role-icon {
+  background-color: var(--primary-green);
+  color: #FFFFFF;
+}
+
+.role-option input[type="radio"]:checked + .role-card .role-title {
+  color: var(--dark-green);
+}
+
+/* Auth Submit & Switch Link */
+.auth-actions {
+  margin-top: 24px;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.auth-footer a {
+  font-weight: 600;
+  color: var(--primary-green);
+}

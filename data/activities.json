@@ -1,0 +1,42 @@
+[
+  {
+    "id": "act-001",
+    "type": "submission",
+    "actor": "Andi Pratama",
+    "action": "submitted an assignment",
+    "context": "Pemrograman Web",
+    "timeAgo": "10 minutes ago",
+    "icon": "upload",
+    "color": "emerald"
+  },
+  {
+    "id": "act-002",
+    "type": "assignment",
+    "actor": "Siti",
+    "action": "uploaded a new assignment",
+    "context": "Basis Data",
+    "timeAgo": "45 minutes ago",
+    "icon": "file-plus",
+    "color": "emerald"
+  },
+  {
+    "id": "act-003",
+    "type": "assessment",
+    "actor": "System AI",
+    "action": "Assessment completed for Tugas 2 OOP",
+    "context": "Object Oriented Programming",
+    "timeAgo": "2 hours ago",
+    "icon": "check",
+    "color": "emerald"
+  },
+  {
+    "id": "act-004",
+    "type": "feedback",
+    "actor": "Dr. Budi Santoso",
+    "action": "Feedback approved for 12 submissions",
+    "context": "Basis Data",
+    "timeAgo": "Yesterday",
+    "icon": "message-square",
+    "color": "blue"
+  }
+]

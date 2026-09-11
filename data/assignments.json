@@ -1,0 +1,30 @@
+[
+  {
+    "id": "asg-001",
+    "title": "Laporan Sistem",
+    "course": "Analisis Sistem",
+    "deadline": "12 Sep 2026",
+    "status": "submitted"
+  },
+  {
+    "id": "asg-002",
+    "title": "Website CRUD",
+    "course": "Pemrograman Web",
+    "deadline": "15 Sep 2026",
+    "status": "pending"
+  },
+  {
+    "id": "asg-003",
+    "title": "Database Design",
+    "course": "Basis Data",
+    "deadline": "18 Sep 2026",
+    "status": "graded"
+  },
+  {
+    "id": "asg-004",
+    "title": "OOP Design Patterns",
+    "course": "Object Oriented Programming",
+    "deadline": "22 Sep 2026",
+    "status": "pending"
+  }
+]
