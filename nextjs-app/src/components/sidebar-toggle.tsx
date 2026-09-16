@@ -1,6 +1,7 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import { useEffect } from "react";
 import { useUIStore } from "@/store/useUIStore";
 
 /**
@@ -29,6 +30,20 @@ export function SidebarToggleButton() {
 export function SidebarDrawer({ children }: { children: React.ReactNode }) {
   const isSidebarOpen = useUIStore((s) => s.isSidebarOpen);
   const setSidebarOpen = useUIStore((s) => s.setSidebarOpen);
+
+  // Close sidebar drawer on Escape key
+  useEffect(() => {
+    if (!isSidebarOpen) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setSidebarOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isSidebarOpen, setSidebarOpen]);
 
   return (
     <>

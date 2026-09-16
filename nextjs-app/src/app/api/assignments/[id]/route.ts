@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { deleteAssignmentFromStore, updateAssignmentInStore } from "@/lib/assignmentStore";
+import { requireDosenRole } from "@/lib/auth-guard";
 import { AssignmentSchema, UpdateAssignmentInputSchema } from "@/types/assignment";
 
 // PUT /api/assignments/[id]
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { errorResponse } = await requireDosenRole(request);
+    if (errorResponse) return errorResponse;
+
     const { id } = await params;
     const body = await request.json();
     const validatedInput = UpdateAssignmentInputSchema.parse(body);
@@ -30,8 +34,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 }
 
 // DELETE /api/assignments/[id]
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { errorResponse } = await requireDosenRole(request);
+    if (errorResponse) return errorResponse;
+
     const { id } = await params;
     const success = deleteAssignmentFromStore(id);
 

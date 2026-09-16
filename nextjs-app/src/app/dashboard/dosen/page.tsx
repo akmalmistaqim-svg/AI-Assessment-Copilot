@@ -9,9 +9,14 @@ import { DosenStatsSection } from "@/components/dosen-stats-section";
 import { PageHeader } from "@/components/ui/page-header";
 import { getSession } from "@/lib/auth";
 
-export const metadata: Metadata = {
-  title: "Dashboard Dosen - AI Assessment Copilot",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const session = await getSession();
+  const userName = session?.name ? ` | ${session.name}` : "";
+  return {
+    title: `Dashboard Dosen${userName} - AI Assessment Copilot`,
+    description: "Portal penilaian terstandar AI Assessment Copilot untuk Dosen.",
+  };
+}
 
 function SectionSkeleton({ height = "h-32" }: { height?: string }) {
   return (

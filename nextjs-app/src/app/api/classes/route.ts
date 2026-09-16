@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { requireDosenRole } from "@/lib/auth-guard";
 import { addClassToStore, getClassesStore } from "@/lib/classStore";
 import { type ClassItem, ClassSchema, CreateClassInputSchema } from "@/types/class";
 
@@ -24,6 +25,9 @@ export async function GET() {
 // POST /api/classes
 export async function POST(request: Request) {
   try {
+    const { errorResponse } = await requireDosenRole(request);
+    if (errorResponse) return errorResponse;
+
     const body = await request.json();
     const validatedInput = CreateClassInputSchema.parse(body);
 

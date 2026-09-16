@@ -31,6 +31,20 @@ export function ProfileDropdown({ name, email, role, initials }: ProfileDropdown
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setDropdownOpen]);
 
+  // Close dropdown on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, setDropdownOpen]);
+
   async function handleLogout() {
     setDropdownOpen(false);
     await fetch("/api/auth/logout", { method: "POST" });

@@ -30,7 +30,31 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(dashboardUrl);
   }
 
+  // 3. Role-based protection on dashboard routes
   if (isDashboardPath && session) {
+    // If accessing root /dashboard, redirect to the role's primary dashboard
+    if (pathname === "/dashboard" || pathname === "/dashboard/") {
+      const targetDashboard =
+        session.role === "dosen" ? "/dashboard/dosen" : "/dashboard/mahasiswa";
+      return NextResponse.redirect(new URL(targetDashboard, request.url));
+    }
+
+    // Mahasiswa trying to access /dashboard/dosen/*
+    if (session.role === "mahasiswa" && pathname.startsWith("/dashboard/dosen")) {
+      console.warn(
+        `[Middleware] BLOCKED: Mahasiswa (${session.email}) attempted to access "${pathname}". Redirecting to /dashboard/mahasiswa`,
+      );
+      return NextResponse.redirect(new URL("/dashboard/mahasiswa", request.url));
+    }
+
+    // Dosen trying to access /dashboard/mahasiswa/*
+    if (session.role === "dosen" && pathname.startsWith("/dashboard/mahasiswa")) {
+      console.warn(
+        `[Middleware] BLOCKED: Dosen (${session.email}) attempted to access "${pathname}". Redirecting to /dashboard/dosen`,
+      );
+      return NextResponse.redirect(new URL("/dashboard/dosen", request.url));
+    }
+
     console.log(`[Middleware] ALLOWED: User (${session.email}, ${session.role}) -> "${pathname}"`);
   }
 
@@ -38,5 +62,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/dashboard", "/login", "/register"],
 };

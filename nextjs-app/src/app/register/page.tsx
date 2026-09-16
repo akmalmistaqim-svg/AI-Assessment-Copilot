@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { BrandLogo } from "@/components/brand-logo";
 import { RegisterForm } from "@/components/register-form";
 
-export const metadata: Metadata = {
-  title: "Register",
-  description: "Daftar akun baru AI Assessment Copilot (Dosen / Mahasiswa).",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Register | AI Assessment Copilot",
+    description: "Daftar akun baru AI Assessment Copilot (Dosen / Mahasiswa).",
+  };
+}
 
 export default function RegisterPage() {
   return (

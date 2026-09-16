@@ -1,7 +1,7 @@
 "use client";
 
 import { Edit2, Loader2, Plus, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCreateClassMutation, useUpdateClassMutation } from "@/hooks/useClassesQuery";
 import { useUIStore } from "@/store/useUIStore";
 import { type ClassItem, CreateClassInputSchema } from "@/types/class";
@@ -42,12 +42,26 @@ export function ClassModal({ initialData, onClearInitialData }: ClassModalProps)
     setFieldErrors({});
   }, [isEditing, initialData]);
 
-  if (!isOpen) return null;
-
-  function handleClose() {
+  const handleClose = useCallback(() => {
     closeModal();
     if (onClearInitialData) onClearInitialData();
-  }
+  }, [closeModal, onClearInitialData]);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, handleClose]);
+
+  if (!isOpen) return null;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

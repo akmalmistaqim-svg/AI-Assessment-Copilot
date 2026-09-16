@@ -6,9 +6,14 @@ import { LatestFeedbackSection } from "@/components/latest-feedback-section";
 import { MahasiswaStatsSection } from "@/components/mahasiswa-stats-section";
 import { getSession } from "@/lib/auth";
 
-export const metadata: Metadata = {
-  title: "Dashboard Mahasiswa - AI Assessment Copilot",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const session = await getSession();
+  const userName = session?.name ? ` | ${session.name}` : "";
+  return {
+    title: `Dashboard Mahasiswa${userName} - AI Assessment Copilot`,
+    description: "Portal aktivitas belajar dan umpan balik tugas mahasiswa.",
+  };
+}
 
 function SectionSkeleton({ height = "h-32" }: { height?: string }) {
   return (

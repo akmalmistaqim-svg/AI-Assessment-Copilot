@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { addAssessmentToStore, getAssessmentsStore } from "@/lib/assessmentStore";
+import { requireDosenRole } from "@/lib/auth-guard";
 import {
   type AssessmentItem,
   AssessmentSchema,
@@ -27,6 +28,9 @@ export async function GET() {
 // POST /api/assessments
 export async function POST(request: Request) {
   try {
+    const { errorResponse } = await requireDosenRole(request);
+    if (errorResponse) return errorResponse;
+
     const body = await request.json();
     const validatedInput = CreateAssessmentInputSchema.parse(body);
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { requireDosenRole } from "@/lib/auth-guard";
 import { addRubricToStore, getRubricsStore } from "@/lib/rubricStore";
 import { CreateRubricInputSchema, type RubricItem, RubricSchema } from "@/types/rubric";
 
@@ -23,6 +24,9 @@ export async function GET() {
 // POST /api/rubrics
 export async function POST(request: Request) {
   try {
+    const { errorResponse } = await requireDosenRole(request);
+    if (errorResponse) return errorResponse;
+
     const body = await request.json();
     const validatedInput = CreateRubricInputSchema.parse(body);
 

@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { BrandLogo } from "@/components/brand-logo";
 import { LoginForm } from "@/components/login-form";
 
-export const metadata: Metadata = {
-  title: "Login",
-  description: "Masuk ke akun AI Assessment Copilot Anda.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Login | AI Assessment Copilot",
+    description: "Masuk ke akun AI Assessment Copilot Anda.",
+  };
+}
 
 export default function LoginPage() {
   return (
