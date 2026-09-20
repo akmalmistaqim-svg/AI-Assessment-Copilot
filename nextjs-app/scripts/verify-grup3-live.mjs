@@ -48,8 +48,14 @@ async function runTests() {
     });
     assert.strictEqual(dosenRes.status, 200, "Dosen settings should return 200 OK");
     const dosenHtml = await dosenRes.text();
-    assert(dosenHtml.includes("Pengaturan Akun"), "Dosen settings harus memuat judul 'Pengaturan Akun'");
-    assert(dosenHtml.includes("dosen@example.com"), "Dosen settings harus menampilkan email read-only");
+    assert(
+      dosenHtml.includes("Pengaturan Akun"),
+      "Dosen settings harus memuat judul 'Pengaturan Akun'",
+    );
+    assert(
+      dosenHtml.includes("dosen@example.com"),
+      "Dosen settings harus menampilkan email read-only",
+    );
     assert(dosenHtml.includes("Terima Notifikasi Email"), "Harus ada switch notifikasi email");
 
     // 2. Mahasiswa settings
@@ -58,14 +64,26 @@ async function runTests() {
     });
     assert.strictEqual(mhsRes.status, 200, "Mahasiswa settings should return 200 OK");
     const mhsHtml = await mhsRes.text();
-    assert(mhsHtml.includes("Pengaturan Akun"), "Mahasiswa settings harus memuat judul 'Pengaturan Akun'");
-    assert(mhsHtml.includes("mahasiswa@example.com"), "Mahasiswa settings harus menampilkan email read-only");
+    assert(
+      mhsHtml.includes("Pengaturan Akun"),
+      "Mahasiswa settings harus memuat judul 'Pengaturan Akun'",
+    );
+    assert(
+      mhsHtml.includes("mahasiswa@example.com"),
+      "Mahasiswa settings harus menampilkan email read-only",
+    );
     assert(mhsHtml.includes("Terima Notifikasi Email"), "Harus ada switch notifikasi email");
 
     // 3. Sidebar links
     const layoutContent = fs.readFileSync(path.join(srcDir, "app/dashboard/layout.tsx"), "utf-8");
-    assert(layoutContent.includes('href: "/dashboard/dosen/settings"'), "Sidebar dosen harus mengarah ke settings");
-    assert(layoutContent.includes('href: "/dashboard/mahasiswa/settings"'), "Sidebar mahasiswa harus mengarah ke settings");
+    assert(
+      layoutContent.includes('href: "/dashboard/dosen/settings"'),
+      "Sidebar dosen harus mengarah ke settings",
+    );
+    assert(
+      layoutContent.includes('href: "/dashboard/mahasiswa/settings"'),
+      "Sidebar mahasiswa harus mengarah ke settings",
+    );
 
     recordResult(
       1,
@@ -88,8 +106,14 @@ async function runTests() {
     assert.strictEqual(dosenHelpRes.status, 200, "Dosen help should return 200 OK");
     const dosenHelpHtml = await dosenHelpRes.text();
     assert(dosenHelpHtml.includes("Pertanyaan Umum (FAQ)"), "Harus memuat section FAQ");
-    assert(dosenHelpHtml.includes("support@aiassessment.ac.id"), "Harus memuat kontak email support");
-    assert(dosenHelpHtml.includes("Bagaimana cara membuat kelas perkuliahan baru?"), "Harus memuat FAQ spesifik dosen");
+    assert(
+      dosenHelpHtml.includes("support@aiassessment.ac.id"),
+      "Harus memuat kontak email support",
+    );
+    assert(
+      dosenHelpHtml.includes("Bagaimana cara membuat kelas perkuliahan baru?"),
+      "Harus memuat FAQ spesifik dosen",
+    );
 
     // 2. Mahasiswa help
     const mhsHelpRes = await fetch(`${BASE_URL}/dashboard/mahasiswa/help`, {
@@ -99,12 +123,21 @@ async function runTests() {
     const mhsHelpHtml = await mhsHelpRes.text();
     assert(mhsHelpHtml.includes("Pertanyaan Umum (FAQ)"), "Harus memuat section FAQ");
     assert(mhsHelpHtml.includes("support@aiassessment.ac.id"), "Harus memuat kontak email support");
-    assert(mhsHelpHtml.includes("Bagaimana cara mengumpulkan tugas perkuliahan?"), "Harus memuat FAQ spesifik mahasiswa");
+    assert(
+      mhsHelpHtml.includes("Bagaimana cara mengumpulkan tugas perkuliahan?"),
+      "Harus memuat FAQ spesifik mahasiswa",
+    );
 
     // 3. Sidebar links
     const layoutContent = fs.readFileSync(path.join(srcDir, "app/dashboard/layout.tsx"), "utf-8");
-    assert(layoutContent.includes('href: "/dashboard/dosen/help"'), "Sidebar dosen harus mengarah ke help");
-    assert(layoutContent.includes('href: "/dashboard/mahasiswa/help"'), "Sidebar mahasiswa harus mengarah ke help");
+    assert(
+      layoutContent.includes('href: "/dashboard/dosen/help"'),
+      "Sidebar dosen harus mengarah ke help",
+    );
+    assert(
+      layoutContent.includes('href: "/dashboard/mahasiswa/help"'),
+      "Sidebar mahasiswa harus mengarah ke help",
+    );
 
     recordResult(
       2,
@@ -120,11 +153,24 @@ async function runTests() {
   // Poin 3: Notifications Topbar Dropdown
   // -------------------------------------------------------------
   try {
-    const notifBtnCode = fs.readFileSync(path.join(srcDir, "components/notification-button.tsx"), "utf-8");
-    assert(notifBtnCode.includes("onClick={() => setIsOpen(!isOpen)}"), "Tombol lonceng harus memiliki toggle onClick");
-    assert(notifBtnCode.includes("handleClickOutside"), "Harus memiliki listener klik di luar area");
+    const notifBtnCode = fs.readFileSync(
+      path.join(srcDir, "components/notification-button.tsx"),
+      "utf-8",
+    );
+    assert(
+      notifBtnCode.includes("onClick={() => setIsOpen(!isOpen)}"),
+      "Tombol lonceng harus memiliki toggle onClick",
+    );
+    assert(
+      notifBtnCode.includes("handleClickOutside"),
+      "Harus memiliki listener klik di luar area",
+    );
     assert(notifBtnCode.includes('e.key === "Escape"'), "Harus memiliki listener tombol Escape");
-    assert(notifBtnCode.includes("dosenNotifications") && notifBtnCode.includes("mahasiswaNotifications"), "Harus memiliki data notifikasi kontekstual");
+    assert(
+      notifBtnCode.includes("dosenNotifications") &&
+        notifBtnCode.includes("mahasiswaNotifications"),
+      "Harus memiliki data notifikasi kontekstual",
+    );
 
     recordResult(
       3,
@@ -140,9 +186,18 @@ async function runTests() {
   // Poin 4 & 5: Profile & Settings Dropdown Menu Navigation
   // -------------------------------------------------------------
   try {
-    const profileDropdownCode = fs.readFileSync(path.join(srcDir, "components/profile-dropdown.tsx"), "utf-8");
-    assert(profileDropdownCode.includes("router.push(`/dashboard/${role}/settings`)"), "Tombol Profile dan Settings harus navigasi ke halaman Settings yang baru dibuat");
-    assert(profileDropdownCode.includes("setDropdownOpen(false)"), "Dropdown harus menutup saat navigasi dilakukan");
+    const profileDropdownCode = fs.readFileSync(
+      path.join(srcDir, "components/profile-dropdown.tsx"),
+      "utf-8",
+    );
+    assert(
+      profileDropdownCode.includes("router.push(`/dashboard/${role}/settings`)"),
+      "Tombol Profile dan Settings harus navigasi ke halaman Settings yang baru dibuat",
+    );
+    assert(
+      profileDropdownCode.includes("setDropdownOpen(false)"),
+      "Dropdown harus menutup saat navigasi dilakukan",
+    );
 
     recordResult(
       4,
@@ -162,9 +217,18 @@ async function runTests() {
     const hasHashHref = layoutContent.includes('href: "#"');
     assert(!hasHashHref, "Tidak boleh ada href: '#' di sidebar layout");
 
-    const sidebarCode = fs.readFileSync(path.join(srcDir, "components/sidebar-nav-list.tsx"), "utf-8");
-    assert(!sidebarCode.includes("handlePlaceholderClick"), "Placeholder click handler di sidebar sudah dibersihkan");
-    assert(!sidebarCode.includes("akan segera hadir"), "Teks alert placeholder sudah tidak ada di sidebar");
+    const sidebarCode = fs.readFileSync(
+      path.join(srcDir, "components/sidebar-nav-list.tsx"),
+      "utf-8",
+    );
+    assert(
+      !sidebarCode.includes("handlePlaceholderClick"),
+      "Placeholder click handler di sidebar sudah dibersihkan",
+    );
+    assert(
+      !sidebarCode.includes("akan segera hadir"),
+      "Teks alert placeholder sudah tidak ada di sidebar",
+    );
 
     recordResult(
       5,

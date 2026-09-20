@@ -89,7 +89,8 @@ async function runTests() {
       headers: { Cookie: andiCookie },
     });
     const assignmentsBefore = await resBefore.json();
-    const targetAssignment = assignmentsBefore.find((a) => a.status === "pending") || assignmentsBefore[0];
+    const targetAssignment =
+      assignmentsBefore.find((a) => a.status === "pending") || assignmentsBefore[0];
     assert(targetAssignment, "Harus ada target tugas");
     submittedAssignmentTitle = targetAssignment.title;
 
@@ -109,10 +110,18 @@ async function runTests() {
       body: JSON.stringify(submitPayload),
     });
 
-    assert.strictEqual(submitRes.status, 201, `Submit harus return 201 Created, got: ${submitRes.status}`);
+    assert.strictEqual(
+      submitRes.status,
+      201,
+      `Submit harus return 201 Created, got: ${submitRes.status}`,
+    );
     const submitData = await submitRes.json();
     assert(submitData.success === true, "Response harus success: true");
-    assert.strictEqual(submitData.updatedAssignment.status, "submitted", "Status assignment dari respons harus 'submitted'");
+    assert.strictEqual(
+      submitData.updatedAssignment.status,
+      "submitted",
+      "Status assignment dari respons harus 'submitted'",
+    );
 
     // Verifikasi cek ulang API assignments dari server dev
     const resAfter = await fetch(`${BASE_URL}/api/assignments`, {
@@ -120,7 +129,11 @@ async function runTests() {
     });
     const assignmentsAfter = await resAfter.json();
     const updatedInServer = assignmentsAfter.find((a) => a.id === targetAssignment.id);
-    assert.strictEqual(updatedInServer.status, "submitted", "Status di server API harus terupdate menjadi 'submitted'");
+    assert.strictEqual(
+      updatedInServer.status,
+      "submitted",
+      "Status di server API harus terupdate menjadi 'submitted'",
+    );
 
     recordResult(
       2,
@@ -151,17 +164,40 @@ async function runTests() {
     const sitiGrades = await sitiRes.json();
 
     // Verifikasi Andi:
-    assert.strictEqual(andiGrades.length, 2, `Andi harus memiliki tepat 2 nilai finalized, dapat: ${andiGrades.length}`);
-    assert(andiGrades.every((g) => g.studentEmail === "mahasiswa@example.com"), "Semua nilai Andi harus ber-email mahasiswa@example.com");
-    assert(andiGrades.every((g) => g.status === "finalized"), "Semua nilai Andi yang tampil harus berstatus finalized (draft disembunyikan)");
+    assert.strictEqual(
+      andiGrades.length,
+      2,
+      `Andi harus memiliki tepat 2 nilai finalized, dapat: ${andiGrades.length}`,
+    );
+    assert(
+      andiGrades.every((g) => g.studentEmail === "mahasiswa@example.com"),
+      "Semua nilai Andi harus ber-email mahasiswa@example.com",
+    );
+    assert(
+      andiGrades.every((g) => g.status === "finalized"),
+      "Semua nilai Andi yang tampil harus berstatus finalized (draft disembunyikan)",
+    );
 
     // Verifikasi Siti:
-    assert.strictEqual(sitiGrades.length, 1, `Siti harus memiliki tepat 1 nilai finalized, dapat: ${sitiGrades.length}`);
-    assert(sitiGrades.every((g) => g.studentEmail === "siti@example.com"), "Nilai Siti harus milik siti@example.com");
+    assert.strictEqual(
+      sitiGrades.length,
+      1,
+      `Siti harus memiliki tepat 1 nilai finalized, dapat: ${sitiGrades.length}`,
+    );
+    assert(
+      sitiGrades.every((g) => g.studentEmail === "siti@example.com"),
+      "Nilai Siti harus milik siti@example.com",
+    );
 
     // Verifikasi isolasi data (data tidak tertukar antar mahasiswa):
-    assert(!andiGrades.some((g) => g.studentEmail === "siti@example.com"), "Data Siti tidak boleh muncul di dashboard Andi");
-    assert(!sitiGrades.some((g) => g.studentEmail === "mahasiswa@example.com"), "Data Andi tidak boleh muncul di dashboard Siti");
+    assert(
+      !andiGrades.some((g) => g.studentEmail === "siti@example.com"),
+      "Data Siti tidak boleh muncul di dashboard Andi",
+    );
+    assert(
+      !sitiGrades.some((g) => g.studentEmail === "mahasiswa@example.com"),
+      "Data Andi tidak boleh muncul di dashboard Siti",
+    );
 
     recordResult(
       3,
@@ -181,13 +217,19 @@ async function runTests() {
       headers: { Cookie: andiCookie },
     });
     const andiGrades = await andiRes.json();
-    
+
     // Verifikasi catatan dosen dan AI copilot ada dan sesuai
     const item1 = andiGrades.find((g) => g.id === "grd-001");
     const item2 = andiGrades.find((g) => g.id === "grd-002");
 
-    assert(item1 && item1.comment && item1.aiReview, "grd-001 harus memiliki komentar dosen dan ulasan AI");
-    assert(item2 && item2.comment && item2.aiReview, "grd-002 harus memiliki komentar dosen dan ulasan AI");
+    assert(
+      item1 && item1.comment && item1.aiReview,
+      "grd-001 harus memiliki komentar dosen dan ulasan AI",
+    );
+    assert(
+      item2 && item2.comment && item2.aiReview,
+      "grd-002 harus memiliki komentar dosen dan ulasan AI",
+    );
     assert(item1.assessorName.includes("Dr. Budi Santoso"), "Penilai harus Dr. Budi Santoso");
 
     recordResult(
@@ -209,17 +251,26 @@ async function runTests() {
     });
     assert.strictEqual(asg1Res.status, 200, "Detail page asg-001 harus 200 OK");
     const html1 = await asg1Res.text();
-    assert(html1.includes("Laporan Analisis SI") || html1.includes("Analisis Sistem"), "Halaman asg-001 harus menampilkan data Laporan Analisis SI");
+    assert(
+      html1.includes("Laporan Analisis SI") || html1.includes("Analisis Sistem"),
+      "Halaman asg-001 harus menampilkan data Laporan Analisis SI",
+    );
 
     const asg2Res = await fetch(`${BASE_URL}/dashboard/mahasiswa/assignments/asg-002`, {
       headers: { Cookie: andiCookie },
     });
     assert.strictEqual(asg2Res.status, 200, "Detail page asg-002 harus 200 OK");
     const html2 = await asg2Res.text();
-    assert(html2.includes("Implementasi Autentikasi JWT") || html2.includes("Pemrograman Web"), "Halaman asg-002 harus menampilkan data Implementasi Autentikasi JWT");
+    assert(
+      html2.includes("Implementasi Autentikasi JWT") || html2.includes("Pemrograman Web"),
+      "Halaman asg-002 harus menampilkan data Implementasi Autentikasi JWT",
+    );
 
     // Pastikan data tidak tertukar
-    assert(!html1.includes("Implementasi Autentikasi JWT"), "asg-001 tidak boleh memuat data asg-002");
+    assert(
+      !html1.includes("Implementasi Autentikasi JWT"),
+      "asg-001 tidak boleh memuat data asg-002",
+    );
 
     recordResult(
       5,

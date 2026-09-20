@@ -22,6 +22,6 @@
     }
   },
   "files": {
-    "includes": ["**", "!**/.next/**", "!**/node_modules/**", "!**/dist/**"]
+    "includes": ["**", "!**/.next", "!**/node_modules", "!**/dist"]
   }
 }

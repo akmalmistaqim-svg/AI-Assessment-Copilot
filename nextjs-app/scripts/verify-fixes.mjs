@@ -25,8 +25,10 @@ async function runTests() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: "mahasiswa@example.com", password: "password123" }),
   });
-  const mhsCookies = resLoginMhs.headers.getSetCookie ? resLoginMhs.headers.getSetCookie() : [resLoginMhs.headers.get("set-cookie")];
-  const mhsCookieHeader = mhsCookies.map(c => c.split(";")[0]).join("; ");
+  const mhsCookies = resLoginMhs.headers.getSetCookie
+    ? resLoginMhs.headers.getSetCookie()
+    : [resLoginMhs.headers.get("set-cookie")];
+  const mhsCookieHeader = mhsCookies.map((c) => c.split(";")[0]).join("; ");
   console.log(`Login status: ${resLoginMhs.status}, Cookie: ${mhsCookieHeader}`);
 
   // Test 3: Mahasiswa accessing /dashboard/dosen/classes
@@ -39,10 +41,19 @@ async function runTests() {
   console.log(`Status: ${resMhsAccessDosen.status}`);
   const locationHeader = resMhsAccessDosen.headers.get("location");
   console.log(`Redirect Location: ${locationHeader}`);
-  if (resMhsAccessDosen.status >= 300 && resMhsAccessDosen.status < 400 && locationHeader?.includes("/dashboard/mahasiswa")) {
+  if (
+    resMhsAccessDosen.status >= 300 &&
+    resMhsAccessDosen.status < 400 &&
+    locationHeader?.includes("/dashboard/mahasiswa")
+  ) {
     console.log("-> PASS: Successfully redirected to /dashboard/mahasiswa!");
   } else {
-    console.error("-> FAIL: Did not redirect to /dashboard/mahasiswa, got status:", resMhsAccessDosen.status, "Location:", locationHeader);
+    console.error(
+      "-> FAIL: Did not redirect to /dashboard/mahasiswa, got status:",
+      resMhsAccessDosen.status,
+      "Location:",
+      locationHeader,
+    );
   }
 
   // Test 4: Mahasiswa trying to POST /api/classes
@@ -71,9 +82,11 @@ async function runTests() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: "dosen@example.com", password: "password123" }),
   });
-  const dsnCookies = resLoginDsn.headers.getSetCookie ? resLoginDsn.headers.getSetCookie() : [resLoginDsn.headers.get("set-cookie")];
-  const dsnCookieHeader = dsnCookies.map(c => c.split(";")[0]).join("; ");
-  
+  const dsnCookies = resLoginDsn.headers.getSetCookie
+    ? resLoginDsn.headers.getSetCookie()
+    : [resLoginDsn.headers.get("set-cookie")];
+  const dsnCookieHeader = dsnCookies.map((c) => c.split(";")[0]).join("; ");
+
   const resDsnPost = await fetch(`${baseUrl}/api/classes`, {
     method: "POST",
     headers: {

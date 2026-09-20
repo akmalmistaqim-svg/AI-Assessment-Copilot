@@ -128,10 +128,6 @@ export function RegisterForm() {
       setIsLoading(false);
     }
   }
-
-  const inputBaseClass =
-    "w-full py-2.5 px-3.5 text-sm text-text-primary bg-white border rounded-lg transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted";
-
   return (
     <>
       {alertMessage && (
@@ -322,7 +318,9 @@ export function RegisterForm() {
         <div className="mb-4">
           <div
             className={`relative flex flex-col justify-center px-3.5 py-2 pr-11 bg-white border rounded-xl transition focus-within:border-primary-green focus-within:ring-2 focus-within:ring-primary-green/20 ${
-              passwordError ? "border-status-danger-text ring-2 ring-red-100" : "border-border-color"
+              passwordError
+                ? "border-status-danger-text ring-2 ring-red-100"
+                : "border-border-color"
             }`}
           >
             <label

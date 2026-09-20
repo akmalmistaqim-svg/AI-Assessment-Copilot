@@ -53,10 +53,17 @@ async function runTests() {
       }),
     });
 
-    assert.strictEqual(createRes.status, 201, `Create class harus return 201 Created, got: ${createRes.status}`);
+    assert.strictEqual(
+      createRes.status,
+      201,
+      `Create class harus return 201 Created, got: ${createRes.status}`,
+    );
     const createdClass = await createRes.json();
     assert.strictEqual(createdClass.name, uniqueClassName, "Nama kelas harus cocok");
-    assert(Array.isArray(createdClass.enrolledStudentIds) && createdClass.enrolledStudentIds.includes(2), "Mahasiswa demo (id: 2) harus auto-enrolled");
+    assert(
+      Array.isArray(createdClass.enrolledStudentIds) && createdClass.enrolledStudentIds.includes(2),
+      "Mahasiswa demo (id: 2) harus auto-enrolled",
+    );
     createdClassId = createdClass.id;
 
     recordResult(
@@ -76,11 +83,18 @@ async function runTests() {
     const mahasiswaRes = await fetch(`${BASE_URL}/api/classes`, {
       headers: { Cookie: andiCookie },
     });
-    assert.strictEqual(mahasiswaRes.status, 200, `Fetch classes untuk mahasiswa harus return 200 OK`);
+    assert.strictEqual(
+      mahasiswaRes.status,
+      200,
+      `Fetch classes untuk mahasiswa harus return 200 OK`,
+    );
     const mahasiswaClasses = await mahasiswaRes.json();
 
     const foundNewClass = mahasiswaClasses.find((c) => c.name === uniqueClassName);
-    assert(foundNewClass, `Kelas baru "${uniqueClassName}" harus ditemukan di list Kelas Saya mahasiswa`);
+    assert(
+      foundNewClass,
+      `Kelas baru "${uniqueClassName}" harus ditemukan di list Kelas Saya mahasiswa`,
+    );
     assert.strictEqual(foundNewClass.id, createdClassId, "ID kelas harus cocok");
 
     // Pastikan halaman HTML render juga memuatnya
@@ -139,11 +153,18 @@ async function runTests() {
     const detailRes = await fetch(`${BASE_URL}/dashboard/mahasiswa/classes/cls-001`, {
       headers: { Cookie: andiCookie },
     });
-    assert.strictEqual(detailRes.status, 200, "Halaman detail /dashboard/mahasiswa/classes/cls-001 harus return 200 OK");
+    assert.strictEqual(
+      detailRes.status,
+      200,
+      "Halaman detail /dashboard/mahasiswa/classes/cls-001 harus return 200 OK",
+    );
     const detailHtml = await detailRes.text();
 
     assert(detailHtml.includes("Pemrograman Web"), "Harus menampilkan nama kelas Pemrograman Web");
-    assert(detailHtml.includes("Website CRUD Next.js"), "Harus menampilkan tugas terkait 'Website CRUD Next.js'");
+    assert(
+      detailHtml.includes("Website CRUD Next.js"),
+      "Harus menampilkan tugas terkait 'Website CRUD Next.js'",
+    );
     assert(detailHtml.includes("Dr. Budi Santoso, M.Kom"), "Harus menampilkan nama dosen pengampu");
 
     recordResult(

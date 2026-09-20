@@ -24,7 +24,10 @@ function StatsGridSkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="bg-card-bg rounded-xl border border-border-color shadow-sm p-5 animate-pulse">
+        <div
+          key={i}
+          className="bg-card-bg rounded-xl border border-border-color shadow-sm p-5 animate-pulse"
+        >
           <div className="flex items-center justify-between">
             <div className="h-4 w-24 bg-border-color/50 rounded"></div>
             <div className="w-10 h-10 rounded-xl bg-border-color/40"></div>
