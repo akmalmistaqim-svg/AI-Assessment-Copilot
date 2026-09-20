@@ -25,7 +25,8 @@ function recordResult(step, name, status, details) {
   results.push({ step, name, status, details });
   const icon = status === "PASS" ? "✅ [PASS]" : "❌ [FAIL]";
   console.log(`${icon} Step ${step}: ${name}`);
-  console.log(`    Detail: ${details}`);
+  const safeDetails = String(details).replace(/[\r\n]+/g, " ");
+  console.log(`    Detail: ${safeDetails}`);
 }
 
 async function runTests() {

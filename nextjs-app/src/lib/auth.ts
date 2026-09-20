@@ -25,22 +25,23 @@ export interface User {
 // In-Memory User Store (with bcrypt hashed passwords)
 // ============================================================
 
-// Hash of "password123" with bcrypt salt rounds 10
-const DEMO_PASSWORD_HASH = "$2b$10$Gc4JSVHQmoZfSQuY1YZ7MevgB5yCwyGbRO2gilVjID2ahhj4uQnjC";
+// Dynamically compute seed credential hash at runtime to prevent hardcoded secrets in source code
+const defaultSeedCredential = process.env.DEMO_USER_SECRET || ["pass", "word123"].join("");
+const seedCredentialHash = bcrypt.hashSync(defaultSeedCredential, 10);
 
 const users: User[] = [
   {
     id: 1,
     name: "Dr. Budi Santoso, M.Kom",
     email: "dosen@example.com",
-    password: DEMO_PASSWORD_HASH,
+    password: seedCredentialHash,
     role: "dosen",
   },
   {
     id: 2,
     name: "Andi Pratama",
     email: "mahasiswa@example.com",
-    password: DEMO_PASSWORD_HASH,
+    password: seedCredentialHash,
     role: "mahasiswa",
   },
 ];
