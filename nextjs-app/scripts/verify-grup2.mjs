@@ -1,27 +1,14 @@
 import assert from "node:assert";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import {
+  assertRouteHasStandardPages,
+  createTestRunner,
+  srcDir,
+} from "./test-helpers.mjs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const srcDir = path.resolve(__dirname, "../src");
-
-let passed = 0;
-let failed = 0;
-
-function test(name, fn) {
-  try {
-    fn();
-    console.log(`  [PASS] ${name}`);
-    passed++;
-  } catch (err) {
-    console.error(`  [FAIL] ${name}:`, err.message);
-    failed++;
-  }
-}
-
-console.log("=== VERIFIKASI PERBAIKAN SEARCH + GRUP 2 (MAHASISWA) ===");
+const runner = createTestRunner("VERIFIKASI PERBAIKAN SEARCH + GRUP 2 (MAHASISWA)");
+const { test } = runner;
 
 // 1. Verifikasi Reset Search Query Antar Halaman
 test("Search Reset: search-input.tsx mereset searchQuery ketika pathname berubah", () => {
@@ -34,18 +21,7 @@ test("Search Reset: search-input.tsx mereset searchQuery ketika pathname berubah
 
 // 2. Verifikasi Poin 1: My Grades
 test("Poin 1: Rute /dashboard/mahasiswa/grades lengkap dengan page, loading, dan error", () => {
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/grades/page.tsx")),
-    "page.tsx harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/grades/loading.tsx")),
-    "loading.tsx harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/grades/error.tsx")),
-    "error.tsx harus ada",
-  );
+  assertRouteHasStandardPages("dashboard/mahasiswa/grades");
 });
 
 test("Poin 1: Sidebar Mahasiswa 'My Grades' terhubung ke /dashboard/mahasiswa/grades", () => {
@@ -82,18 +58,7 @@ test("Poin 1: Logika filter nilai hanya mengembalikan data akun mahasiswa yang l
 
 // 3. Verifikasi Poin 2: Feedback
 test("Poin 2: Rute /dashboard/mahasiswa/feedback lengkap dengan page, loading, dan error", () => {
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/feedback/page.tsx")),
-    "page.tsx harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/feedback/loading.tsx")),
-    "loading.tsx harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/feedback/error.tsx")),
-    "error.tsx harus ada",
-  );
+  assertRouteHasStandardPages("dashboard/mahasiswa/feedback");
 });
 
 test("Poin 2: Sidebar Mahasiswa 'Feedback' terhubung ke /dashboard/mahasiswa/feedback", () => {
@@ -140,7 +105,7 @@ test("Poin 3: API route /api/submissions memiliki validasi Zod dan proteksi role
 });
 
 test("Poin 3: Alur pengumpulan tugas mengubah status assignment menjadi 'submitted'", async () => {
-  const { getAssignmentsStore, updateAssignmentInStore, getAssignmentByIdFromStore } = await import(
+  const { updateAssignmentInStore, getAssignmentByIdFromStore } = await import(
     "../src/lib/assignmentStore.ts"
   );
   const { addSubmissionToStore } = await import("../src/lib/submissionStore.ts");
@@ -171,5 +136,5 @@ test("Poin 3: Alur pengumpulan tugas mengubah status assignment menjadi 'submitt
   assert(updatedTarget?.status === "submitted", "Status tugas harus berubah menjadi 'submitted'");
 });
 
-console.log(`\nHASIL VERIFIKASI GRUP 2: ${passed} Passed, ${failed} Failed`);
-if (failed > 0) process.exit(1);
+const summary = runner.summary();
+if (summary.failed > 0) process.exit(1);

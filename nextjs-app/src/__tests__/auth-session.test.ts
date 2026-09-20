@@ -1,17 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import {
-  type SessionPayload,
-  signSessionPayload,
-  toUserId,
-  verifySessionToken,
-} from "@/types/auth";
+import { signSessionPayload, toUserId, verifySessionToken } from "@/types/auth";
+import { createMockSessionPayload, TEST_SESSION_SECRET } from "./helpers";
 
 describe("HMAC-SHA256 Session Token & UserId Branded Type", () => {
   const originalSecret = process.env.SESSION_SECRET;
-  const TEST_SECRET = "super-secure-test-session-secret-key-32-chars-long";
 
   beforeEach(() => {
-    process.env.SESSION_SECRET = TEST_SECRET;
+    process.env.SESSION_SECRET = TEST_SESSION_SECRET;
   });
 
   afterEach(() => {
@@ -19,21 +14,12 @@ describe("HMAC-SHA256 Session Token & UserId Branded Type", () => {
   });
 
   it("toUserId returns a branded UserId with correct value", () => {
-    const userIdNum = toUserId(42);
-    expect(userIdNum).toBe(42);
-
-    const userIdAnother = toUserId(999);
-    expect(userIdAnother).toBe(999);
+    expect(toUserId(42)).toBe(42);
+    expect(toUserId(999)).toBe(999);
   });
 
   it("signSessionPayload generates a valid two-part token (header.signature)", async () => {
-    const payload: SessionPayload = {
-      id: toUserId(1),
-      name: "Dosen Test",
-      email: "dosen@example.com",
-      role: "dosen",
-    };
-
+    const payload = createMockSessionPayload("dosen");
     const token = await signSessionPayload(payload);
     expect(typeof token).toBe("string");
     const parts = token.split(".");
@@ -43,13 +29,7 @@ describe("HMAC-SHA256 Session Token & UserId Branded Type", () => {
   });
 
   it("verifySessionToken successfully verifies and reconstructs payload", async () => {
-    const payload: SessionPayload = {
-      id: toUserId(2),
-      name: "Mahasiswa Test",
-      email: "mahasiswa@example.com",
-      role: "mahasiswa",
-    };
-
+    const payload = createMockSessionPayload("mahasiswa");
     const token = await signSessionPayload(payload);
     const verified = await verifySessionToken(token);
 
@@ -61,17 +41,10 @@ describe("HMAC-SHA256 Session Token & UserId Branded Type", () => {
   });
 
   it("verifySessionToken rejects tampered token payload", async () => {
-    const payload: SessionPayload = {
-      id: toUserId(2),
-      name: "Mahasiswa Test",
-      email: "mahasiswa@example.com",
-      role: "mahasiswa",
-    };
-
+    const payload = createMockSessionPayload("mahasiswa");
     const token = await signSessionPayload(payload);
     const parts = token.split(".");
 
-    // Alter payload base64 part
     const tamperedPart0 = Buffer.from(JSON.stringify({ ...payload, role: "dosen" })).toString(
       "base64url",
     );
@@ -82,22 +55,15 @@ describe("HMAC-SHA256 Session Token & UserId Branded Type", () => {
   });
 
   it("verifySessionToken rejects invalid token formats", async () => {
-    expect(await verifySessionToken("not-a-token")).toBeNull();
-    expect(await verifySessionToken("onlyonepart")).toBeNull();
-    expect(await verifySessionToken("part1.part2.part3")).toBeNull();
-    expect(await verifySessionToken("")).toBeNull();
+    const invalidTokens = ["not-a-token", "onlyonepart", "part1.part2.part3", ""];
+    for (const invalid of invalidTokens) {
+      expect(await verifySessionToken(invalid)).toBeNull();
+    }
   });
 
   it("signSessionPayload throws error when SESSION_SECRET is not configured", async () => {
     delete process.env.SESSION_SECRET;
-
-    const payload: SessionPayload = {
-      id: toUserId(1),
-      name: "Test",
-      email: "test@example.com",
-      role: "dosen",
-    };
-
+    const payload = createMockSessionPayload("dosen");
     await expect(signSessionPayload(payload)).rejects.toThrow(/SESSION_SECRET is not defined/);
   });
 });

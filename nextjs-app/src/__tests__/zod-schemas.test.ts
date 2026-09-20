@@ -8,20 +8,17 @@ describe("Zod Validation Schemas", () => {
   describe("LoginRequestSchema", () => {
     it("validates correct login credentials", () => {
       const valid = { email: "user@example.com", password: "password123" };
-      const parsed = LoginRequestSchema.safeParse(valid);
-      expect(parsed.success).toBe(true);
+      expect(LoginRequestSchema.safeParse(valid).success).toBe(true);
     });
 
     it("rejects invalid email formats", () => {
       const invalid = { email: "not-an-email", password: "password123" };
-      const parsed = LoginRequestSchema.safeParse(invalid);
-      expect(parsed.success).toBe(false);
+      expect(LoginRequestSchema.safeParse(invalid).success).toBe(false);
     });
 
     it("rejects missing password", () => {
       const invalid = { email: "user@example.com" };
-      const parsed = LoginRequestSchema.safeParse(invalid);
-      expect(parsed.success).toBe(false);
+      expect(LoginRequestSchema.safeParse(invalid).success).toBe(false);
     });
   });
 
@@ -33,8 +30,7 @@ describe("Zod Validation Schemas", () => {
         password: "secretpassword",
         role: "mahasiswa" as const,
       };
-      const parsed = RegisterRequestSchema.safeParse(valid);
-      expect(parsed.success).toBe(true);
+      expect(RegisterRequestSchema.safeParse(valid).success).toBe(true);
     });
 
     it("rejects password shorter than 6 characters", () => {
@@ -44,8 +40,7 @@ describe("Zod Validation Schemas", () => {
         password: "123",
         role: "mahasiswa" as const,
       };
-      const parsed = RegisterRequestSchema.safeParse(invalid);
-      expect(parsed.success).toBe(false);
+      expect(RegisterRequestSchema.safeParse(invalid).success).toBe(false);
     });
 
     it("rejects invalid role selection", () => {
@@ -55,8 +50,7 @@ describe("Zod Validation Schemas", () => {
         password: "password123",
         role: "superadmin",
       };
-      const parsed = RegisterRequestSchema.safeParse(invalid);
-      expect(parsed.success).toBe(false);
+      expect(RegisterRequestSchema.safeParse(invalid).success).toBe(false);
     });
   });
 
@@ -70,8 +64,7 @@ describe("Zod Validation Schemas", () => {
         totalWeight: 100,
         status: "active" as const,
       };
-      const parsed = RubricSchema.safeParse(rubric);
-      expect(parsed.success).toBe(true);
+      expect(RubricSchema.safeParse(rubric).success).toBe(true);
     });
 
     it("coerces string numbers and defaults status to active in CreateRubricInputSchema", () => {
@@ -97,8 +90,7 @@ describe("Zod Validation Schemas", () => {
         criteriaCount: 2,
         totalWeight: 150,
       };
-      const parsed = CreateRubricInputSchema.safeParse(invalid);
-      expect(parsed.success).toBe(false);
+      expect(CreateRubricInputSchema.safeParse(invalid).success).toBe(false);
     });
   });
 
@@ -112,8 +104,7 @@ describe("Zod Validation Schemas", () => {
         description: "Buat analisis heuristik lengkap.",
         status: "pending" as const,
       };
-      const parsed = AssignmentSchema.safeParse(item);
-      expect(parsed.success).toBe(true);
+      expect(AssignmentSchema.safeParse(item).success).toBe(true);
     });
 
     it("defaults status to pending in CreateAssignmentInputSchema", () => {
@@ -133,27 +124,27 @@ describe("Zod Validation Schemas", () => {
 
   describe("Assessment Discriminated Union Helper", () => {
     it("returns correct config for draft state", () => {
-      const config = getAssessmentStatusConfig("draft");
-      expect(config.status).toBe("draft");
-      expect(config.statusLabel).toBe("Draft");
-      expect(config.canEdit).toBe(true);
-      expect(config.canFinalize).toBe(false);
+      const c = getAssessmentStatusConfig("draft");
+      expect(c.status).toBe("draft");
+      expect(c.statusLabel).toBe("Draft");
+      expect(c.canEdit).toBe(true);
+      expect(c.canFinalize).toBe(false);
     });
 
     it("returns correct config for in-review state", () => {
-      const config = getAssessmentStatusConfig("in-review");
-      expect(config.status).toBe("in-review");
-      expect(config.statusLabel).toBe("In-Review");
-      expect(config.canEdit).toBe(true);
-      expect(config.canFinalize).toBe(true);
+      const c = getAssessmentStatusConfig("in-review");
+      expect(c.status).toBe("in-review");
+      expect(c.statusLabel).toBe("In-Review");
+      expect(c.canEdit).toBe(true);
+      expect(c.canFinalize).toBe(true);
     });
 
     it("returns correct config for finalized state", () => {
-      const config = getAssessmentStatusConfig("finalized");
-      expect(config.status).toBe("finalized");
-      expect(config.statusLabel).toBe("Finalized");
-      expect(config.canEdit).toBe(false);
-      expect(config.canFinalize).toBe(false);
+      const c = getAssessmentStatusConfig("finalized");
+      expect(c.status).toBe("finalized");
+      expect(c.statusLabel).toBe("Finalized");
+      expect(c.canEdit).toBe(false);
+      expect(c.canFinalize).toBe(false);
     });
   });
 });

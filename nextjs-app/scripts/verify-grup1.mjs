@@ -1,27 +1,14 @@
 import assert from "node:assert";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import {
+  assertRouteHasStandardPages,
+  createTestRunner,
+  srcDir,
+} from "./test-helpers.mjs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const srcDir = path.resolve(__dirname, "../src");
-
-let passed = 0;
-let failed = 0;
-
-function test(name, fn) {
-  try {
-    fn();
-    console.log(`  [PASS] ${name}`);
-    passed++;
-  } catch (err) {
-    console.error(`  [FAIL] ${name}:`, err.message);
-    failed++;
-  }
-}
-
-console.log("=== VERIFIKASI GRUP 1 (QUICK WINS) ===");
+const runner = createTestRunner("VERIFIKASI GRUP 1 (QUICK WINS)");
+const { test } = runner;
 
 // 1. Verifikasi "Lihat Semua Tugas" di dashboard mahasiswa
 test('Point 1: assignments-list-section-server.tsx menggunakan <Link href="/dashboard/mahasiswa/assignments">', () => {
@@ -43,18 +30,7 @@ test('Point 1: assignments-list-section-server.tsx menggunakan <Link href="/dash
 });
 
 test("Point 1: Rute /dashboard/mahasiswa/assignments sudah dibuat lengkap dengan loading & error", () => {
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/assignments/page.tsx")),
-    "page.tsx harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/assignments/loading.tsx")),
-    "loading.tsx harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/assignments/error.tsx")),
-    "error.tsx harus ada",
-  );
+  assertRouteHasStandardPages("dashboard/mahasiswa/assignments");
 });
 
 test("Point 1: Sidebar Mahasiswa 'My Assignments' terhubung ke /dashboard/mahasiswa/assignments", () => {
@@ -81,18 +57,7 @@ test('Point 2: activity-feed-section.tsx menggunakan <Link href="/dashboard/dose
 });
 
 test("Point 2: Rute /dashboard/dosen/activities sudah dibuat lengkap dengan loading & error", () => {
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/dosen/activities/page.tsx")),
-    "page.tsx activities harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/dosen/activities/loading.tsx")),
-    "loading.tsx activities harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/dosen/activities/error.tsx")),
-    "error.tsx activities harus ada",
-  );
+  assertRouteHasStandardPages("dashboard/dosen/activities", "activities");
 });
 
 // 3. Verifikasi Tombol Panah di MahasiswaAssignmentCard
@@ -109,18 +74,7 @@ test("Point 3: mahasiswa-assignment-card.tsx memiliki Link menuju /dashboard/mah
 });
 
 test("Point 3: Rute detail /dashboard/mahasiswa/assignments/[id] sudah dibuat lengkap dengan loading & error", () => {
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/assignments/[id]/page.tsx")),
-    "page.tsx detail harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/assignments/[id]/loading.tsx")),
-    "loading.tsx detail harus ada",
-  );
-  assert(
-    fs.existsSync(path.join(srcDir, "app/dashboard/mahasiswa/assignments/[id]/error.tsx")),
-    "error.tsx detail harus ada",
-  );
+  assertRouteHasStandardPages("dashboard/mahasiswa/assignments/[id]", "detail");
 
   const detailContent = fs.readFileSync(
     path.join(srcDir, "app/dashboard/mahasiswa/assignments/[id]/page.tsx"),
@@ -185,5 +139,5 @@ test("Point 4: Komponen tugas mahasiswa membaca searchQuery dan memfilter daftar
   );
 });
 
-console.log(`\nHASIL VERIFIKASI: ${passed} Passed, ${failed} Failed`);
-if (failed > 0) process.exit(1);
+const summary = runner.summary();
+if (summary.failed > 0) process.exit(1);
