@@ -8,18 +8,30 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useAssessmentsQuery, useDeleteAssessmentMutation } from "@/hooks/useAssessmentsQuery";
-import { useUIStore } from "@/store/useUIStore";
+import { type AssessmentFilter, useUIStore } from "@/store/useUIStore";
 import { type AssessmentItem, getAssessmentStatusConfig } from "@/types/assessment";
+
+const FILTER_OPTIONS: { label: string; value: AssessmentFilter }[] = [
+  { label: "Semua", value: "ALL" },
+  { label: "Finalized", value: "finalized" },
+  { label: "In-Review", value: "in-review" },
+  { label: "Draft", value: "draft" },
+];
 
 export function AssessmentListSection() {
   const openModal = useUIStore((s) => s.openModal);
   const searchQuery = useUIStore((s) => s.searchQuery);
+  const selectedFilter = useUIStore((s) => s.selectedFilter);
+  const setFilter = useUIStore((s) => s.setFilter);
   const { data: assessments, isLoading, isError, error, refetch } = useAssessmentsQuery();
   const deleteMutation = useDeleteAssessmentMutation();
 
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentItem | null>(null);
 
   const filteredAssessments = assessments?.filter((asm: AssessmentItem) => {
+    if (selectedFilter !== "ALL" && asm.status !== selectedFilter) {
+      return false;
+    }
     if (!searchQuery.trim()) return true;
     const query = searchQuery.toLowerCase();
     return asm.name.toLowerCase().includes(query) || asm.course.toLowerCase().includes(query);
@@ -70,6 +82,32 @@ export function AssessmentListSection() {
           </Button>
         </div>
 
+        {/* Filter Buttons & Counter */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {FILTER_OPTIONS.map((opt) => {
+              const isActive = selectedFilter === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setFilter(opt.value)}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    isActive
+                      ? "bg-primary-green text-white shadow-xs"
+                      : "bg-white text-text-secondary border border-border-color hover:bg-slate-50 hover:text-text-primary"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-xs text-text-muted font-medium">
+            Menampilkan {filteredAssessments?.length ?? 0} dari {assessments?.length ?? 0} sesi
+          </p>
+        </div>
+
         {/* Loading State */}
         {isLoading && (
           <div className="bg-card-bg rounded-xl border border-border-color p-8 text-center space-y-3">
@@ -103,7 +141,7 @@ export function AssessmentListSection() {
           />
         )}
 
-        {/* Search No Results State */}
+        {/* Search / Filter No Results State */}
         {!isLoading &&
           !isError &&
           assessments &&
@@ -112,7 +150,11 @@ export function AssessmentListSection() {
           filteredAssessments.length === 0 && (
             <EmptyState
               title="Tidak ada hasil"
-              description={`Tidak ditemukan assessment dengan kata kunci "${searchQuery}".`}
+              description={
+                searchQuery
+                  ? `Tidak ditemukan assessment dengan kata kunci "${searchQuery}".`
+                  : "Tidak ditemukan assessment dengan filter yang dipilih."
+              }
             />
           )}
 
