@@ -7,7 +7,7 @@
     "dev": "npm --prefix nextjs-app run dev",
     "build": "cd nextjs-app && npm install && npm run build",
     "start": "npm --prefix nextjs-app run start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm --prefix nextjs-app run test"
   },
   "keywords": [],
   "author": "",

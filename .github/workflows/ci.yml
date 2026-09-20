@@ -37,3 +37,9 @@ jobs:
 
       - name: Run lint (Biome)
         run: npm run lint:biome
+
+      - name: Run type-check
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        run: npm run test:coverage

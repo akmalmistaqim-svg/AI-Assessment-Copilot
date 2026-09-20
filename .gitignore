@@ -13,5 +13,11 @@ yarn-error.log*
 # env files
 .env*
 
+# test & coverage
+coverage/
+
+# next.js build
+.next/
+
 # vercel
 .vercel
