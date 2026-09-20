@@ -55,22 +55,23 @@
     <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar w-[260px] bg-sidebar-bg border-r border-border-color flex flex-col fixed top-0 bottom-0 left-0 z-100 transition-transform">
       <div class="sidebar-header p-5 md:py-6 md:px-5 border-b border-border-light">
-        <a href="mahasiswa.html" class="brand-logo flex items-center gap-3 no-underline">
+        <a href="#dashboard" class="brand-logo flex items-center gap-3 no-underline" data-view="dashboard">
           <img src="../assets/images/dexa-logo.png" alt="DeXa Assessment Logo" class="w-10 h-10 rounded-xl object-contain shadow-xs shrink-0">
           <div class="brand-text flex flex-col">
-            <span class="brand-name text-base font-bold text-text-primary tracking-tight leading-tight">DeXa Assessment</span>
-            <span class="brand-tagline text-[11px] text-text-secondary font-normal mt-0.5">Student Portal</span>
+            <span class="brand-name font-bold text-sm text-text-primary leading-tight">DeXa Assessment</span>
+            <span class="brand-portal text-[11px] text-text-secondary">Student Portal</span>
           </div>
         </a>
       </div>
 
-      <div class="sidebar-nav-container flex-1 overflow-y-auto py-5 px-3.5">
+      <!-- Navigation Menus -->
+      <div class="sidebar-nav-container flex-1 overflow-y-auto p-4 md:px-3 md:py-5">
         <!-- MAIN Section -->
         <div class="nav-section mb-6">
           <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">MAIN</div>
           <ul class="nav-menu list-none flex flex-col gap-1">
             <li>
-              <a href="mahasiswa.html" class="nav-link active flex items-center gap-3 py-2 px-3 rounded-md bg-light-green text-dark-green text-[13.5px] font-semibold transition">
+              <a href="#dashboard" class="nav-link active flex items-center gap-3 py-2 px-3 rounded-md bg-light-green text-dark-green text-[13.5px] font-semibold transition" data-view="dashboard">
                 <i data-lucide="layout-dashboard" class="nav-icon w-4.5 h-4.5 text-primary-green"></i>
                 <span>Dashboard</span>
               </a>
@@ -83,19 +84,19 @@
           <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">LEARNING</div>
           <ul class="nav-menu list-none flex flex-col gap-1">
             <li>
-              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="My Assignments">
+              <a href="#assignments" class="nav-link flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-view="assignments">
                 <i data-lucide="file-text" class="nav-icon w-4.5 h-4.5"></i>
                 <span>My Assignments</span>
               </a>
             </li>
             <li>
-              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="My Grades">
+              <a href="#grades" class="nav-link flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-view="grades">
                 <i data-lucide="award" class="nav-icon w-4.5 h-4.5"></i>
                 <span>My Grades</span>
               </a>
             </li>
             <li>
-              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Feedback">
+              <a href="#feedback" class="nav-link flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-view="feedback">
                 <i data-lucide="message-square" class="nav-icon w-4.5 h-4.5"></i>
                 <span>Feedback</span>
               </a>
@@ -108,13 +109,13 @@
           <div class="nav-section-title text-[11px] font-semibold uppercase tracking-wider text-text-muted px-3 pb-2">GENERAL</div>
           <ul class="nav-menu list-none flex flex-col gap-1">
             <li>
-              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Settings">
+              <a href="#settings" class="nav-link flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-view="settings">
                 <i data-lucide="settings" class="nav-icon w-4.5 h-4.5"></i>
                 <span>Settings</span>
               </a>
             </li>
             <li>
-              <a href="#" class="nav-link js-future-feature flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-title="Help & Support">
+              <a href="#help" class="nav-link flex items-center gap-3 py-2 px-3 rounded-md text-text-secondary text-[13.5px] font-medium transition hover:bg-slate-50 hover:text-text-primary" data-view="help">
                 <i data-lucide="help-circle" class="nav-icon w-4.5 h-4.5"></i>
                 <span>Help</span>
               </a>
@@ -146,16 +147,51 @@
           
           <div class="search-box relative flex items-center w-full">
             <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);" class="absolute left-3"></i>
-            <input type="text" id="topbarSearchInput" placeholder="Search assignments, grades, or feedback..." aria-label="Search" class="w-full pl-9 pr-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-md focus:outline-none focus:border-primary-green focus:bg-white transition">
+            <input type="text" id="topbarSearchInput" placeholder="Cari tugas, nilai, atau feedback..." aria-label="Search" class="w-full pl-9 pr-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-md focus:outline-none focus:border-primary-green focus:bg-white transition">
           </div>
         </div>
 
         <div class="topbar-right flex items-center gap-3.5">
           <!-- Notification Button -->
-          <button type="button" class="icon-btn js-future-feature relative p-2 rounded-md text-text-secondary hover:bg-slate-50 hover:text-text-primary transition" data-title="Notifications" aria-label="View notifications">
-            <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
-            <span class="badge-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-status-danger-text"></span>
-          </button>
+          <div class="relative">
+            <button type="button" id="notificationsTrigger" class="icon-btn relative p-2 rounded-md text-text-secondary hover:bg-slate-50 hover:text-text-primary transition" aria-label="View notifications" aria-expanded="false">
+              <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+              <span id="notifBadgeDot" class="badge-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-status-danger-text"></span>
+            </button>
+            <!-- Notification Dropdown -->
+            <div id="notificationsMenu" class="dropdown-menu w-80 p-0 absolute right-0 mt-2 bg-card-bg rounded-xl border border-border-color shadow-lg z-50">
+              <div class="p-3.5 border-b border-border-light flex items-center justify-between">
+                <span class="text-xs font-bold text-text-primary">Notifikasi (<span id="notifCount">3</span>)</span>
+                <button type="button" id="markAllReadBtn" class="text-[11px] font-semibold text-primary-green hover:underline cursor-pointer bg-transparent border-0">Tandai Dibaca</button>
+              </div>
+              <div class="divide-y divide-border-light max-h-72 overflow-y-auto" id="notifList">
+                <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3">
+                  <div class="w-2 h-2 rounded-full bg-primary-green mt-1.5 shrink-0 notif-unread-dot"></div>
+                  <div>
+                    <p class="text-xs font-semibold text-text-primary">Website CRUD telah dinilai</p>
+                    <p class="text-[11px] text-text-secondary">Nilai: 88/100 oleh Dr. Budi Santoso</p>
+                    <span class="text-[10px] text-text-muted">1 jam yang lalu</span>
+                  </div>
+                </div>
+                <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3">
+                  <div class="w-2 h-2 rounded-full bg-primary-green mt-1.5 shrink-0 notif-unread-dot"></div>
+                  <div>
+                    <p class="text-xs font-semibold text-text-primary">Pengingat Deadline Tugas</p>
+                    <p class="text-[11px] text-text-secondary">OOP Design Patterns jatuh tempo 22 Sep 2026</p>
+                    <span class="text-[10px] text-text-muted">3 jam yang lalu</span>
+                  </div>
+                </div>
+                <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3">
+                  <div class="w-2 h-2 rounded-full bg-primary-green mt-1.5 shrink-0 notif-unread-dot"></div>
+                  <div>
+                    <p class="text-xs font-semibold text-text-primary">Umpan Balik Baru Dosen</p>
+                    <p class="text-[11px] text-text-secondary">Ir. Siti Aminah memberikan catatan tugas Basis Data</p>
+                    <span class="text-[10px] text-text-muted">Kemarin</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- User Profile Dropdown -->
           <div class="profile-dropdown-container relative">
@@ -174,11 +210,11 @@
                 <div class="full-name js-user-name">Andi Pratama</div>
                 <div class="user-email js-user-email">mahasiswa@example.com</div>
               </div>
-              <button type="button" class="dropdown-item js-future-feature" data-title="Student Profile">
+              <button type="button" class="dropdown-item" data-view="settings">
                 <i data-lucide="user" style="width: 16px; height: 16px;"></i>
                 <span>Profile</span>
               </button>
-              <button type="button" class="dropdown-item js-future-feature" data-title="Preferences">
+              <button type="button" class="dropdown-item" data-view="settings">
                 <i data-lucide="sliders" style="width: 16px; height: 16px;"></i>
                 <span>Settings</span>
               </button>
@@ -195,114 +231,449 @@
       <!-- PAGE CONTENT -->
       <main class="main-content flex-1 p-5 md:p-8">
 
-        <!-- Header Section -->
-        <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-7">
-          <div>
-            <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Welcome back, <span class="js-user-name">Andi Pratama</span></h1>
-            <p class="page-subtitle text-sm text-text-secondary mt-1">Keep track of your assignments and assessment results.</p>
+        <!-- ========================================== -->
+        <!-- VIEW 1: DASHBOARD OVERVIEW                 -->
+        <!-- ========================================== -->
+        <div id="view-dashboard" class="student-view active">
+          <!-- Header Section -->
+          <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-7">
+            <div>
+              <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Selamat Datang, <span class="js-user-name">Andi Pratama</span></h1>
+              <p class="page-subtitle text-sm text-text-secondary mt-1">Pantau progres penugasan, status submisi, dan penilaian akademik Anda.</p>
+            </div>
+            <div class="header-actions flex flex-wrap items-center gap-2.5">
+              <button type="button" id="calendarBtn" class="btn btn-secondary">
+                <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
+                <span>Jadwal / Kalender</span>
+              </button>
+              <button type="button" id="openSubmitModalBtn" class="btn btn-primary">
+                <i data-lucide="upload" style="width: 16px; height: 16px;"></i>
+                <span>Kumpulkan Tugas</span>
+              </button>
+            </div>
           </div>
-          <div class="header-actions flex flex-wrap items-center gap-2.5">
-            <button type="button" data-component="button" data-variant="secondary" data-size="md" class="btn btn-secondary js-future-feature" data-title="Submission Schedule">
-              <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
-              <span>Calendar</span>
-            </button>
-            <button type="button" data-component="button" data-variant="primary" data-size="md" class="btn btn-primary js-future-feature" data-title="Submit Assignment">
-              <i data-lucide="upload" style="width: 16px; height: 16px;"></i>
-              <span>Submit Assignment</span>
-            </button>
+
+          <!-- 4 Summary Cards -->
+          <section class="stats-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8" aria-label="Summary Statistics">
+            <!-- Card 1: Active Assignments -->
+            <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
+              <div class="stat-info flex flex-col">
+                <span class="stat-label text-xs text-text-secondary font-medium mb-1">Active Assignments</span>
+                <span class="stat-value text-2xl font-bold text-text-primary tracking-tight" id="statActiveCount">3</span>
+                <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-text-secondary mt-1">
+                  <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                  Due within 7 days
+                </span>
+              </div>
+              <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-light-green text-primary-green flex items-center justify-center shrink-0">
+                <i data-lucide="file-clock" style="width: 22px; height: 22px;"></i>
+              </div>
+            </div>
+
+            <!-- Card 2: Submitted -->
+            <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
+              <div class="stat-info flex flex-col">
+                <span class="stat-label text-xs text-text-secondary font-medium mb-1">Submitted</span>
+                <span class="stat-value text-2xl font-bold text-text-primary tracking-tight" id="statSubmittedCount">7</span>
+                <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-blue-600 mt-1">
+                  <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                  Sent to lecturer
+                </span>
+              </div>
+              <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                <i data-lucide="send" style="width: 22px; height: 22px;"></i>
+              </div>
+            </div>
+
+            <!-- Card 3: Pending Grades -->
+            <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
+              <div class="stat-info flex flex-col">
+                <span class="stat-label text-xs text-text-secondary font-medium mb-1">Pending Grades</span>
+                <span class="stat-value text-2xl font-bold text-text-primary tracking-tight" id="statPendingCount">2</span>
+                <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-amber-600 mt-1">
+                  <i data-lucide="hourglass" style="width: 12px; height: 12px;"></i>
+                  In review
+                </span>
+              </div>
+              <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                <i data-lucide="timer" style="width: 22px; height: 22px;"></i>
+              </div>
+            </div>
+
+            <!-- Card 4: Graded -->
+            <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
+              <div class="stat-info flex flex-col">
+                <span class="stat-label text-xs text-text-secondary font-medium mb-1">Graded</span>
+                <span class="stat-value text-2xl font-bold text-text-primary tracking-tight" id="statGradedCount">5</span>
+                <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-emerald-600 mt-1">
+                  <i data-lucide="award" style="width: 12px; height: 12px;"></i>
+                  Avg score: 89.2
+                </span>
+              </div>
+              <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <i data-lucide="check-circle-2" style="width: 22px; height: 22px;"></i>
+              </div>
+            </div>
+          </section>
+
+          <!-- Main Dashboard Content Grid -->
+          <div class="dashboard-grid grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Recent Assignments (Dynamic via apiService) -->
+            <div class="section-card bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+              <div class="section-header flex items-center justify-between px-6 py-4.5 border-b border-border-light">
+                <h2 class="section-title text-base font-bold text-text-primary">Recent Assignments</h2>
+                <button type="button" class="section-action-link text-xs font-semibold text-primary-green hover:text-dark-green transition cursor-pointer bg-transparent border-0" data-view="assignments">View all</button>
+              </div>
+              <div class="section-body p-6">
+                <div class="item-list flex flex-col gap-3" id="assignmentsListContainer">
+                  <!-- Assignments loaded dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Feedback (Dynamic via apiService) -->
+            <div class="section-card bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+              <div class="section-header flex items-center justify-between px-6 py-4.5 border-b border-border-light">
+                <h2 class="section-title text-base font-bold text-text-primary">Recent Feedback</h2>
+                <button type="button" class="section-action-link text-xs font-semibold text-primary-green hover:text-dark-green transition cursor-pointer bg-transparent border-0" data-view="feedback">Archive</button>
+              </div>
+              <div class="section-body p-6" id="feedbackContainer">
+                <!-- Feedback loaded dynamically -->
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- 4 Summary Cards -->
-        <section class="stats-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8" aria-label="Summary Statistics">
-          <!-- Card 1: Active Assignments -->
-          <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
-            <div class="stat-info flex flex-col">
-              <span class="stat-label text-xs text-text-secondary font-medium mb-1">Active Assignments</span>
-              <span class="stat-value text-2xl font-bold text-text-primary tracking-tight">3</span>
-              <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-text-secondary mt-1">
-                <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
-                Due within 7 days
-              </span>
+        <!-- ========================================== -->
+        <!-- VIEW 2: MY ASSIGNMENTS                     -->
+        <!-- ========================================== -->
+        <div id="view-assignments" class="student-view hidden">
+          <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-2 text-xs text-text-secondary mb-1.5">
+                <button type="button" class="hover:text-primary-green transition bg-transparent border-0 p-0 text-text-secondary cursor-pointer" data-view="dashboard">Dashboard</button>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+                <span class="font-semibold text-text-primary">My Assignments</span>
+              </div>
+              <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Daftar Tugas Saya</h1>
+              <p class="page-subtitle text-sm text-text-secondary mt-1">Kelola seluruh tugas kuliah, deadline, dan submisi proyek Anda.</p>
             </div>
-            <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-light-green text-primary-green flex items-center justify-center shrink-0">
-              <i data-lucide="file-clock" style="width: 22px; height: 22px;"></i>
+            <button type="button" class="btn btn-primary js-open-submit-modal">
+              <i data-lucide="upload" style="width: 16px; height: 16px;"></i>
+              <span>Kumpulkan Tugas</span>
+            </button>
+          </div>
+
+          <!-- Assignment Filter Tabs & Search -->
+          <div class="bg-card-bg rounded-xl border border-border-color p-4 mb-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" id="assignmentsFilterTabs">
+              <button type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-light-green text-dark-green border-0" data-filter="all">Semua (<span id="countFilterAll">4</span>)</button>
+              <button type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-text-secondary hover:bg-slate-100 transition cursor-pointer bg-transparent border-0" data-filter="pending">Aktif / Pending (<span id="countFilterPending">2</span>)</button>
+              <button type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-text-secondary hover:bg-slate-100 transition cursor-pointer bg-transparent border-0" data-filter="submitted">Terkumpul (<span id="countFilterSubmitted">1</span>)</button>
+              <button type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-text-secondary hover:bg-slate-100 transition cursor-pointer bg-transparent border-0" data-filter="graded">Dinilai (<span id="countFilterGraded">1</span>)</button>
+            </div>
+            <div class="relative w-full sm:w-64">
+              <i data-lucide="search" style="width: 14px; height: 14px; color: var(--text-muted);" class="absolute left-3 top-2.5"></i>
+              <input type="text" id="assignmentsSearchInput" placeholder="Cari nama tugas / mata kuliah..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition">
             </div>
           </div>
 
-          <!-- Card 2: Submitted -->
-          <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
-            <div class="stat-info flex flex-col">
-              <span class="stat-label text-xs text-text-secondary font-medium mb-1">Submitted</span>
-              <span class="stat-value text-2xl font-bold text-text-primary tracking-tight">7</span>
-              <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-blue-600 mt-1">
-                <i data-lucide="check" style="width: 12px; height: 12px;"></i>
-                Sent to lecturer
-              </span>
-            </div>
-            <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <i data-lucide="send" style="width: 22px; height: 22px;"></i>
+          <!-- Full Assignments List -->
+          <div class="flex flex-col gap-4" id="fullAssignmentsContainer">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: MY GRADES                          -->
+        <!-- ========================================== -->
+        <div id="view-grades" class="student-view hidden">
+          <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-2 text-xs text-text-secondary mb-1.5">
+                <button type="button" class="hover:text-primary-green transition bg-transparent border-0 p-0 text-text-secondary cursor-pointer" data-view="dashboard">Dashboard</button>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+                <span class="font-semibold text-text-primary">My Grades</span>
+              </div>
+              <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Nilai & Transkrip Akademik</h1>
+              <p class="page-subtitle text-sm text-text-secondary mt-1">Pantau akumulasi nilai dan performa capaian rubrik perkuliahan.</p>
             </div>
           </div>
 
-          <!-- Card 3: Pending Grades -->
-          <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
-            <div class="stat-info flex flex-col">
-              <span class="stat-label text-xs text-text-secondary font-medium mb-1">Pending Grades</span>
-              <span class="stat-value text-2xl font-bold text-text-primary tracking-tight">2</span>
-              <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-amber-600 mt-1">
-                <i data-lucide="hourglass" style="width: 12px; height: 12px;"></i>
-                In review
-              </span>
+          <!-- Grade Summary Metric Strip -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between">
+              <div>
+                <span class="text-xs text-text-secondary font-medium">IPK Semester Ini</span>
+                <div class="text-2xl font-bold text-primary-green mt-1">3.85 <span class="text-xs font-normal text-text-muted">/ 4.00</span></div>
+                <span class="text-[11px] text-emerald-600">Predikat: Sangat Memuaskan</span>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-light-green text-primary-green flex items-center justify-center">
+                <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
+              </div>
             </div>
-            <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-              <i data-lucide="timer" style="width: 22px; height: 22px;"></i>
+            <div class="bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between">
+              <div>
+                <span class="text-xs text-text-secondary font-medium">Rata-rata Nilai Tugas</span>
+                <div class="text-2xl font-bold text-text-primary mt-1">89.2 <span class="text-xs font-normal text-text-muted">/ 100</span></div>
+                <span class="text-[11px] text-text-secondary">Dari 5 tugas yang telah dinilai</span>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+              </div>
             </div>
-          </div>
-
-          <!-- Card 4: Graded -->
-          <div class="stat-card bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-sm">
-            <div class="stat-info flex flex-col">
-              <span class="stat-label text-xs text-text-secondary font-medium mb-1">Graded</span>
-              <span class="stat-value text-2xl font-bold text-text-primary tracking-tight">5</span>
-              <span class="stat-desc inline-flex items-center gap-1 text-[11.5px] text-emerald-600 mt-1">
-                <i data-lucide="award" style="width: 12px; height: 12px;"></i>
-                Avg score: 89.2
-              </span>
+            <div class="bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between">
+              <div>
+                <span class="text-xs text-text-secondary font-medium">Tugas Dinilai</span>
+                <div class="text-2xl font-bold text-text-primary mt-1">5 Tugas</div>
+                <span class="text-[11px] text-emerald-600">100% tepat waktu</span>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <i data-lucide="check-circle-2" style="width: 20px; height: 20px;"></i>
+              </div>
             </div>
-            <div class="stat-icon-wrap w-11 h-11 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <i data-lucide="check-circle-2" style="width: 22px; height: 22px;"></i>
-            </div>
-          </div>
-        </section>
-
-        <!-- Main Dashboard Content Grid -->
-        <div class="dashboard-grid grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
-          <!-- Recent Assignments (Dynamic via apiService) -->
-          <div class="section-card bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
-            <div class="section-header flex items-center justify-between px-6 py-4.5 border-b border-border-light">
-              <h2 class="section-title text-base font-bold text-text-primary">Recent Assignments</h2>
-              <button type="button" class="section-action-link js-future-feature text-xs font-semibold text-primary-green hover:text-dark-green transition cursor-pointer bg-transparent border-0" data-title="All Assignments">View all</button>
-            </div>
-            <div class="section-body p-6">
-              <div class="item-list flex flex-col gap-3" id="assignmentsListContainer">
-                <!-- Assignments will be loaded dynamically via apiService.fetchAssignments() -->
+            <div class="bg-card-bg p-5 rounded-xl border border-border-color shadow-xs flex items-center justify-between">
+              <div>
+                <span class="text-xs text-text-secondary font-medium">Menunggu Nilai</span>
+                <div class="text-2xl font-bold text-text-primary mt-1">2 Tugas</div>
+                <span class="text-[11px] text-amber-600">Dalam proses evaluasi</span>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                <i data-lucide="clock" style="width: 20px; height: 20px;"></i>
               </div>
             </div>
           </div>
 
-          <!-- Recent Feedback (Dynamic via apiService) -->
+          <!-- Grades Table Card -->
           <div class="section-card bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
-            <div class="section-header flex items-center justify-between px-6 py-4.5 border-b border-border-light">
-              <h2 class="section-title text-base font-bold text-text-primary">Recent Feedback</h2>
-              <button type="button" class="section-action-link js-future-feature text-xs font-semibold text-primary-green hover:text-dark-green transition cursor-pointer bg-transparent border-0" data-title="All Feedback">Archive</button>
+            <div class="section-header px-6 py-4.5 border-b border-border-light flex items-center justify-between">
+              <h2 class="section-title text-base font-bold text-text-primary">Daftar Nilai Tugas & Penilaian</h2>
+              <span class="text-xs text-text-muted">Semester Genap 2025/2026</span>
             </div>
-            <div class="section-body p-6" id="feedbackContainer">
-              <!-- Feedback will be loaded dynamically via apiService.fetchFeedback() -->
+            <div class="p-6">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                  <thead>
+                    <tr class="border-b border-border-light text-xs font-semibold text-text-muted uppercase tracking-wider">
+                      <th class="pb-3 px-2">Tugas / Proyek</th>
+                      <th class="pb-3 px-2">Mata Kuliah</th>
+                      <th class="pb-3 px-2">Dosen Penilai</th>
+                      <th class="pb-3 px-2 text-center">Grade</th>
+                      <th class="pb-3 px-2 text-center">Skor</th>
+                      <th class="pb-3 px-2 text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-border-light" id="gradesTableBody">
+                    <!-- Loaded dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: FEEDBACK                           -->
+        <!-- ========================================== -->
+        <div id="view-feedback" class="student-view hidden">
+          <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-2 text-xs text-text-secondary mb-1.5">
+                <button type="button" class="hover:text-primary-green transition bg-transparent border-0 p-0 text-text-secondary cursor-pointer" data-view="dashboard">Dashboard</button>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+                <span class="font-semibold text-text-primary">Feedback</span>
+              </div>
+              <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Ulasan & Feedback Dosen</h1>
+              <p class="page-subtitle text-sm text-text-secondary mt-1">Evaluasi komprehensif, catatan perbaikan, dan rekomendasi dari dosen.</p>
             </div>
           </div>
 
+          <div class="grid grid-cols-1 gap-5" id="fullFeedbackContainer">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: SETTINGS                           -->
+        <!-- ========================================== -->
+        <div id="view-settings" class="student-view hidden">
+          <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-2 text-xs text-text-secondary mb-1.5">
+                <button type="button" class="hover:text-primary-green transition bg-transparent border-0 p-0 text-text-secondary cursor-pointer" data-view="dashboard">Dashboard</button>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+                <span class="font-semibold text-text-primary">Settings</span>
+              </div>
+              <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Pengaturan Akun</h1>
+              <p class="page-subtitle text-sm text-text-secondary mt-1">Kelola data profil mahasiswa dan preferensi pemberitahuan Anda.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Profile Info Card -->
+            <div class="lg:col-span-2 bg-card-bg rounded-xl border border-border-color shadow-xs p-6">
+              <h3 class="text-base font-bold text-text-primary mb-4 flex items-center gap-2">
+                <i data-lucide="user" class="w-5 h-5 text-primary-green"></i>
+                <span>Informasi Profil Mahasiswa</span>
+              </h3>
+              <form id="studentProfileForm" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-semibold text-text-secondary mb-1.5">Nama Lengkap</label>
+                    <input type="text" id="settingStudentName" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition" value="Andi Pratama" required>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-text-secondary mb-1.5">Nomor Induk Mahasiswa (NIM)</label>
+                    <input type="text" id="settingStudentNim" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition" value="21010045" required>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-semibold text-text-secondary mb-1.5">Alamat Email Kampus</label>
+                    <input type="email" id="settingStudentEmail" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition" value="mahasiswa@example.com" required>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-text-secondary mb-1.5">Program Studi</label>
+                    <input type="text" id="settingStudentMajor" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition" value="Teknik Informatika">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-text-secondary mb-1.5">Semester & Tahun Akademik</label>
+                  <input type="text" id="settingStudentSemester" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition" value="Semester 5 • 2026/2027">
+                </div>
+                <div class="pt-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i data-lucide="save" style="width: 15px; height: 15px;"></i>
+                    <span>Simpan Perubahan Profil</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Preferences Card -->
+            <div class="bg-card-bg rounded-xl border border-border-color shadow-xs p-6 flex flex-col justify-between">
+              <div>
+                <h3 class="text-base font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <i data-lucide="bell-ring" class="w-5 h-5 text-primary-green"></i>
+                  <span>Preferensi Notifikasi</span>
+                </h3>
+                <div class="space-y-4">
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" checked id="prefNewAssignment" class="mt-1 rounded text-primary-green focus:ring-primary-green accent-primary-green">
+                    <div class="text-xs">
+                      <span class="font-semibold text-text-primary block">Tugas Baru Dosen</span>
+                      <span class="text-text-secondary">Dapatkan notifikasi saat dosen membuat tugas baru.</span>
+                    </div>
+                  </label>
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" checked id="prefDeadlineReminder" class="mt-1 rounded text-primary-green focus:ring-primary-green accent-primary-green">
+                    <div class="text-xs">
+                      <span class="font-semibold text-text-primary block">Pengingat Deadline H-1</span>
+                      <span class="text-text-secondary">Peringatan otomatis 24 jam sebelum tenggat waktu.</span>
+                    </div>
+                  </label>
+                  <label class="flex items-start gap-3 checked id="prefGradeDone" class="mt-1 rounded text-primary-green focus:ring-primary-green accent-primary-green">
+                    <div class="text-xs">
+                      <span class="font-semibold text-text-primary block">Nilai & Review Selesai</span>
+                      <span class="text-text-secondary">Pemberitahuan saat tugas Anda selesai dinilai.</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <button type="button" id="savePrefBtn" class="btn btn-secondary w-full mt-6">
+                <span>Simpan Preferensi</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 6: HELP & SUPPORT                     -->
+        <!-- ========================================== -->
+        <div id="view-help" class="student-view hidden">
+          <div class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-2 text-xs text-text-secondary mb-1.5">
+                <button type="button" class="hover:text-primary-green transition bg-transparent border-0 p-0 text-text-secondary cursor-pointer" data-view="dashboard">Dashboard</button>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+                <span class="font-semibold text-text-primary">Help</span>
+              </div>
+              <h1 class="page-title text-2xl font-bold text-text-primary tracking-tight">Pusat Bantuan & FAQ</h1>
+              <p class="page-subtitle text-sm text-text-secondary mt-1">Panduan lengkap penggunaan portal mahasiswa dan kendala umum penugasan.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- FAQ Accordions -->
+            <div class="lg:col-span-2 space-y-3" id="helpFaqContainer">
+              <div class="faq-item bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+                <button type="button" class="faq-question w-full p-4.5 text-left font-semibold text-sm text-text-primary flex items-center justify-between hover:bg-slate-50 transition cursor-pointer bg-transparent border-0">
+                  <span>Bagaimana cara mengumpulkan tugas di DeXa Assessment?</span>
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-text-secondary transition-transform"></i>
+                </button>
+                <div class="faq-answer p-4.5 pt-0 text-xs text-text-secondary leading-relaxed border-t border-border-light hidden">
+                  Anda dapat mengklik tombol <strong>"Kumpulkan Tugas"</strong> di header atau di halaman <strong>My Assignments</strong>. Pilih tugas yang ingin dikumpulkan, lalu masukkan tautan repository GitHub/GitLab atau unggah file tugas Anda, sertakan catatan bila perlu, lalu klik tombol "Kirim Tugas".
+                </div>
+              </div>
+
+              <div class="faq-item bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+                <button type="button" class="faq-question w-full p-4.5 text-left font-semibold text-sm text-text-primary flex items-center justify-between hover:bg-slate-50 transition cursor-pointer bg-transparent border-0">
+                  <span>Apakah saya bisa memperbarui submisi tugas yang telah dikirim?</span>
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-text-secondary transition-transform"></i>
+                </button>
+                <div class="faq-answer p-4.5 pt-0 text-xs text-text-secondary leading-relaxed border-t border-border-light hidden">
+                  Selama tugas belum dinilai oleh dosen (status masih <em>Submitted</em> atau <em>Pending</em>) dan belum melewati batas waktu deadline, Anda dapat mengumpulkan ulang (resubmit) dengan informasi perbaikan terbaru.
+                </div>
+              </div>
+
+              <div class="faq-item bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+                <button type="button" class="faq-question w-full p-4.5 text-left font-semibold text-sm text-text-primary flex items-center justify-between hover:bg-slate-50 transition cursor-pointer bg-transparent border-0">
+                  <span>Bagaimana sistem AI Copilot dan Dosen menilai tugas saya?</span>
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-text-secondary transition-transform"></i>
+                </button>
+                <div class="faq-answer p-4.5 pt-0 text-xs text-text-secondary leading-relaxed border-t border-border-light hidden">
+                  AI Assessment Copilot menganalisis struktur kode, kelengkapan fitur, dan sintaks berdasarkan rubrik penilaian yang ditetapkan dosen. Hasil analisis AI tersebut diverifikasi dan disetujui langsung oleh dosen pengampu sebelum nilai final diterbitkan.
+                </div>
+              </div>
+
+              <div class="faq-item bg-card-bg rounded-xl border border-border-color shadow-xs overflow-hidden">
+                <button type="button" class="faq-question w-full p-4.5 text-left font-semibold text-sm text-text-primary flex items-center justify-between hover:bg-slate-50 transition cursor-pointer bg-transparent border-0">
+                  <span>Format berkas apa saja yang didukung?</span>
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-text-secondary transition-transform"></i>
+                </button>
+                <div class="faq-answer p-4.5 pt-0 text-xs text-text-secondary leading-relaxed border-t border-border-light hidden">
+                  Sistem mendukung berkas format ZIP, RAR, PDF, DOCX, serta tautan repository publik/privat dari GitHub, GitLab, atau Bitbucket dengan ukuran maksimum berkas 50MB.
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact / Helpdesk Card -->
+            <div class="bg-card-bg rounded-xl border border-border-color shadow-xs p-6 flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-xl bg-light-green text-primary-green flex items-center justify-center mb-4">
+                  <i data-lucide="headphones" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="text-base font-bold text-text-primary mb-2">Butuh Bantuan Lebih Lanjut?</h3>
+                <p class="text-xs text-text-secondary leading-relaxed mb-4">
+                  Jika Anda mengalami kendala teknis dalam pengumpulan tugas atau memiliki pertanyaan seputar materi perkuliahan, hubungi tim dukungan atau dosen pengampu.
+                </p>
+                <div class="p-3 bg-slate-50 rounded-lg border border-border-light text-xs text-text-secondary space-y-2 mb-4">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="mail" style="width: 14px; height: 14px;" class="text-primary-green"></i>
+                    <span>support@dexa-assessment.id</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="phone" style="width: 14px; height: 14px;" class="text-primary-green"></i>
+                    <span>+62 812-3456-7890 (WA Helpdesk)</span>
+                  </div>
+                </div>
+              </div>
+              <a href="mailto:support@dexa-assessment.id" class="btn btn-primary w-full text-center flex items-center justify-center gap-2 no-underline">
+                <i data-lucide="send" style="width: 15px; height: 15px;"></i>
+                <span>Kirim Tiket Bantuan</span>
+              </a>
+            </div>
+          </div>
         </div>
 
       </main>
@@ -310,6 +681,231 @@
     </div>
 
   </div>
+
+  <!-- ===================================================== -->
+  <!-- MODAL: SUBMIT ASSIGNMENT                              -->
+  <!-- ===================================================== -->
+  <div id="submitAssignmentModal" class="modal-backdrop fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-110 hidden p-4">
+    <div class="class-modal-card max-w-lg w-full bg-card-bg rounded-xl shadow-2xl border border-border-color overflow-hidden">
+      <div class="class-modal-header p-5 border-b border-border-light flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-light-green text-primary-green flex items-center justify-center shrink-0">
+            <i data-lucide="upload" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-text-primary">Kumpulkan Tugas Kuliah</h3>
+            <p class="text-[11px] text-text-secondary">Pilih penugasan dan masukkan berkas atau link repository Anda.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-slate-100 transition cursor-pointer bg-transparent border-0" id="closeSubmitModalBtn">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <form id="submitAssignmentForm" class="p-5 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-text-secondary mb-1.5">Pilih Tugas <span class="text-red-500">*</span></label>
+          <select id="submitAssignmentSelect" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition" required>
+            <!-- Filled dynamically -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-text-secondary mb-1.5">Metode Submisi <span class="text-red-500">*</span></label>
+          <div class="grid grid-cols-2 gap-2 mb-3">
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-border-color cursor-pointer hover:bg-slate-50 text-xs font-medium has-checked:border-primary-green has-checked:bg-light-green">
+              <input type="radio" name="submissionType" value="url" checked class="text-primary-green accent-primary-green">
+              <span>Link Repository / URL</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-border-color cursor-pointer hover:bg-slate-50 text-xs font-medium has-checked:border-primary-green has-checked:bg-light-green">
+              <input type="radio" name="submissionType" value="file" class="text-primary-green accent-primary-green">
+              <span>Upload Berkas (ZIP/PDF)</span>
+            </label>
+          </div>
+          
+          <div id="urlInputContainer">
+            <input type="url" id="submitRepoUrl" placeholder="https://github.com/username/project-repo" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition">
+          </div>
+
+          <div id="fileInputContainer" class="hidden">
+            <input type="file" id="submitFilePicker" class="w-full px-3.5 py-2 text-xs bg-slate-50 border border-border-color rounded-lg file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-light-green file:text-dark-green hover:file:bg-emerald-100 cursor-pointer">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-text-secondary mb-1.5">Catatan Tambahan untuk Dosen</label>
+          <textarea id="submitNotes" rows="3" placeholder="Tuliskan catatan teknis, instruksi build, atau keterangan pengerjaan..." class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-border-color rounded-lg focus:outline-none focus:border-primary-green focus:bg-white transition resize-none"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2.5 border-t border-border-light">
+          <button type="button" id="cancelSubmitModalBtn" class="btn btn-secondary">Batal</button>
+          <button type="submit" id="confirmSubmitBtn" class="btn btn-primary">
+            <i data-lucide="send" style="width: 15px; height: 15px;"></i>
+            <span>Kirim Tugas</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- MODAL: CALENDAR SCHEDULE                              -->
+  <!-- ===================================================== -->
+  <div id="calendarModal" class="modal-backdrop fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-110 hidden p-4">
+    <div class="class-modal-card max-w-lg w-full bg-card-bg rounded-xl shadow-2xl border border-border-color overflow-hidden">
+      <div class="class-modal-header p-5 border-b border-border-light flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-light-green text-primary-green flex items-center justify-center shrink-0">
+            <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-text-primary">Jadwal & Kalender Penugasan</h3>
+            <p class="text-[11px] text-text-secondary">September 2026 • Semester Genap</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-slate-100 transition cursor-pointer bg-transparent border-0" id="closeCalendarModalBtn">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-3 max-h-96 overflow-y-auto" id="calendarDeadlinesList">
+        <div class="p-3 rounded-lg border border-border-light bg-slate-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 text-center">
+              <span class="block text-[10px] uppercase font-bold text-red-500">SEP</span>
+              <span class="block text-lg font-extrabold text-text-primary">12</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-text-primary">Laporan Sistem</p>
+              <p class="text-[11px] text-text-secondary">Analisis Sistem</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-600">Submitted</span>
+        </div>
+
+        <div class="p-3 rounded-lg border border-border-light bg-slate-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 text-center">
+              <span class="block text-[10px] uppercase font-bold text-amber-500">SEP</span>
+              <span class="block text-lg font-extrabold text-text-primary">15</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-text-primary">Website CRUD</p>
+              <p class="text-[11px] text-text-secondary">Pemrograman Web</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700">Pending</span>
+        </div>
+
+        <div class="p-3 rounded-lg border border-border-light bg-slate-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 text-center">
+              <span class="block text-[10px] uppercase font-bold text-emerald-500">SEP</span>
+              <span class="block text-lg font-extrabold text-text-primary">18</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-text-primary">Database Design</p>
+              <p class="text-[11px] text-text-secondary">Basis Data</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700">Graded (92)</span>
+        </div>
+
+        <div class="p-3 rounded-lg border border-border-light bg-slate-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 text-center">
+              <span class="block text-[10px] uppercase font-bold text-amber-500">SEP</span>
+              <span class="block text-lg font-extrabold text-text-primary">22</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-text-primary">OOP Design Patterns</p>
+              <p class="text-[11px] text-text-secondary">Object Oriented Programming</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700">Pending</span>
+        </div>
+      </div>
+
+      <div class="p-4 bg-slate-50 border-t border-border-light flex justify-end">
+        <button type="button" class="btn btn-secondary" id="closeCalendarBtn2">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- MODAL: GRADE & RUBRIC DETAIL                          -->
+  <!-- ===================================================== -->
+  <div id="gradeDetailModal" class="modal-backdrop fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-110 hidden p-4">
+    <div class="class-modal-card max-w-lg w-full bg-card-bg rounded-xl shadow-2xl border border-border-color overflow-hidden">
+      <div class="class-modal-header p-5 border-b border-border-light flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <i data-lucide="award" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-text-primary" id="gradeModalTitle">Detail Nilai & Rubrik</h3>
+            <p class="text-[11px] text-text-secondary" id="gradeModalCourse">Pemrograman Web</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-slate-100 transition cursor-pointer bg-transparent border-0" id="closeGradeModalBtn">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+        <div class="p-4 rounded-xl bg-light-green/40 border border-primary-green/20 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-semibold text-text-secondary">Skor Akhir Mahasiswa</span>
+            <div class="text-2xl font-extrabold text-dark-green" id="gradeModalScore">88 / 100</div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-sm font-bold bg-emerald-500 text-white" id="gradeModalGrade">A</span>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold uppercase text-text-muted mb-2 tracking-wide">Rincian Kriteria Rubrik Penilaian</h4>
+          <div class="space-y-2.5 text-xs" id="gradeModalRubricList">
+            <div class="p-3 rounded-lg border border-border-light bg-slate-50 flex items-center justify-between">
+              <div>
+                <span class="font-semibold text-text-primary">1. Arsitektur & Kualitas Kode</span>
+                <p class="text-[11px] text-text-muted">Kerapian struktur folder, modularitas, dan konvensi penamaan.</p>
+              </div>
+              <span class="font-bold text-primary-green">90 / 100</span>
+            </div>
+            <div class="p-3 rounded-lg border border-border-light bg-slate-50 flex items-center justify-between">
+              <div>
+                <span class="font-semibold text-text-primary">2. Fungsionalitas CRUD & Validasi</span>
+                <p class="text-[11px] text-text-muted">Kelancaran fungsi Create, Read, Update, Delete & penanganan error.</p>
+              </div>
+              <span class="font-bold text-primary-green">88 / 100</span>
+            </div>
+            <div class="p-3 rounded-lg border border-border-light bg-slate-50 flex items-center justify-between">
+              <div>
+                <span class="font-semibold text-text-primary">3. Desain Antarmuka & UX</span>
+                <p class="text-[11px] text-text-muted">Responsivitas tampilan mobile-desktop dan konsistensi warna.</p>
+              </div>
+              <span class="font-bold text-primary-green">86 / 100</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold uppercase text-text-muted mb-1.5 tracking-wide">Catatan & Ulasan Dosen</h4>
+          <div class="p-3.5 rounded-lg border border-border-light bg-slate-50 text-xs italic text-text-secondary leading-relaxed border-l-3 border-primary-green" id="gradeModalComment">
+            "Struktur aplikasi sudah baik dan implementasi fitur utama sudah berjalan dengan lancar."
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 bg-slate-50 border-t border-border-light flex justify-end">
+        <button type="button" class="btn btn-secondary" id="closeGradeModalBtn2">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- FLOATING TOAST NOTIFICATION CONTAINER                 -->
+  <!-- ===================================================== -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-120 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- Scripts -->
   <script src="../js/components/button.js"></script>

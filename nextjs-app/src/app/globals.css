@@ -90,3 +90,28 @@
     opacity: 1;
   }
 }
+
+/* Remove browser autofill dark/shaded background in form inputs */
+input,
+textarea,
+select {
+  color-scheme: light;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: var(--color-text-primary, #1f2933) !important;
+  caret-color: var(--color-text-primary, #1f2933) !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  background-color: transparent !important;
+}
+
+input:autofill {
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: var(--color-text-primary, #1f2933) !important;
+  background-color: transparent !important;
+}

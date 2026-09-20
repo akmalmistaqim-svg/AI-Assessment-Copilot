@@ -185,6 +185,7 @@ export function RegisterForm() {
               className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
               placeholder="Contoh: Budi Santoso"
               autoComplete="name"
+              style={{ colorScheme: "light" }}
             />
           </div>
           {nameError && (
@@ -227,6 +228,7 @@ export function RegisterForm() {
               className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
               placeholder="nama@kampus.ac.id"
               autoComplete="email"
+              style={{ colorScheme: "light" }}
             />
           </div>
           {emailError && (
@@ -349,6 +351,7 @@ export function RegisterForm() {
               className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
               placeholder="Minimal 8 karakter"
               autoComplete="new-password"
+              style={{ colorScheme: "light" }}
             />
             <button
               type="button"
@@ -396,6 +399,7 @@ export function RegisterForm() {
               className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
               placeholder="Ulangi password Anda"
               autoComplete="new-password"
+              style={{ colorScheme: "light" }}
             />
             <button
               type="button"

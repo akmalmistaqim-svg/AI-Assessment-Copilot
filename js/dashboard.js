@@ -5,6 +5,9 @@
  */
 
 function initDashboard(expectedRole) {
+  if (window.__dashboardInitialized) return;
+  window.__dashboardInitialized = true;
+
   // 1. Route guard - Verify authentication and role
   const currentUser = protectDashboard(expectedRole);
   if (!currentUser) return; // redirected
@@ -1826,13 +1829,279 @@ function setupDosenSearchFilter() {
 }
 
 /**
- * MAHASISWA DASHBOARD FEATURES
+ * =========================================================================
+ * MAHASISWA DASHBOARD FEATURES (FULL SPA IMPLEMENTATION)
+ * =========================================================================
  */
+let currentStudentView = 'dashboard';
+let currentAssignmentFilter = 'all';
+let studentGradesData = [];
+let studentFeedbackData = [];
+
 async function initMahasiswaFeatures() {
-  await Promise.all([loadAssignmentsData(), loadFeedbackData()]);
+  initStudentMockData();
+  setupMahasiswaViewRouter();
+  setupMahasiswaFilterTabs();
   setupMahasiswaSearchFilter();
+  setupSubmitAssignmentModal();
+  setupCalendarModal();
+  setupGradeDetailModal();
+  setupNotificationsDropdown();
+  setupStudentSettingsForm();
+  setupHelpFaqAccordion();
+
+  renderFullAssignmentsList();
+  renderGradesTable();
+  renderFullFeedbackList();
+  updateMahasiswaStatCounters();
+
+  await Promise.all([loadAssignmentsData(), loadFeedbackData()]);
+  renderFullAssignmentsList();
+  updateMahasiswaStatCounters();
 }
 
+/**
+ * Initialize extra mock data for Grades and Feedback
+ */
+function initStudentMockData() {
+  studentGradesData = [
+    {
+      id: 'grd-001',
+      assignmentTitle: 'Website CRUD',
+      course: 'Pemrograman Web',
+      score: 88,
+      maxScore: 100,
+      grade: 'A',
+      assessor: 'Dr. Budi Santoso',
+      date: '11 Sep 2026',
+      rubrics: [
+        { name: 'Arsitektur & Kualitas Kode', score: '90 / 100', desc: 'Kerapian struktur folder, modularitas, dan konvensi penamaan.' },
+        { name: 'Fungsionalitas CRUD & Validasi', score: '88 / 100', desc: 'Kelancaran fungsi Create, Read, Update, Delete & penanganan error.' },
+        { name: 'Desain Antarmuka & UX', score: '86 / 100', desc: 'Responsivitas tampilan mobile-desktop dan konsistensi warna.' }
+      ],
+      comment: 'Struktur aplikasi sudah baik dan implementasi fitur utama sudah berjalan dengan lancar.'
+    },
+    {
+      id: 'grd-002',
+      assignmentTitle: 'Database Design',
+      course: 'Basis Data',
+      score: 92,
+      maxScore: 100,
+      grade: 'A',
+      assessor: 'Ir. Siti Aminah, M.Kom',
+      date: '18 Sep 2026',
+      rubrics: [
+        { name: 'Normalisasi Data (3NF)', score: '95 / 100', desc: 'Penghapusan anomali redundansi dan ketergantungan transitif.' },
+        { name: 'Relasi & Kunci (PK/FK)', score: '92 / 100', desc: 'Integritas referensial dan penataan indexing yang tepat.' },
+        { name: 'Dokumentasi Skema ERD', score: '90 / 100', desc: 'Diagram ERD terstruktur dengan deskripsi kardinalitas lengkap.' }
+      ],
+      comment: 'Relasi foreign key dan indexing sudah sangat rapi. Struktur ERD memenuhi standar 3NF tanpa anomali data.'
+    },
+    {
+      id: 'grd-003',
+      assignmentTitle: 'Algoritma Sorting & Complexity',
+      course: 'Struktur Data',
+      score: 85,
+      maxScore: 100,
+      grade: 'B+',
+      assessor: 'Prof. Hendra Wijaya',
+      date: '08 Sep 2026',
+      rubrics: [
+        { name: 'Implementasi Algoritma', score: '85 / 100', desc: 'Ketepatan implementasi QuickSort dan MergeSort.' },
+        { name: 'Analisis Kompleksitas Waktu', score: '88 / 100', desc: 'Pembuktian matematis notasi Big-O Best & Worst case.' },
+        { name: 'Benchmark & Visualisasi', score: '82 / 100', desc: 'Grafik performa pengujian data skala besar.' }
+      ],
+      comment: 'Analisis Big-O lengkap dan visualisasi runtime sangat jelas. Pertahankan konsistensi dokumentasi kode.'
+    },
+    {
+      id: 'grd-004',
+      assignmentTitle: 'UX Wireframe & Prototyping',
+      course: 'Interaksi Manusia & Komputer',
+      score: 90,
+      maxScore: 100,
+      grade: 'A',
+      assessor: 'Ratna Sari, M.T.',
+      date: '02 Sep 2026',
+      rubrics: [
+        { name: 'Prinsip Desain Gestalt', score: '92 / 100', desc: 'Hierarki visual, proximity, dan penataan ruang putih.' },
+        { name: 'Interaktivitas Prototype', score: '88 / 100', desc: 'Alur user journey intuitif dan transisi layar mulus.' },
+        { name: 'Aksesibilitas (WCAG)', score: '90 / 100', desc: 'Kontras warna memadai dan navigasi ramah keyboard.' }
+      ],
+      comment: 'Prinsip gestalt diterapkan dengan baik pada layout dashboard. Hierarki tipografi mudah dipahami user.'
+    },
+    {
+      id: 'grd-005',
+      assignmentTitle: 'API Integration & Auth',
+      course: 'Pemrograman Web',
+      score: 91,
+      maxScore: 100,
+      grade: 'A',
+      assessor: 'Dr. Budi Santoso',
+      date: '28 Agu 2026',
+      rubrics: [
+        { name: 'Keamanan Token JWT', score: '93 / 100', desc: 'Penyimpanan secure token dan mekanisme refresh token.' },
+        { name: 'Desain RESTful Endpoint', score: '90 / 100', desc: 'Standar HTTP status code dan validasi payload JSON.' },
+        { name: 'Penanganan Error Asinkron', score: '90 / 100', desc: 'Robust try-catch dan error toast ramah pengguna.' }
+      ],
+      comment: 'Integrasi otentikasi sangat aman dan arsitektur endpoint modular mematuhi standar RESTful modern.'
+    }
+  ];
+
+  studentFeedbackData = [
+    {
+      id: 'sf-001',
+      assessor: 'Dr. Budi Santoso',
+      assessorRole: 'Dosen Pengampu Pemrograman Web',
+      assignmentTitle: 'Website CRUD',
+      course: 'Pemrograman Web',
+      date: '11 Sep 2026',
+      score: 88,
+      comment: 'Struktur aplikasi sudah baik dan implementasi fitur utama sudah berjalan dengan lancar. Saran untuk perbaikan: tambahkan validasi input pada sisi server untuk keamanan ekstra.'
+    },
+    {
+      id: 'sf-002',
+      assessor: 'Ir. Siti Aminah, M.Kom',
+      assessorRole: 'Dosen Pengampu Basis Data',
+      assignmentTitle: 'Database Design',
+      course: 'Basis Data',
+      date: '18 Sep 2026',
+      score: 92,
+      comment: 'Relasi foreign key dan indexing sudah sangat rapi. Struktur ERD memenuhi standar 3NF tanpa anomali data. Kerja bagus!'
+    },
+    {
+      id: 'sf-003',
+      assessor: 'Prof. Hendra Wijaya',
+      assessorRole: 'Dosen Pengampu Struktur Data',
+      assignmentTitle: 'Algoritma Sorting & Complexity',
+      course: 'Struktur Data',
+      date: '08 Sep 2026',
+      score: 85,
+      comment: 'Analisis Big-O lengkap dan visualisasi runtime sangat jelas. Pertahankan konsistensi dokumentasi kode pada proyek berikutnya.'
+    },
+    {
+      id: 'sf-004',
+      assessor: 'Ratna Sari, M.T.',
+      assessorRole: 'Dosen Pengampu IMK',
+      assignmentTitle: 'UX Wireframe & Prototyping',
+      course: 'Interaksi Manusia & Komputer',
+      date: '02 Sep 2026',
+      score: 90,
+      comment: 'Prinsip gestalt diterapkan dengan baik pada layout dashboard. Hierarki tipografi dan palet warna mint green sangat konsisten.'
+    }
+  ];
+}
+
+/**
+ * View Routing for Mahasiswa SPA
+ */
+function setupMahasiswaViewRouter() {
+  function applyView(viewName) {
+    const validViews = ['dashboard', 'assignments', 'grades', 'feedback', 'settings', 'help'];
+    if (!validViews.includes(viewName)) viewName = 'dashboard';
+    currentStudentView = viewName;
+
+    // Toggle views visibility
+    const views = document.querySelectorAll('.student-view');
+    views.forEach(v => {
+      if (v.id === `view-${viewName}`) {
+        v.classList.remove('hidden');
+        v.classList.add('active');
+      } else {
+        v.classList.add('hidden');
+        v.classList.remove('active');
+      }
+    });
+
+    // Update sidebar active link
+    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+    navLinks.forEach(link => {
+      const linkView = link.getAttribute('data-view');
+      if (linkView === viewName) {
+        link.classList.add('active', 'bg-light-green', 'text-dark-green', 'font-semibold');
+        link.classList.remove('text-text-secondary');
+        const icon = link.querySelector('.nav-icon');
+        if (icon) icon.classList.add('text-primary-green');
+      } else if (linkView) {
+        link.classList.remove('active', 'bg-light-green', 'text-dark-green', 'font-semibold');
+        link.classList.add('text-text-secondary');
+        const icon = link.querySelector('.nav-icon');
+        if (icon) icon.classList.remove('text-primary-green');
+      }
+    });
+
+    // Close mobile drawer if open
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('drawerBackdrop');
+    if (sidebar && sidebar.classList.contains('drawer-open')) {
+      sidebar.classList.remove('drawer-open');
+      if (backdrop) backdrop.classList.remove('show');
+    }
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Refresh icons
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  // Handle click on all elements with data-view
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-view]');
+    if (trigger) {
+      e.preventDefault();
+      const targetView = trigger.getAttribute('data-view');
+      window.location.hash = targetView;
+      applyView(targetView);
+    }
+  });
+
+  // Handle hashchange
+  window.addEventListener('hashchange', () => {
+    const hash = window.location.hash.replace('#', '') || 'dashboard';
+    applyView(hash);
+  });
+
+  // Initial load hash
+  const initialHash = window.location.hash.replace('#', '') || 'dashboard';
+  applyView(initialHash);
+}
+
+/**
+ * Update Summary Statistics Cards
+ */
+function updateMahasiswaStatCounters() {
+  const activeCount = cachedAssignments.filter(a => a.status === 'pending').length;
+  const submittedCount = cachedAssignments.filter(a => a.status === 'submitted').length;
+  const gradedCount = studentGradesData.length;
+  const pendingReviewCount = 2;
+
+  const elActive = document.getElementById('statActiveCount');
+  const elSubmitted = document.getElementById('statSubmittedCount');
+  const elPending = document.getElementById('statPendingCount');
+  const elGraded = document.getElementById('statGradedCount');
+
+  if (elActive) elActive.textContent = activeCount;
+  if (elSubmitted) elSubmitted.textContent = submittedCount + 6; // reflect overall 7 submitted
+  if (elPending) elPending.textContent = pendingReviewCount;
+  if (elGraded) elGraded.textContent = gradedCount;
+
+  // Filter tabs count
+  const countAll = document.getElementById('countFilterAll');
+  const countPending = document.getElementById('countFilterPending');
+  const countSubmitted = document.getElementById('countFilterSubmitted');
+  const countGraded = document.getElementById('countFilterGraded');
+
+  if (countAll) countAll.textContent = cachedAssignments.length;
+  if (countPending) countPending.textContent = cachedAssignments.filter(a => a.status === 'pending').length;
+  if (countSubmitted) countSubmitted.textContent = cachedAssignments.filter(a => a.status === 'submitted').length;
+  if (countGraded) countGraded.textContent = cachedAssignments.filter(a => a.status === 'graded').length;
+
+  populateSubmitAssignmentDropdown();
+}
+
+/**
+ * Load and Render Recent Assignments on Overview
+ */
 async function loadAssignmentsData() {
   const container = document.getElementById('assignmentsListContainer');
   if (!container) return;
@@ -1849,6 +2118,7 @@ async function loadAssignmentsData() {
     const assignments = await window.apiService.fetchAssignments();
     cachedAssignments = assignments;
     renderAssignmentsList(assignments);
+    updateMahasiswaStatCounters();
   } catch (error) {
     container.innerHTML = `
       <div class="p-4 rounded-lg bg-red-50 text-status-danger-text border border-red-200 text-sm flex items-center justify-between">
@@ -1875,10 +2145,7 @@ function renderAssignmentsList(assignments) {
 
   container.innerHTML = assignments
     .map((asg) => {
-      const badgeHtml = window.badgeVariants 
-        ? `<span class="${window.badgeVariants({ variant: asg.status || 'submitted', size: 'md' })}">${asg.status.charAt(0).toUpperCase() + asg.status.slice(1)}</span>`
-        : `<span class="badge badge-${asg.status}">${asg.status}</span>`;
-
+      const badgeHtml = getStudentBadgeHtml(asg.status);
       return `
         <div class="list-item flex items-center justify-between p-3.5 rounded-lg border border-border-light bg-slate-50/50 hover:bg-slate-50 transition">
           <div class="item-main flex flex-col">
@@ -1903,6 +2170,204 @@ function renderAssignmentsList(assignments) {
   if (window.lucide) window.lucide.createIcons({ root: container });
 }
 
+/**
+ * Render Full Assignments View
+ */
+function renderFullAssignmentsList() {
+  const container = document.getElementById('fullAssignmentsContainer');
+  if (!container) return;
+
+  let list = cachedAssignments || [];
+  if (currentAssignmentFilter !== 'all') {
+    list = list.filter(a => a.status === currentAssignmentFilter);
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="bg-card-bg p-8 rounded-xl border border-border-color text-center text-text-secondary">
+        <div class="w-12 h-12 rounded-full bg-slate-100 text-text-muted flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="folder-open" style="width: 24px; height: 24px;"></i>
+        </div>
+        <h4 class="text-sm font-bold text-text-primary">Tidak Ada Tugas di Kategori Ini</h4>
+        <p class="text-xs text-text-muted mt-1">Silakan pilih filter lain atau gunakan pencarian.</p>
+      </div>
+    `;
+    if (window.lucide) window.lucide.createIcons({ root: container });
+    return;
+  }
+
+  container.innerHTML = list.map(asg => {
+    const badgeHtml = getStudentBadgeHtml(asg.status);
+    let actionBtnHtml = '';
+    
+    if (asg.status === 'pending') {
+      actionBtnHtml = `
+        <button type="button" class="btn btn-sm btn-primary flex items-center gap-1.5 js-quick-submit-btn" data-id="${asg.id}">
+          <i data-lucide="upload" style="width: 13px; height: 13px;"></i>
+          <span>Kirim Tugas</span>
+        </button>
+      `;
+    } else if (asg.status === 'graded') {
+      actionBtnHtml = `
+        <button type="button" class="btn btn-sm btn-secondary flex items-center gap-1.5 js-view-grade-btn" data-title="${escapeHtml(asg.title)}" data-course="${escapeHtml(asg.course)}">
+          <i data-lucide="award" style="width: 13px; height: 13px;"></i>
+          <span>Lihat Nilai & Rubrik</span>
+        </button>
+      `;
+    } else {
+      actionBtnHtml = `
+        <span class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
+          <i data-lucide="check-check" style="width: 13px; height: 13px;"></i>
+          <span>Terkumpul</span>
+        </span>
+      `;
+    }
+
+    return `
+      <div class="bg-card-bg rounded-xl border border-border-color shadow-xs p-5 transition hover:border-primary-green/50">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h3 class="text-base font-bold text-text-primary">${escapeHtml(asg.title)}</h3>
+              ${badgeHtml}
+            </div>
+            <div class="flex items-center gap-4 text-xs text-text-secondary flex-wrap">
+              <span class="inline-flex items-center gap-1.5 font-medium text-text-primary">
+                <i data-lucide="book-open" style="width: 14px; height: 14px;" class="text-primary-green"></i>
+                ${escapeHtml(asg.course)}
+              </span>
+              <span class="inline-flex items-center gap-1.5 text-text-muted">
+                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+                Tenggat: ${escapeHtml(asg.deadline)}
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            ${actionBtnHtml}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  if (window.lucide) window.lucide.createIcons({ root: container });
+
+  // Attach quick submit listeners
+  container.querySelectorAll('.js-quick-submit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const asgId = btn.getAttribute('data-id');
+      openSubmitModal(asgId);
+    });
+  });
+
+  // Attach view grade listeners
+  container.querySelectorAll('.js-view-grade-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const title = btn.getAttribute('data-title');
+      const course = btn.getAttribute('data-course');
+      openGradeModal(title, course);
+    });
+  });
+}
+
+function getStudentBadgeHtml(status) {
+  if (status === 'graded') {
+    return `<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Graded</span>`;
+  }
+  if (status === 'submitted') {
+    return `<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">Submitted</span>`;
+  }
+  return `<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Pending</span>`;
+}
+
+/**
+ * Filter Tabs for Assignments
+ */
+function setupMahasiswaFilterTabs() {
+  const tabsContainer = document.getElementById('assignmentsFilterTabs');
+  if (!tabsContainer) return;
+
+  const buttons = tabsContainer.querySelectorAll('button[data-filter]');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => {
+        b.className = 'px-3.5 py-1.5 rounded-lg text-xs font-medium text-text-secondary hover:bg-slate-100 transition cursor-pointer bg-transparent border-0';
+      });
+      btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-light-green text-dark-green border-0';
+      currentAssignmentFilter = btn.getAttribute('data-filter');
+      renderFullAssignmentsList();
+    });
+  });
+}
+
+/**
+ * Search Filter
+ */
+function setupMahasiswaSearchFilter() {
+  const topbarSearch = document.getElementById('topbarSearchInput');
+  const asgSearch = document.getElementById('assignmentsSearchInput');
+
+  function handleSearch(term) {
+    if (!term) {
+      renderAssignmentsList(cachedAssignments);
+      renderFullAssignmentsList();
+      return;
+    }
+
+    const filtered = cachedAssignments.filter(
+      (a) =>
+        a.title.toLowerCase().includes(term) ||
+        a.course.toLowerCase().includes(term)
+    );
+    renderAssignmentsList(filtered);
+    
+    // Also filter full assignments list
+    const container = document.getElementById('fullAssignmentsContainer');
+    if (container) {
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-card-bg p-8 rounded-xl border border-border-color text-center text-text-secondary">
+            <p class="font-medium text-sm">Tidak ditemukan tugas dengan kata kunci "${escapeHtml(term)}".</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = filtered.map(asg => {
+          const badgeHtml = getStudentBadgeHtml(asg.status);
+          return `
+            <div class="bg-card-bg rounded-xl border border-border-color shadow-xs p-5">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <h3 class="text-base font-bold text-text-primary">${escapeHtml(asg.title)}</h3>
+                    ${badgeHtml}
+                  </div>
+                  <p class="text-xs text-text-secondary">${escapeHtml(asg.course)} • Deadline: ${escapeHtml(asg.deadline)}</p>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+      if (window.lucide) window.lucide.createIcons({ root: container });
+    }
+  }
+
+  if (topbarSearch) {
+    topbarSearch.addEventListener('input', (e) => {
+      handleSearch(e.target.value.toLowerCase().trim());
+    });
+  }
+
+  if (asgSearch) {
+    asgSearch.addEventListener('input', (e) => {
+      handleSearch(e.target.value.toLowerCase().trim());
+    });
+  }
+}
+
+/**
+ * Load and Render Recent Feedback on Overview
+ */
 async function loadFeedbackData() {
   const container = document.getElementById('feedbackContainer');
   if (!container) return;
@@ -1917,9 +2382,7 @@ async function loadFeedbackData() {
 
   try {
     const feedback = await window.apiService.fetchFeedback();
-    const badgeHtml = window.badgeVariants 
-      ? `<span class="${window.badgeVariants({ variant: feedback.status || 'graded', size: 'sm' })}">Graded</span>`
-      : `<span class="badge badge-graded">Graded</span>`;
+    const badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Graded</span>`;
 
     container.innerHTML = `
       <div class="feedback-card-highlight p-4.5 rounded-lg border border-border-light bg-slate-50/50">
@@ -1943,6 +2406,7 @@ async function loadFeedbackData() {
         </div>
       </div>
     `;
+    if (window.lucide) window.lucide.createIcons({ root: container });
   } catch (error) {
     container.innerHTML = `
       <div class="p-4 rounded-lg bg-red-50 text-status-danger-text border border-red-200 text-sm flex items-center justify-between">
@@ -1953,24 +2417,391 @@ async function loadFeedbackData() {
   }
 }
 
-function setupMahasiswaSearchFilter() {
-  const searchInput = document.getElementById('topbarSearchInput');
-  if (!searchInput) return;
+/**
+ * Render Grades Table in View Grades
+ */
+function renderGradesTable() {
+  const tbody = document.getElementById('gradesTableBody');
+  if (!tbody) return;
 
-  searchInput.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase().trim();
-    if (!term) {
+  tbody.innerHTML = studentGradesData.map(item => {
+    return `
+      <tr class="hover:bg-slate-50/80 transition">
+        <td class="py-3.5 px-2">
+          <span class="font-semibold text-text-primary block">${escapeHtml(item.assignmentTitle)}</span>
+          <span class="text-[11px] text-text-muted">Dinilai: ${escapeHtml(item.date)}</span>
+        </td>
+        <td class="py-3.5 px-2 text-xs text-text-secondary">${escapeHtml(item.course)}</td>
+        <td class="py-3.5 px-2 text-xs text-text-primary font-medium">${escapeHtml(item.assessor)}</td>
+        <td class="py-3.5 px-2 text-center">
+          <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">${item.grade}</span>
+        </td>
+        <td class="py-3.5 px-2 text-center font-bold text-dark-green">${item.score} <span class="text-[11px] text-text-muted font-normal">/ 100</span></td>
+        <td class="py-3.5 px-2 text-right">
+          <button type="button" class="btn btn-sm btn-secondary js-open-grade-detail" data-id="${item.id}">
+            <span>Detail Rubrik</span>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  tbody.querySelectorAll('.js-open-grade-detail').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const gradeItem = studentGradesData.find(g => g.id === id);
+      if (gradeItem) {
+        openGradeModal(gradeItem.assignmentTitle, gradeItem.course, gradeItem);
+      }
+    });
+  });
+}
+
+/**
+ * Render Full Feedback List in View Feedback
+ */
+function renderFullFeedbackList() {
+  const container = document.getElementById('fullFeedbackContainer');
+  if (!container) return;
+
+  container.innerHTML = studentFeedbackData.map(fb => {
+    return `
+      <div class="bg-card-bg rounded-xl border border-border-color shadow-xs p-6 transition hover:border-primary-green/40">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-border-light">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-light-green text-primary-green font-bold text-xs flex items-center justify-center shrink-0">
+              ${fb.assessor.split(' ').map(p => p[0]).slice(0, 2).join('')}
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-text-primary">${escapeHtml(fb.assessor)}</h4>
+              <p class="text-[11px] text-text-muted">${escapeHtml(fb.assessorRole)} • ${escapeHtml(fb.date)}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-light-green text-dark-green">Skor: ${fb.score} / 100</span>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <span class="text-xs font-semibold text-text-muted uppercase tracking-wider">Tugas:</span>
+          <span class="text-xs font-bold text-text-primary ml-1">${escapeHtml(fb.assignmentTitle)} (${escapeHtml(fb.course)})</span>
+        </div>
+
+        <div class="bg-slate-50 p-4 rounded-lg border border-border-light text-xs text-text-secondary leading-relaxed italic border-l-3 border-primary-green">
+          "${escapeHtml(fb.comment)}"
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  if (window.lucide) window.lucide.createIcons({ root: container });
+}
+
+/**
+ * Submit Assignment Modal Logic
+ */
+function setupSubmitAssignmentModal() {
+  const modal = document.getElementById('submitAssignmentModal');
+  const openBtns = document.querySelectorAll('#openSubmitModalBtn, .js-open-submit-modal');
+  const closeBtn = document.getElementById('closeSubmitModalBtn');
+  const cancelBtn = document.getElementById('cancelSubmitModalBtn');
+  const form = document.getElementById('submitAssignmentForm');
+  const radioInputs = document.querySelectorAll('input[name="submissionType"]');
+  const urlContainer = document.getElementById('urlInputContainer');
+  const fileContainer = document.getElementById('fileInputContainer');
+
+  if (!modal) return;
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    if (form) form.reset();
+    if (urlContainer) urlContainer.classList.remove('hidden');
+    if (fileContainer) fileContainer.classList.add('hidden');
+  }
+
+  openBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      openSubmitModal();
+    });
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  radioInputs.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.value === 'url') {
+        if (urlContainer) urlContainer.classList.remove('hidden');
+        if (fileContainer) fileContainer.classList.add('hidden');
+      } else {
+        if (urlContainer) urlContainer.classList.add('hidden');
+        if (fileContainer) fileContainer.classList.remove('hidden');
+      }
+    });
+  });
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const select = document.getElementById('submitAssignmentSelect');
+      const selectedId = select ? select.value : null;
+
+      // Find assignment and mark submitted
+      const targetAsg = cachedAssignments.find(a => a.id === selectedId);
+      if (targetAsg) {
+        targetAsg.status = 'submitted';
+      }
+
+      closeModal();
+      updateMahasiswaStatCounters();
       renderAssignmentsList(cachedAssignments);
+      renderFullAssignmentsList();
+      showStudentToast('Tugas berhasil dikumpulkan! Status diperbarui menjadi Terkumpul.', 'success');
+    });
+  }
+}
+
+function openSubmitModal(preselectedId = null) {
+  const modal = document.getElementById('submitAssignmentModal');
+  if (!modal) return;
+
+  populateSubmitAssignmentDropdown(preselectedId);
+  modal.classList.remove('hidden');
+  if (window.lucide) window.lucide.createIcons({ root: modal });
+}
+
+function populateSubmitAssignmentDropdown(selectedId = null) {
+  const select = document.getElementById('submitAssignmentSelect');
+  if (!select) return;
+
+  select.innerHTML = cachedAssignments.map(asg => {
+    const isSelected = selectedId ? asg.id === selectedId : asg.status === 'pending';
+    const statusNote = asg.status === 'submitted' ? ' (Sudah dikumpulkan)' : asg.status === 'graded' ? ' (Sudah dinilai)' : '';
+    return `
+      <option value="${asg.id}" ${isSelected ? 'selected' : ''}>
+        ${escapeHtml(asg.title)} - ${escapeHtml(asg.course)}${statusNote}
+      </option>
+    `;
+  }).join('');
+}
+
+/**
+ * Calendar Modal Logic
+ */
+function setupCalendarModal() {
+  const modal = document.getElementById('calendarModal');
+  const trigger = document.getElementById('calendarBtn');
+  const closeBtn = document.getElementById('closeCalendarModalBtn');
+  const closeBtn2 = document.getElementById('closeCalendarBtn2');
+
+  if (!modal) return;
+
+  function openCal() {
+    modal.classList.remove('hidden');
+    if (window.lucide) window.lucide.createIcons({ root: modal });
+  }
+
+  function closeCal() {
+    modal.classList.add('hidden');
+  }
+
+  if (trigger) trigger.addEventListener('click', openCal);
+  if (closeBtn) closeBtn.addEventListener('click', closeCal);
+  if (closeBtn2) closeBtn2.addEventListener('click', closeCal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeCal();
+  });
+}
+
+/**
+ * Grade Detail Modal Logic
+ */
+function setupGradeDetailModal() {
+  const modal = document.getElementById('gradeDetailModal');
+  const closeBtn = document.getElementById('closeGradeModalBtn');
+  const closeBtn2 = document.getElementById('closeGradeModalBtn2');
+
+  if (!modal) return;
+
+  function closeGrade() {
+    modal.classList.add('hidden');
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeGrade);
+  if (closeBtn2) closeBtn2.addEventListener('click', closeGrade);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeGrade();
+  });
+}
+
+function openGradeModal(title, course, gradeObj = null) {
+  const modal = document.getElementById('gradeDetailModal');
+  if (!modal) return;
+
+  const titleEl = document.getElementById('gradeModalTitle');
+  const courseEl = document.getElementById('gradeModalCourse');
+  const scoreEl = document.getElementById('gradeModalScore');
+  const gradeEl = document.getElementById('gradeModalGrade');
+  const commentEl = document.getElementById('gradeModalComment');
+  const rubricList = document.getElementById('gradeModalRubricList');
+
+  const data = gradeObj || studentGradesData.find(g => g.assignmentTitle === title) || studentGradesData[0];
+
+  if (titleEl) titleEl.textContent = data.assignmentTitle;
+  if (courseEl) courseEl.textContent = data.course;
+  if (scoreEl) scoreEl.textContent = `${data.score} / ${data.maxScore || 100}`;
+  if (gradeEl) gradeEl.textContent = data.grade || 'A';
+  if (commentEl) commentEl.textContent = `"${data.comment}"`;
+
+  if (rubricList && data.rubrics) {
+    rubricList.innerHTML = data.rubrics.map(r => `
+      <div class="p-3 rounded-lg border border-border-light bg-slate-50 flex items-center justify-between">
+        <div>
+          <span class="font-semibold text-text-primary">${escapeHtml(r.name)}</span>
+          <p class="text-[11px] text-text-muted">${escapeHtml(r.desc)}</p>
+        </div>
+        <span class="font-bold text-primary-green">${escapeHtml(r.score)}</span>
+      </div>
+    `).join('');
+  }
+
+  modal.classList.remove('hidden');
+  if (window.lucide) window.lucide.createIcons({ root: modal });
+}
+
+/**
+ * Notifications Dropdown Logic
+ */
+function setupNotificationsDropdown() {
+  const trigger = document.getElementById('notificationsTrigger');
+  const menu = document.getElementById('notificationsMenu');
+  const markReadBtn = document.getElementById('markAllReadBtn');
+  const badgeDot = document.getElementById('notifBadgeDot');
+  const notifCount = document.getElementById('notifCount');
+
+  if (!trigger || !menu) return;
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menu.classList.toggle('show');
+    const isExpanded = menu.classList.contains('show');
+    trigger.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#notificationsTrigger') || menu.contains(e.target)) {
       return;
     }
-
-    const filtered = cachedAssignments.filter(
-      (a) =>
-        a.title.toLowerCase().includes(term) ||
-        a.course.toLowerCase().includes(term)
-    );
-    renderAssignmentsList(filtered);
+    menu.classList.remove('show');
+    trigger.setAttribute('aria-expanded', 'false');
   });
+
+  if (markReadBtn) {
+    markReadBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (badgeDot) badgeDot.classList.add('hidden');
+      if (notifCount) notifCount.textContent = '0';
+      const unreadDots = document.querySelectorAll('.notif-unread-dot');
+      unreadDots.forEach(d => d.classList.replace('bg-primary-green', 'bg-slate-300'));
+      showStudentToast('Semua notifikasi telah ditandai dibaca.', 'info');
+    });
+  }
+}
+
+/**
+ * Student Settings Form Logic
+ */
+function setupStudentSettingsForm() {
+  const form = document.getElementById('studentProfileForm');
+  const prefBtn = document.getElementById('savePrefBtn');
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById('settingStudentName');
+      const emailInput = document.getElementById('settingStudentEmail');
+
+      const user = getCurrentUser() || { role: 'mahasiswa' };
+      if (nameInput) user.name = nameInput.value.trim();
+      if (emailInput) user.email = emailInput.value.trim();
+
+      setCurrentUser(user);
+      populateUserProfile(user);
+      showStudentToast('Profil mahasiswa berhasil disimpan!', 'success');
+    });
+  }
+
+  if (prefBtn) {
+    prefBtn.addEventListener('click', () => {
+      showStudentToast('Preferensi pemberitahuan berhasil diperbarui!', 'success');
+    });
+  }
+}
+
+/**
+ * Help FAQ Accordion Logic
+ */
+function setupHelpFaqAccordion() {
+  const container = document.getElementById('helpFaqContainer');
+  if (!container) return;
+
+  const questions = container.querySelectorAll('.faq-question');
+  questions.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const answer = btn.nextElementSibling;
+      const icon = btn.querySelector('svg, i');
+      if (!answer) return;
+
+      const isClosed = answer.classList.contains('hidden');
+      // Close other answers
+      container.querySelectorAll('.faq-answer').forEach(a => a.classList.add('hidden'));
+      container.querySelectorAll('.faq-question svg, .faq-question i').forEach(ic => {
+        try { if (ic && ic.style) ic.style.transform = 'rotate(0deg)'; } catch (err) {}
+      });
+
+      if (isClosed) {
+        answer.classList.remove('hidden');
+        try { if (icon && icon.style) icon.style.transform = 'rotate(180deg)'; } catch (err) {}
+      }
+    });
+  });
+}
+
+/**
+ * Toast Notification Helper
+ */
+function showStudentToast(message, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  const bgColor = type === 'success' ? 'bg-dark-green text-white' : 'bg-slate-800 text-white';
+  const iconName = type === 'success' ? 'check-circle' : 'info';
+
+  toast.className = `p-3.5 px-4 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2.5 transition-all transform duration-300 translate-y-2 opacity-0 ${bgColor} pointer-events-auto`;
+  toast.innerHTML = `
+    <i data-lucide="${iconName}" style="width: 16px; height: 16px;"></i>
+    <span>${escapeHtml(message)}</span>
+  `;
+
+  container.appendChild(toast);
+  if (window.lucide) window.lucide.createIcons({ root: toast });
+
+  setTimeout(() => {
+    toast.classList.remove('translate-y-2', 'opacity-0');
+  }, 20);
+
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'translate-y-2');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
 }
 
 function escapeHtml(str) {

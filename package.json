@@ -4,6 +4,9 @@
   "description": "> *\"Smarter Assessment, Better Feedback.\"*",
   "main": "index.js",
   "scripts": {
+    "dev": "npm --prefix nextjs-app run dev",
+    "build": "npm --prefix nextjs-app run build",
+    "start": "npm --prefix nextjs-app run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
