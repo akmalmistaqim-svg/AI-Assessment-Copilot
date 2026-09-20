@@ -1,6 +1,7 @@
 import { CheckCheck } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { LogoutButton } from "@/app/dashboard/logout-button";
 import { NotificationButton } from "@/components/notification-button";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import { SearchInput } from "@/components/search-input";
@@ -26,8 +27,8 @@ const dosenNavSections = [
   {
     title: "GENERAL",
     items: [
-      { label: "Settings", href: "#", icon: "Settings" },
-      { label: "Help", href: "#", icon: "HelpCircle" },
+      { label: "Settings", href: "/dashboard/dosen/settings", icon: "Settings" },
+      { label: "Help", href: "/dashboard/dosen/help", icon: "HelpCircle" },
     ],
   },
 ];
@@ -40,16 +41,17 @@ const mahasiswaNavSections = [
   {
     title: "LEARNING",
     items: [
-      { label: "My Assignments", href: "#", icon: "FileText" },
-      { label: "My Grades", href: "#", icon: "Award" },
-      { label: "Feedback", href: "#", icon: "MessageSquare" },
+      { label: "Kelas Saya", href: "/dashboard/mahasiswa/classes", icon: "GraduationCap" },
+      { label: "My Assignments", href: "/dashboard/mahasiswa/assignments", icon: "FileText" },
+      { label: "My Grades", href: "/dashboard/mahasiswa/grades", icon: "Award" },
+      { label: "Feedback", href: "/dashboard/mahasiswa/feedback", icon: "MessageSquare" },
     ],
   },
   {
     title: "GENERAL",
     items: [
-      { label: "Settings", href: "#", icon: "Settings" },
-      { label: "Help", href: "#", icon: "HelpCircle" },
+      { label: "Settings", href: "/dashboard/mahasiswa/settings", icon: "Settings" },
+      { label: "Help", href: "/dashboard/mahasiswa/help", icon: "HelpCircle" },
     ],
   },
 ];
@@ -66,7 +68,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const navSections = isDosen ? dosenNavSections : mahasiswaNavSections;
   const searchPlaceholder = isDosen
     ? "Search classes, assignments, or students..."
-    : "Search assignments, grades, or feedback...";
+    : "Search classes, assignments, grades, or feedback...";
 
   // User initials
   const nameParts = session.name.split(" ");
@@ -85,12 +87,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
             href={`/dashboard/${session.role}`}
             className="flex items-center gap-3 no-underline"
           >
-            <div className="w-[38px] h-[38px] rounded-[10px] bg-light-green text-primary-green flex items-center justify-center font-bold text-lg shadow-xs shrink-0">
-              <CheckCheck size={20} strokeWidth={2.5} />
-            </div>
+            <img
+              src="/dexa-logo.png"
+              alt="DeXa Assessment Logo"
+              className="w-10 h-10 rounded-xl object-contain shadow-xs shrink-0"
+            />
             <div className="flex flex-col">
               <span className="text-base font-bold text-text-primary tracking-tight leading-tight">
-                AI Assessment
+                DeXa Assessment
               </span>
               <span className="text-[11px] text-text-secondary font-normal mt-0.5">
                 {portalLabel}
@@ -102,9 +106,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
         {/* Dynamic Navigation List Component */}
         <SidebarNavList sections={navSections} />
 
-        {/* Sidebar Footer */}
-        <div className="py-4 px-5 border-t border-border-color text-[11px] text-text-muted">
-          <span>AI Assessment Copilot &copy; 2026</span>
+        {/* Sidebar Footer: Logout Button */}
+        <div className="p-3 border-t border-border-color bg-sidebar-bg shrink-0">
+          <LogoutButton variant="sidebar" />
         </div>
       </SidebarDrawer>
 
@@ -118,7 +122,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           </div>
 
           <div className="flex items-center gap-4">
-            <NotificationButton />
+            <NotificationButton role={session.role} />
             <ProfileDropdown
               name={session.name}
               email={session.email}

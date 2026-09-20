@@ -41,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     alertBox.classList.remove('show');
     emailInput.classList.remove('input-error');
     passwordInput.classList.remove('input-error');
+    emailInput.closest('.input-wrap')?.classList.remove('has-error');
+    passwordInput.closest('.input-wrap')?.classList.remove('has-error');
     if (emailFeedback) emailFeedback.classList.remove('show');
     if (passwordFeedback) passwordFeedback.classList.remove('show');
   }
@@ -68,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Validate Email
     if (!email) {
       emailInput.classList.add('input-error');
+      emailInput.closest('.input-wrap')?.classList.add('has-error');
       if (emailFeedback) {
         emailFeedback.textContent = 'Email wajib diisi.';
         emailFeedback.classList.add('show');
@@ -75,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hasValidationError = true;
     } else if (!isValidEmail(email)) {
       emailInput.classList.add('input-error');
+      emailInput.closest('.input-wrap')?.classList.add('has-error');
       if (emailFeedback) {
         emailFeedback.textContent = 'Format email tidak valid.';
         emailFeedback.classList.add('show');
@@ -85,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Validate Password
     if (!password) {
       passwordInput.classList.add('input-error');
+      passwordInput.closest('.input-wrap')?.classList.add('has-error');
       if (passwordFeedback) {
         passwordFeedback.textContent = 'Password wajib diisi.';
         passwordFeedback.classList.add('show');

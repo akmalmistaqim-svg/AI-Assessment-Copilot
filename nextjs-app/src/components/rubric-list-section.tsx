@@ -11,10 +11,17 @@ import type { RubricItem } from "@/types/rubric";
 
 export function RubricListSection() {
   const openModal = useUIStore((s) => s.openModal);
+  const searchQuery = useUIStore((s) => s.searchQuery);
   const { data: rubrics, isLoading, isError, error, refetch } = useRubricsQuery();
   const deleteMutation = useDeleteRubricMutation();
 
   const [selectedRubric, setSelectedRubric] = useState<RubricItem | null>(null);
+
+  const filteredRubrics = rubrics?.filter((rubric: RubricItem) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return rubric.name.toLowerCase().includes(query) || rubric.course.toLowerCase().includes(query);
+  });
 
   function handleCreate() {
     setSelectedRubric(null);
@@ -86,10 +93,23 @@ export function RubricListSection() {
           />
         )}
 
+        {/* Search No Results State */}
+        {!isLoading &&
+          !isError &&
+          rubrics &&
+          rubrics.length > 0 &&
+          filteredRubrics &&
+          filteredRubrics.length === 0 && (
+            <EmptyState
+              title="Tidak ada hasil"
+              description={`Tidak ditemukan rubrik dengan kata kunci "${searchQuery}".`}
+            />
+          )}
+
         {/* Rubrics Grid */}
-        {!isLoading && !isError && rubrics && rubrics.length > 0 && (
+        {!isLoading && !isError && filteredRubrics && filteredRubrics.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {rubrics.map((rubric: RubricItem) => (
+            {filteredRubrics.map((rubric: RubricItem) => (
               <RubricCard
                 key={rubric.id}
                 rubric={rubric}

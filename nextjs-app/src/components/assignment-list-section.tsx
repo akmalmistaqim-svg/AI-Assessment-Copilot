@@ -12,10 +12,21 @@ import type { AssignmentItem } from "@/types/assignment";
 
 export function AssignmentListSection() {
   const openModal = useUIStore((s) => s.openModal);
+  const searchQuery = useUIStore((s) => s.searchQuery);
   const { data: assignments, isLoading, isError, error, refetch } = useAssignmentsQuery();
   const deleteMutation = useDeleteAssignmentMutation();
 
   const [selectedAssignment, setSelectedAssignment] = useState<AssignmentItem | null>(null);
+
+  const filteredAssignments = assignments?.filter((asg: AssignmentItem) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      asg.title.toLowerCase().includes(query) ||
+      asg.course.toLowerCase().includes(query) ||
+      asg.description.toLowerCase().includes(query)
+    );
+  });
 
   function handleCreate() {
     setSelectedAssignment(null);
@@ -98,10 +109,23 @@ export function AssignmentListSection() {
           />
         )}
 
+        {/* Search No Results State */}
+        {!isLoading &&
+          !isError &&
+          assignments &&
+          assignments.length > 0 &&
+          filteredAssignments &&
+          filteredAssignments.length === 0 && (
+            <EmptyState
+              title="Tidak ada hasil"
+              description={`Tidak ditemukan tugas dengan kata kunci "${searchQuery}".`}
+            />
+          )}
+
         {/* Assignments Grid */}
-        {!isLoading && !isError && assignments && assignments.length > 0 && (
+        {!isLoading && !isError && filteredAssignments && filteredAssignments.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {assignments.map((asg: AssignmentItem) => (
+            {filteredAssignments.map((asg: AssignmentItem) => (
               <AssignmentCard
                 key={asg.id}
                 assignment={asg}

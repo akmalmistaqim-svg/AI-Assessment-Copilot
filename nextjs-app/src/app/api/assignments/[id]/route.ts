@@ -1,8 +1,35 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { deleteAssignmentFromStore, updateAssignmentInStore } from "@/lib/assignmentStore";
+import {
+  deleteAssignmentFromStore,
+  getAssignmentByIdFromStore,
+  updateAssignmentInStore,
+} from "@/lib/assignmentStore";
 import { requireDosenRole } from "@/lib/auth-guard";
 import { AssignmentSchema, UpdateAssignmentInputSchema } from "@/types/assignment";
+
+// GET /api/assignments/[id]
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
+    const assignment = getAssignmentByIdFromStore(id);
+
+    if (!assignment) {
+      return NextResponse.json({ error: "Assignment not found" }, { status: 404 });
+    }
+
+    const validatedResult = AssignmentSchema.parse(assignment);
+    return NextResponse.json(validatedResult);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: "Validation Error", details: error.issues },
+        { status: 400 },
+      );
+    }
+    return NextResponse.json({ error: "Failed to fetch assignment" }, { status: 500 });
+  }
+}
 
 // PUT /api/assignments/[id]
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {

@@ -4,6 +4,8 @@ import { Suspense } from "react";
 import { AssignmentsListSectionServer } from "@/components/assignments-list-section-server";
 import { LatestFeedbackSection } from "@/components/latest-feedback-section";
 import { MahasiswaStatsSection } from "@/components/mahasiswa-stats-section";
+import { SubmitAssignmentButton } from "@/components/submit-assignment-button";
+import { SubmitAssignmentModal } from "@/components/submit-assignment-modal";
 import { getSession } from "@/lib/auth";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -50,12 +52,7 @@ export default async function MahasiswaDashboardPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            className="px-4 py-2 text-xs font-semibold text-white bg-primary-green hover:bg-dark-green rounded-lg transition shadow-sm hover:shadow"
-          >
-            + Kumpul Tugas
-          </button>
+          <SubmitAssignmentButton />
         </div>
       </div>
 
@@ -77,6 +74,9 @@ export default async function MahasiswaDashboardPage() {
           </Suspense>
         </div>
       </div>
+
+      {/* Submit Assignment Modal */}
+      <SubmitAssignmentModal />
     </div>
   );
 }

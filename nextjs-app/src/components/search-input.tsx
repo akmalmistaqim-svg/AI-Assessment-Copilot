@@ -1,6 +1,8 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { useUIStore } from "@/store/useUIStore";
 
 interface SearchInputProps {
@@ -8,8 +10,16 @@ interface SearchInputProps {
 }
 
 export function SearchInput({ placeholder = "Search..." }: SearchInputProps) {
+  const pathname = usePathname();
   const searchQuery = useUIStore((s) => s.searchQuery);
   const setSearchQuery = useUIStore((s) => s.setSearchQuery);
+
+  // Reset search query whenever route changes
+  useEffect(() => {
+    if (pathname) {
+      setSearchQuery("");
+    }
+  }, [pathname, setSearchQuery]);
 
   return (
     <div className="relative flex items-center w-full max-w-[420px]">

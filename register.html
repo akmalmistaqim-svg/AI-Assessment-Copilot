@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI Assessment Copilot - Create your account. Smarter Assessment, Better Feedback.">
-  <title>Register - AI Assessment Copilot</title>
+  <meta name="description" content="DeXa Assessment - Create your account. Smarter Assessment, Better Feedback.">
+  <title>Register - DeXa Assessment</title>
   
   <!-- CSS Files -->
   <link rel="stylesheet" href="css/global.css">
@@ -50,21 +50,20 @@
   <div class="auth-wrapper min-h-screen flex flex-col justify-center items-center py-8 px-4 bg-main-bg">
     <div class="auth-container w-full max-w-[440px]">
 
-      <!-- Brand Header (Semantic HTML5) -->
-      <header class="auth-header text-center mb-7">
-        <div class="brand-logo flex items-center justify-center gap-3 no-underline">
-          <div class="brand-icon w-11 h-11 rounded-[10px] bg-light-green text-primary-green flex items-center justify-center font-bold text-xl shadow-xs shrink-0">
-            <i data-lucide="check-check" style="width: 22px; height: 22px;"></i>
-          </div>
-          <div class="brand-text flex flex-col text-left">
-            <span class="brand-name text-[19px] font-bold text-text-primary tracking-tight leading-tight">AI Assessment Copilot</span>
-            <span class="brand-tagline text-xs text-text-secondary font-normal mt-0.5">Smarter Assessment, Better Feedback.</span>
-          </div>
-        </div>
-      </header>
-
       <!-- Auth Card (Semantic HTML5 Main) -->
       <main class="auth-card bg-card-bg rounded-2xl border border-border-color shadow-sm p-8 md:p-9" id="main-content">
+
+        <!-- Brand Header inside Card -->
+        <header class="auth-header text-center mb-6">
+          <div class="brand-logo flex items-center justify-center gap-3 no-underline">
+            <img src="assets/images/dexa-logo.png" alt="DeXa Assessment Logo" class="w-11 h-11 rounded-xl object-contain shadow-xs shrink-0">
+            <div class="brand-text flex flex-col text-left">
+              <span class="brand-name text-[19px] font-bold text-text-primary tracking-tight leading-tight">DeXa Assessment</span>
+              <span class="brand-tagline text-xs text-text-secondary font-normal mt-0.5">Smarter Assessment, Better Feedback.</span>
+            </div>
+          </div>
+        </header>
+
         <h1 class="auth-title text-[22px] font-bold text-text-primary tracking-tight mb-1.5">Create your account</h1>
         <p class="auth-subtitle text-sm text-text-secondary mb-6">Daftar sekarang untuk memulai penilaian terstandar.</p>
 
@@ -76,53 +75,53 @@
 
         <!-- Register Form -->
         <form id="registerForm" novalidate>
-          <!-- Full Name -->
+          <!-- Full Name (Inner Label Layout) -->
           <div class="form-group mb-4">
-            <label class="form-label block text-[13px] font-medium text-text-primary mb-1.5" for="fullName">
-              Nama Lengkap <span class="required text-status-danger-text">*</span>
-            </label>
-            <div class="input-wrap relative flex items-center">
+            <div class="input-wrap">
+              <label class="form-label" for="fullName">
+                Nama Lengkap <span class="required">*</span>
+              </label>
               <input 
                 type="text" 
                 id="fullName" 
                 name="fullName" 
-                class="form-control w-full py-2.5 px-3.5 text-sm text-text-primary bg-white border border-border-color rounded-md transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted" 
+                class="form-control" 
                 placeholder="Contoh: Budi Santoso" 
                 autocomplete="name"
                 required
               >
             </div>
-            <div id="nameFeedback" class="input-feedback hidden text-xs text-status-danger-text mt-1" role="alert"></div>
+            <div id="nameFeedback" class="input-feedback" role="alert"></div>
           </div>
 
-          <!-- Email -->
+          <!-- Email (Inner Label Layout) -->
           <div class="form-group mb-4">
-            <label class="form-label block text-[13px] font-medium text-text-primary mb-1.5" for="email">
-              Email <span class="required text-status-danger-text">*</span>
-            </label>
-            <div class="input-wrap relative flex items-center">
+            <div class="input-wrap">
+              <label class="form-label" for="email">
+                Email <span class="required">*</span>
+              </label>
               <input 
                 type="email" 
                 id="email" 
                 name="email" 
-                class="form-control w-full py-2.5 px-3.5 text-sm text-text-primary bg-white border border-border-color rounded-md transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted" 
+                class="form-control" 
                 placeholder="nama@kampus.ac.id" 
                 autocomplete="email"
                 required
               >
             </div>
-            <div id="emailFeedback" class="input-feedback hidden text-xs text-status-danger-text mt-1" role="alert"></div>
+            <div id="emailFeedback" class="input-feedback" role="alert"></div>
           </div>
 
           <!-- Role Selection (Dosen / Mahasiswa) -->
-          <div class="form-group form-group-role mb-3.5" role="radiogroup" aria-label="Pilih Role">
+          <div class="form-group form-group-role mb-4" role="radiogroup" aria-label="Pilih Role">
             <label class="form-label block text-[13px] font-medium text-text-primary mb-1.5" id="roleLabel">
               Pilih Role <span class="required text-status-danger-text">*</span>
             </label>
             <div class="role-selector grid grid-cols-2 gap-2.5 mt-1" aria-labelledby="roleLabel">
               <label class="role-option relative cursor-pointer">
                 <input type="radio" name="role" value="dosen" checked class="sr-only" aria-label="Role Dosen">
-                <div class="role-card flex flex-col items-center justify-center gap-1 p-2.5 min-h-[52px] border border-border-color rounded-md bg-white text-center transition hover:border-slate-300 hover:bg-slate-50">
+                <div class="role-card flex flex-col items-center justify-center gap-1 p-2.5 min-h-[52px] border border-border-color rounded-xl bg-white text-center transition hover:border-slate-300 hover:bg-slate-50">
                   <div class="role-icon w-6 h-6 rounded-md bg-slate-100 text-text-secondary flex items-center justify-center transition">
                     <i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i>
                   </div>
@@ -132,7 +131,7 @@
 
               <label class="role-option relative cursor-pointer">
                 <input type="radio" name="role" value="mahasiswa" class="sr-only" aria-label="Role Mahasiswa">
-                <div class="role-card flex flex-col items-center justify-center gap-1 p-2.5 min-h-[52px] border border-border-color rounded-md bg-white text-center transition hover:border-slate-300 hover:bg-slate-50">
+                <div class="role-card flex flex-col items-center justify-center gap-1 p-2.5 min-h-[52px] border border-border-color rounded-xl bg-white text-center transition hover:border-slate-300 hover:bg-slate-50">
                   <div class="role-icon w-6 h-6 rounded-md bg-slate-100 text-text-secondary flex items-center justify-center transition">
                     <i data-lucide="book-open" style="width: 14px; height: 14px;"></i>
                   </div>
@@ -142,17 +141,17 @@
             </div>
           </div>
 
-          <!-- Password -->
+          <!-- Password (Inner Label Layout) -->
           <div class="form-group mb-4">
-            <label class="form-label block text-[13px] font-medium text-text-primary mb-1.5" for="password">
-              Password (Min. 8 Karakter) <span class="required text-status-danger-text">*</span>
-            </label>
-            <div class="input-wrap relative flex items-center">
+            <div class="input-wrap input-wrap-password">
+              <label class="form-label" for="password">
+                Password (Min. 8 Karakter) <span class="required">*</span>
+              </label>
               <input 
                 type="password" 
                 id="password" 
                 name="password" 
-                class="form-control w-full py-2.5 px-3.5 text-sm text-text-primary bg-white border border-border-color rounded-md transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted" 
+                class="form-control" 
                 placeholder="Minimal 8 karakter" 
                 autocomplete="new-password"
                 required
@@ -160,27 +159,27 @@
               <button 
                 type="button" 
                 id="togglePassword" 
-                class="btn-password-toggle absolute right-3 p-1 text-text-muted hover:text-text-primary transition flex items-center justify-center cursor-pointer" 
+                class="btn-password-toggle" 
                 aria-label="Toggle password visibility"
                 title="Show/Hide Password"
               >
                 <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
               </button>
             </div>
-            <div id="passwordFeedback" class="input-feedback hidden text-xs text-status-danger-text mt-1" role="alert"></div>
+            <div id="passwordFeedback" class="input-feedback" role="alert"></div>
           </div>
 
-          <!-- Confirm Password -->
+          <!-- Confirm Password (Inner Label Layout) -->
           <div class="form-group mb-4">
-            <label class="form-label block text-[13px] font-medium text-text-primary mb-1.5" for="confirmPassword">
-              Konfirmasi Password <span class="required text-status-danger-text">*</span>
-            </label>
-            <div class="input-wrap relative flex items-center">
+            <div class="input-wrap input-wrap-password">
+              <label class="form-label" for="confirmPassword">
+                Konfirmasi Password <span class="required">*</span>
+              </label>
               <input 
                 type="password" 
                 id="confirmPassword" 
                 name="confirmPassword" 
-                class="form-control w-full py-2.5 px-3.5 text-sm text-text-primary bg-white border border-border-color rounded-md transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted" 
+                class="form-control" 
                 placeholder="Ulangi password Anda" 
                 autocomplete="new-password"
                 required
@@ -188,14 +187,14 @@
               <button 
                 type="button" 
                 id="toggleConfirmPassword" 
-                class="btn-password-toggle absolute right-3 p-1 text-text-muted hover:text-text-primary transition flex items-center justify-center cursor-pointer" 
+                class="btn-password-toggle" 
                 aria-label="Toggle confirm password visibility"
                 title="Show/Hide Confirm Password"
               >
                 <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
               </button>
             </div>
-            <div id="confirmPasswordFeedback" class="input-feedback hidden text-xs text-status-danger-text mt-1" role="alert"></div>
+            <div id="confirmPasswordFeedback" class="input-feedback" role="alert"></div>
           </div>
 
           <!-- Submit Button (CVA Headless Component) -->

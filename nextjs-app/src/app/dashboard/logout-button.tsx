@@ -36,7 +36,7 @@ export function LogoutButton({ className, variant = "sidebar" }: LogoutButtonPro
       disabled={isLoading}
       className={className || baseClasses}
     >
-      <LogOut size={16} />
+      <LogOut size={variant === "dropdown" ? 14 : 18} className="shrink-0" />
       <span>{isLoading ? "Logging out..." : "Logout"}</span>
     </button>
   );

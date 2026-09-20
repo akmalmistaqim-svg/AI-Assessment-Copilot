@@ -9,6 +9,8 @@ export let classesStore: ClassItem[] = [
     assignmentsCount: 4,
     status: "active",
     semester: "Semester Genap 2025/2026",
+    lecturerName: "Dr. Budi Santoso, M.Kom",
+    enrolledStudentIds: [2],
   },
   {
     id: "cls-002",
@@ -17,6 +19,8 @@ export let classesStore: ClassItem[] = [
     assignmentsCount: 3,
     status: "active",
     semester: "Semester Genap 2025/2026",
+    lecturerName: "Dr. Budi Santoso, M.Kom",
+    enrolledStudentIds: [2],
   },
   {
     id: "cls-003",
@@ -25,6 +29,8 @@ export let classesStore: ClassItem[] = [
     assignmentsCount: 5,
     status: "active",
     semester: "Semester Genap 2025/2026",
+    lecturerName: "Dr. Budi Santoso, M.Kom",
+    enrolledStudentIds: [2],
   },
   {
     id: "cls-004",
@@ -33,11 +39,21 @@ export let classesStore: ClassItem[] = [
     assignmentsCount: 2,
     status: "active",
     semester: "Semester Genap 2025/2026",
+    lecturerName: "Dr. Budi Santoso, M.Kom",
+    enrolledStudentIds: [2],
   },
 ];
 
 export function getClassesStore(): ClassItem[] {
   return classesStore;
+}
+
+export function getClassByIdFromStore(id: string): ClassItem | null {
+  return classesStore.find((c) => c.id === id) ?? null;
+}
+
+export function getClassesByStudentId(studentId: number): ClassItem[] {
+  return classesStore.filter((c) => c.enrolledStudentIds?.includes(studentId));
 }
 
 export function addClassToStore(newClass: ClassItem): ClassItem {

@@ -82,15 +82,21 @@ export function ProfileDropdown({ name, email, role, initials }: ProfileDropdown
 
           <button
             type="button"
-            onClick={() => setDropdownOpen(false)}
-            className="flex items-center gap-2.5 w-full px-4 py-2.5 text-[13px] text-text-secondary hover:bg-slate-50 hover:text-text-primary transition cursor-pointer"
+            onClick={() => {
+              setDropdownOpen(false);
+              router.push(`/dashboard/${role}/settings`);
+            }}
+            className="flex items-center gap-2.5 w-full px-4 py-2.5 text-[13px] text-text-secondary hover:bg-slate-50 hover:text-text-primary transition cursor-pointer text-left"
           >
             <User size={16} /> <span>Profile</span>
           </button>
           <button
             type="button"
-            onClick={() => setDropdownOpen(false)}
-            className="flex items-center gap-2.5 w-full px-4 py-2.5 text-[13px] text-text-secondary hover:bg-slate-50 hover:text-text-primary transition cursor-pointer"
+            onClick={() => {
+              setDropdownOpen(false);
+              router.push(`/dashboard/${role}/settings`);
+            }}
+            className="flex items-center gap-2.5 w-full px-4 py-2.5 text-[13px] text-text-secondary hover:bg-slate-50 hover:text-text-primary transition cursor-pointer text-left"
           >
             <Sliders size={16} /> <span>Settings</span>
           </button>

@@ -153,77 +153,92 @@ export function RegisterForm() {
       )}
 
       <form onSubmit={handleSubmit} noValidate>
-        {/* Full Name */}
+        {/* Full Name (Inner Label Layout) */}
         <div className="mb-4">
-          <label
-            htmlFor="fullName"
-            className="block text-[13px] font-medium text-text-primary mb-1.5"
-          >
-            Nama Lengkap <span className="text-status-danger-text">*</span>
-          </label>
-          <input
-            type="text"
-            id="fullName"
-            value={fullName}
-            onChange={(e) => {
-              setFullName(e.target.value);
-              clearErrors();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                emailInputRef.current?.focus();
-              }
-            }}
-            className={`${inputBaseClass} ${
-              nameError ? "border-status-danger-text" : "border-border-color"
+          <div
+            className={`relative flex flex-col justify-center px-3.5 py-2 bg-white border rounded-xl transition focus-within:border-primary-green focus-within:ring-2 focus-within:ring-primary-green/20 ${
+              nameError ? "border-status-danger-text ring-2 ring-red-100" : "border-border-color"
             }`}
-            placeholder="Contoh: Budi Santoso"
-            autoComplete="name"
-          />
+          >
+            <label
+              htmlFor="fullName"
+              className={`block text-[11px] font-semibold mb-0.5 transition cursor-pointer ${
+                nameError ? "text-status-danger-text" : "text-text-secondary"
+              }`}
+            >
+              Nama Lengkap <span className="text-status-danger-text">*</span>
+            </label>
+            <input
+              type="text"
+              id="fullName"
+              value={fullName}
+              onChange={(e) => {
+                setFullName(e.target.value);
+                clearErrors();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  emailInputRef.current?.focus();
+                }
+              }}
+              className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
+              placeholder="Contoh: Budi Santoso"
+              autoComplete="name"
+            />
+          </div>
           {nameError && (
-            <div className="text-xs text-status-danger-text mt-1" role="alert">
+            <div className="text-xs text-status-danger-text mt-1 ml-0.5" role="alert">
               {nameError}
             </div>
           )}
         </div>
 
-        {/* Email */}
+        {/* Email (Inner Label Layout) */}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-[13px] font-medium text-text-primary mb-1.5">
-            Email <span className="text-status-danger-text">*</span>
-          </label>
-          <input
-            ref={emailInputRef}
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              clearErrors();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                passwordInputRef.current?.focus();
-              }
-            }}
-            className={`${inputBaseClass} ${
-              emailError ? "border-status-danger-text" : "border-border-color"
+          <div
+            className={`relative flex flex-col justify-center px-3.5 py-2 bg-white border rounded-xl transition focus-within:border-primary-green focus-within:ring-2 focus-within:ring-primary-green/20 ${
+              emailError ? "border-status-danger-text ring-2 ring-red-100" : "border-border-color"
             }`}
-            placeholder="nama@kampus.ac.id"
-            autoComplete="email"
-          />
+          >
+            <label
+              htmlFor="email"
+              className={`block text-[11px] font-semibold mb-0.5 transition cursor-pointer ${
+                emailError ? "text-status-danger-text" : "text-text-secondary"
+              }`}
+            >
+              Email <span className="text-status-danger-text">*</span>
+            </label>
+            <input
+              ref={emailInputRef}
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                clearErrors();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  passwordInputRef.current?.focus();
+                }
+              }}
+              className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
+              placeholder="nama@kampus.ac.id"
+              autoComplete="email"
+            />
+          </div>
           {emailError && (
-            <div className="text-xs text-status-danger-text mt-1" role="alert">
+            <div className="text-xs text-status-danger-text mt-1 ml-0.5" role="alert">
               {emailError}
             </div>
           )}
         </div>
 
         {/* Role Selection */}
-        <div className="mb-3.5">
-          <span className="block text-[13px] font-medium text-text-primary mb-1.5">
+        <div className="mb-4">
+          <span className="block text-xs font-semibold text-text-secondary mb-1.5">
             Pilih Role <span className="text-status-danger-text">*</span>
           </span>
           <div className="grid grid-cols-2 gap-2.5 mt-1" role="radiogroup" aria-label="Pilih Role">
@@ -238,7 +253,7 @@ export function RegisterForm() {
                 className="sr-only"
               />
               <div
-                className={`flex flex-col items-center justify-center gap-1 p-2.5 min-h-[52px] border-[1.5px] rounded-lg bg-white text-center transition ${
+                className={`flex flex-col items-center justify-center gap-1 p-2.5 min-h-[52px] border-[1.5px] rounded-xl bg-white text-center transition ${
                   role === "dosen"
                     ? "border-primary-green bg-light-green"
                     : "border-border-color hover:border-slate-300 hover:bg-slate-50"
@@ -274,7 +289,7 @@ export function RegisterForm() {
                 className="sr-only"
               />
               <div
-                className={`flex flex-col items-center justify-center gap-1 p-2.5 min-h-[52px] border-[1.5px] rounded-lg bg-white text-center transition ${
+                className={`flex flex-col items-center justify-center gap-1 p-2.5 min-h-[52px] border-[1.5px] rounded-xl bg-white text-center transition ${
                   role === "mahasiswa"
                     ? "border-primary-green bg-light-green"
                     : "border-border-color hover:border-slate-300 hover:bg-slate-50"
@@ -301,15 +316,21 @@ export function RegisterForm() {
           </div>
         </div>
 
-        {/* Password */}
+        {/* Password (Inner Label Layout) */}
         <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-[13px] font-medium text-text-primary mb-1.5"
+          <div
+            className={`relative flex flex-col justify-center px-3.5 py-2 pr-11 bg-white border rounded-xl transition focus-within:border-primary-green focus-within:ring-2 focus-within:ring-primary-green/20 ${
+              passwordError ? "border-status-danger-text ring-2 ring-red-100" : "border-border-color"
+            }`}
           >
-            Password (Min. 8 Karakter) <span className="text-status-danger-text">*</span>
-          </label>
-          <div className="relative flex items-center">
+            <label
+              htmlFor="password"
+              className={`block text-[11px] font-semibold mb-0.5 transition cursor-pointer ${
+                passwordError ? "text-status-danger-text" : "text-text-secondary"
+              }`}
+            >
+              Password (Min. 8 Karakter) <span className="text-status-danger-text">*</span>
+            </label>
             <input
               ref={passwordInputRef}
               type={showPassword ? "text" : "password"}
@@ -325,9 +346,7 @@ export function RegisterForm() {
                   confirmPasswordInputRef.current?.focus();
                 }
               }}
-              className={`${inputBaseClass} pr-11 ${
-                passwordError ? "border-status-danger-text" : "border-border-color"
-              }`}
+              className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
               placeholder="Minimal 8 karakter"
               autoComplete="new-password"
             />
@@ -335,28 +354,36 @@ export function RegisterForm() {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               tabIndex={-1}
-              className="absolute right-3 z-10 p-1 text-text-muted hover:text-text-primary transition cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 text-text-muted hover:text-text-primary rounded-md hover:bg-slate-100 transition cursor-pointer"
               aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
             >
-              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
           {passwordError && (
-            <div className="text-xs text-status-danger-text mt-1" role="alert">
+            <div className="text-xs text-status-danger-text mt-1 ml-0.5" role="alert">
               {passwordError}
             </div>
           )}
         </div>
 
-        {/* Confirm Password */}
+        {/* Confirm Password (Inner Label Layout) */}
         <div className="mb-4">
-          <label
-            htmlFor="confirmPassword"
-            className="block text-[13px] font-medium text-text-primary mb-1.5"
+          <div
+            className={`relative flex flex-col justify-center px-3.5 py-2 pr-11 bg-white border rounded-xl transition focus-within:border-primary-green focus-within:ring-2 focus-within:ring-primary-green/20 ${
+              confirmPasswordError
+                ? "border-status-danger-text ring-2 ring-red-100"
+                : "border-border-color"
+            }`}
           >
-            Konfirmasi Password <span className="text-status-danger-text">*</span>
-          </label>
-          <div className="relative flex items-center">
+            <label
+              htmlFor="confirmPassword"
+              className={`block text-[11px] font-semibold mb-0.5 transition cursor-pointer ${
+                confirmPasswordError ? "text-status-danger-text" : "text-text-secondary"
+              }`}
+            >
+              Konfirmasi Password <span className="text-status-danger-text">*</span>
+            </label>
             <input
               ref={confirmPasswordInputRef}
               type={showConfirmPassword ? "text" : "password"}
@@ -366,9 +393,7 @@ export function RegisterForm() {
                 setConfirmPassword(e.target.value);
                 clearErrors();
               }}
-              className={`${inputBaseClass} pr-11 ${
-                confirmPasswordError ? "border-status-danger-text" : "border-border-color"
-              }`}
+              className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
               placeholder="Ulangi password Anda"
               autoComplete="new-password"
             />
@@ -376,18 +401,18 @@ export function RegisterForm() {
               type="button"
               onClick={() => setShowConfirmPassword((prev) => !prev)}
               tabIndex={-1}
-              className="absolute right-3 z-10 p-1 text-text-muted hover:text-text-primary transition cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 text-text-muted hover:text-text-primary rounded-md hover:bg-slate-100 transition cursor-pointer"
               aria-label={
                 showConfirmPassword
                   ? "Sembunyikan konfirmasi password"
                   : "Tampilkan konfirmasi password"
               }
             >
-              {showConfirmPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
           {confirmPasswordError && (
-            <div className="text-xs text-status-danger-text mt-1" role="alert">
+            <div className="text-xs text-status-danger-text mt-1 ml-0.5" role="alert">
               {confirmPasswordError}
             </div>
           )}

@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createAssignment,
   deleteAssignment,
+  fetchAssignmentById,
   fetchAssignments,
   updateAssignment,
 } from "@/services/assignmentApi";
@@ -11,6 +12,16 @@ export function useAssignmentsQuery() {
   return useQuery({
     queryKey: ["assignments"],
     queryFn: fetchAssignments,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+}
+
+export function useAssignmentQuery(id: string) {
+  return useQuery({
+    queryKey: ["assignments", id],
+    queryFn: () => fetchAssignmentById(id),
+    enabled: Boolean(id),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });

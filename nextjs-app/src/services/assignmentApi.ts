@@ -15,6 +15,15 @@ export async function fetchAssignments(): Promise<AssignmentItem[]> {
   return z.array(AssignmentSchema).parse(data);
 }
 
+export async function fetchAssignmentById(id: string): Promise<AssignmentItem> {
+  const res = await fetch(`/api/assignments/${id}`);
+  if (!res.ok) {
+    throw new Error("Gagal mengambil detail tugas dari server");
+  }
+  const data = await res.json();
+  return AssignmentSchema.parse(data);
+}
+
 export async function createAssignment(input: CreateAssignmentInput): Promise<AssignmentItem> {
   const res = await fetch("/api/assignments", {
     method: "POST",

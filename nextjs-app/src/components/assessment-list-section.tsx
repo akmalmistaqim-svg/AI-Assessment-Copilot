@@ -12,10 +12,17 @@ import type { AssessmentItem } from "@/types/assessment";
 
 export function AssessmentListSection() {
   const openModal = useUIStore((s) => s.openModal);
+  const searchQuery = useUIStore((s) => s.searchQuery);
   const { data: assessments, isLoading, isError, error, refetch } = useAssessmentsQuery();
   const deleteMutation = useDeleteAssessmentMutation();
 
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentItem | null>(null);
+
+  const filteredAssessments = assessments?.filter((asm: AssessmentItem) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return asm.name.toLowerCase().includes(query) || asm.course.toLowerCase().includes(query);
+  });
 
   function handleCreate() {
     setSelectedAssessment(null);
@@ -98,10 +105,23 @@ export function AssessmentListSection() {
           />
         )}
 
+        {/* Search No Results State */}
+        {!isLoading &&
+          !isError &&
+          assessments &&
+          assessments.length > 0 &&
+          filteredAssessments &&
+          filteredAssessments.length === 0 && (
+            <EmptyState
+              title="Tidak ada hasil"
+              description={`Tidak ditemukan assessment dengan kata kunci "${searchQuery}".`}
+            />
+          )}
+
         {/* Assessments Grid */}
-        {!isLoading && !isError && assessments && assessments.length > 0 && (
+        {!isLoading && !isError && filteredAssessments && filteredAssessments.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {assessments.map((asm: AssessmentItem) => (
+            {filteredAssessments.map((asm: AssessmentItem) => (
               <AssessmentCard
                 key={asm.id}
                 assessment={asm}

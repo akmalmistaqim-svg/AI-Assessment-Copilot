@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogoutButton } from "@/app/dashboard/logout-button";
 
 const iconMap: Record<string, LucideIcon> = {
   LayoutDashboard,
@@ -54,14 +53,6 @@ export function SidebarNavList({ sections }: SidebarNavListProps) {
     return pathname.startsWith(href);
   }
 
-  function handlePlaceholderClick(
-    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
-    label: string,
-  ) {
-    e.preventDefault();
-    alert(`Fitur "${label}" akan segera hadir pada pembaruan berikutnya!`);
-  }
-
   return (
     <div className="flex-1 overflow-y-auto py-5 px-3.5">
       {sections.map((section) => (
@@ -74,22 +65,6 @@ export function SidebarNavList({ sections }: SidebarNavListProps) {
               const Icon =
                 typeof item.icon === "string" ? (iconMap[item.icon] ?? HelpCircle) : item.icon;
               const active = isItemActive(item.href);
-              const isPlaceholder = item.href === "#";
-
-              if (isPlaceholder) {
-                return (
-                  <li key={item.label}>
-                    <button
-                      type="button"
-                      onClick={(e) => handlePlaceholderClick(e, item.label)}
-                      className="w-full flex items-center gap-3 py-[9px] px-3 rounded-lg text-[13.5px] font-medium text-text-secondary hover:bg-slate-50 hover:text-text-primary transition no-underline cursor-pointer bg-transparent border-none text-left"
-                    >
-                      <Icon size={18} className="shrink-0 text-text-muted" />
-                      <span>{item.label}</span>
-                    </button>
-                  </li>
-                );
-              }
 
               return (
                 <li key={item.label}>
@@ -110,15 +85,6 @@ export function SidebarNavList({ sections }: SidebarNavListProps) {
           </ul>
         </div>
       ))}
-
-      {/* Logout link in sidebar */}
-      <div className="mb-6">
-        <ul className="list-none flex flex-col gap-[3px]">
-          <li>
-            <LogoutButton variant="sidebar" />
-          </li>
-        </ul>
-      </div>
     </div>
   );
 }

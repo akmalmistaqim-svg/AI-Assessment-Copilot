@@ -63,3 +63,7 @@ export function deleteAssignmentFromStore(id: string): boolean {
   assignmentsStore = assignmentsStore.filter((a) => a.id !== id);
   return assignmentsStore.length < initialLen;
 }
+
+export function getAssignmentByIdFromStore(id: string): AssignmentItem | null {
+  return assignmentsStore.find((a) => a.id === id) ?? null;
+}

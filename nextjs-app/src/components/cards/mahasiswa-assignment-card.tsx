@@ -1,5 +1,6 @@
 import { ArrowRight, Calendar } from "lucide-react";
-import type { AssignmentItem } from "@/lib/data";
+import Link from "next/link";
+import type { AssignmentItem } from "@/types/assignment";
 
 interface MahasiswaAssignmentCardProps {
   assignment: AssignmentItem;
@@ -44,12 +45,14 @@ export function MahasiswaAssignmentCard({ assignment }: MahasiswaAssignmentCardP
 
       <div className="flex items-center gap-3">
         {getStatusBadge(assignment.status)}
-        <button
-          type="button"
-          className="p-2 rounded-lg hover:bg-border-color/30 text-text-secondary transition"
+        <Link
+          href={`/dashboard/mahasiswa/assignments/${assignment.id}`}
+          className="p-2 rounded-lg hover:bg-slate-100 text-text-secondary hover:text-primary-green transition flex items-center justify-center no-underline"
+          title="Lihat Detail Tugas"
+          aria-label={`Detail tugas ${assignment.title}`}
         >
           <ArrowRight className="w-4 h-4" />
-        </button>
+        </Link>
       </div>
     </div>
   );

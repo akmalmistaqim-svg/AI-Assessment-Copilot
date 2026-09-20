@@ -77,3 +77,64 @@ export async function requireDosenRole(request?: Request): Promise<{
 
   return { user, errorResponse: null };
 }
+
+/**
+ * Enforces authentication and authorization for Mahasiswa-only API mutations.
+ * Returns { user, errorResponse: null } on success.
+ * If unauthenticated -> returns 401 Unauthorized NextResponse.
+ * If authenticated but not a mahasiswa -> returns 403 Forbidden NextResponse.
+ */
+export async function requireMahasiswaRole(request?: Request): Promise<{
+  user: SessionPayload | null;
+  errorResponse: NextResponse | null;
+}> {
+  const user = await getSessionFromRequest(request);
+
+  if (!user) {
+    return {
+      user: null,
+      errorResponse: NextResponse.json(
+        { success: false, error: "Unauthorized", message: "Silakan login terlebih dahulu." },
+        { status: 401 },
+      ),
+    };
+  }
+
+  if (user.role !== "mahasiswa") {
+    return {
+      user: null,
+      errorResponse: NextResponse.json(
+        {
+          success: false,
+          error: "Forbidden",
+          message: "Akses ditolak. Operasi ini hanya diizinkan untuk mahasiswa.",
+        },
+        { status: 403 },
+      ),
+    };
+  }
+
+  return { user, errorResponse: null };
+}
+
+/**
+ * Enforces authentication for any logged-in user (dosen or mahasiswa).
+ */
+export async function requireAuthUser(request?: Request): Promise<{
+  user: SessionPayload | null;
+  errorResponse: NextResponse | null;
+}> {
+  const user = await getSessionFromRequest(request);
+
+  if (!user) {
+    return {
+      user: null,
+      errorResponse: NextResponse.json(
+        { success: false, error: "Unauthorized", message: "Silakan login terlebih dahulu." },
+        { status: 401 },
+      ),
+    };
+  }
+
+  return { user, errorResponse: null };
+}

@@ -1,10 +1,12 @@
-import { FileCheck2, FileText } from "lucide-react";
+import { FileCheck2 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { ActivityFeedSection } from "@/components/activity-feed-section";
+import { AssignmentModal } from "@/components/assignment-modal";
 import { ClassListSection } from "@/components/class-list-section";
+import { CreateAssignmentShortcutButton } from "@/components/create-assignment-shortcut-button";
 import { DosenStatsSection } from "@/components/dosen-stats-section";
 import { PageHeader } from "@/components/ui/page-header";
 import { getSession } from "@/lib/auth";
@@ -51,15 +53,10 @@ export default async function DosenDashboardPage() {
               href="/dashboard/dosen/rubrics"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-primary-green bg-light-green hover:bg-emerald-100 rounded-lg transition no-underline shadow-xs"
             >
-              <FileCheck2 className="w-3.5 h-3.5" />
-              Kelola Rubrik
+              <FileCheck2 className="w-3.5 h-3.5 text-primary-green shrink-0" />
+              <span>Kelola Rubrik</span>
             </Link>
-            <Link
-              href="/dashboard/dosen/assignments"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-green hover:bg-dark-green rounded-lg transition no-underline shadow-sm hover:shadow"
-            >
-              <FileText className="w-3.5 h-3.5" />+ Buat Tugas
-            </Link>
+            <CreateAssignmentShortcutButton />
           </div>
         }
       />
@@ -80,6 +77,9 @@ export default async function DosenDashboardPage() {
           </Suspense>
         </div>
       </div>
+
+      {/* Create Assignment Modal Shortcut */}
+      <AssignmentModal />
     </div>
   );
 }

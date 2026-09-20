@@ -11,10 +11,17 @@ import type { ClassItem } from "@/types/class";
 
 export function ClassListSection() {
   const openModal = useUIStore((s) => s.openModal);
+  const searchQuery = useUIStore((s) => s.searchQuery);
   const { data: classes, isLoading, isError, error, refetch } = useClassesQuery();
   const deleteMutation = useDeleteClassMutation();
 
   const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
+
+  const filteredClasses = classes?.filter((cls: ClassItem) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return cls.name.toLowerCase().includes(query) || cls.semester.toLowerCase().includes(query);
+  });
 
   function handleCreate() {
     setSelectedClass(null);
@@ -86,10 +93,23 @@ export function ClassListSection() {
           />
         )}
 
+        {/* Search No Results State */}
+        {!isLoading &&
+          !isError &&
+          classes &&
+          classes.length > 0 &&
+          filteredClasses &&
+          filteredClasses.length === 0 && (
+            <EmptyState
+              title="Tidak ada hasil"
+              description={`Tidak ditemukan kelas dengan kata kunci "${searchQuery}".`}
+            />
+          )}
+
         {/* Classes Grid */}
-        {!isLoading && !isError && classes && classes.length > 0 && (
+        {!isLoading && !isError && filteredClasses && filteredClasses.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {classes.map((cls: ClassItem) => (
+            {filteredClasses.map((cls: ClassItem) => (
               <ClassCard
                 key={cls.id}
                 cls={cls}

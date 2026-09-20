@@ -58,6 +58,8 @@ assert(parsedClass.success, `Zod validation for CreateClassInput`);
 const newCls: ClassItem = {
   id: `cls-test-${Date.now()}`,
   ...classInput,
+  lecturerName: "Dr. Budi Santoso, M.Kom",
+  enrolledStudentIds: [2],
 };
 addClassToStore(newCls);
 assert(getClassesStore().some(c => c.id === newCls.id), `Added class to store: ${newCls.name}`);

@@ -150,47 +150,62 @@ function LoginFormContent() {
       )}
 
       <form onSubmit={handleSubmit} noValidate>
-        {/* Email */}
-        <div className="mb-4.5">
-          <label htmlFor="email" className="block text-[13px] font-medium text-text-primary mb-1.5">
-            Email <span className="text-status-danger-text">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              clearErrors();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                passwordInputRef.current?.focus();
-              }
-            }}
-            className={`w-full py-2.5 px-3.5 text-sm text-text-primary bg-white border rounded-lg transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted ${
-              emailError ? "border-status-danger-text" : "border-border-color"
+        {/* Email (Inner Label Layout) */}
+        <div className="mb-4">
+          <div
+            className={`relative flex flex-col justify-center px-3.5 py-2 bg-white border rounded-xl transition focus-within:border-primary-green focus-within:ring-2 focus-within:ring-primary-green/20 ${
+              emailError ? "border-status-danger-text ring-2 ring-red-100" : "border-border-color"
             }`}
-            placeholder="nama@kampus.ac.id"
-            autoComplete="email"
-          />
+          >
+            <label
+              htmlFor="email"
+              className={`block text-[11px] font-semibold mb-0.5 transition cursor-pointer ${
+                emailError ? "text-status-danger-text" : "text-text-secondary"
+              }`}
+            >
+              Email <span className="text-status-danger-text">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                clearErrors();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  passwordInputRef.current?.focus();
+                }
+              }}
+              className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
+              placeholder="nama@kampus.ac.id"
+              autoComplete="email"
+            />
+          </div>
           {emailError && (
-            <div className="text-xs text-status-danger-text mt-1" role="alert">
+            <div className="text-xs text-status-danger-text mt-1 ml-0.5" role="alert">
               {emailError}
             </div>
           )}
         </div>
 
-        {/* Password */}
-        <div className="mb-4.5">
-          <label
-            htmlFor="password"
-            className="block text-[13px] font-medium text-text-primary mb-1.5"
+        {/* Password (Inner Label Layout) */}
+        <div className="mb-4">
+          <div
+            className={`relative flex flex-col justify-center px-3.5 py-2 pr-11 bg-white border rounded-xl transition focus-within:border-primary-green focus-within:ring-2 focus-within:ring-primary-green/20 ${
+              passwordError ? "border-status-danger-text ring-2 ring-red-100" : "border-border-color"
+            }`}
           >
-            Password <span className="text-status-danger-text">*</span>
-          </label>
-          <div className="relative flex items-center">
+            <label
+              htmlFor="password"
+              className={`block text-[11px] font-semibold mb-0.5 transition cursor-pointer ${
+                passwordError ? "text-status-danger-text" : "text-text-secondary"
+              }`}
+            >
+              Password <span className="text-status-danger-text">*</span>
+            </label>
             <input
               ref={passwordInputRef}
               type={showPassword ? "text" : "password"}
@@ -200,9 +215,7 @@ function LoginFormContent() {
                 setPassword(e.target.value);
                 clearErrors();
               }}
-              className={`w-full py-2.5 px-3.5 pr-11 text-sm text-text-primary bg-white border rounded-lg transition focus:border-primary-green focus:ring-2 focus:ring-primary-green/20 focus:outline-none placeholder:text-text-muted ${
-                passwordError ? "border-status-danger-text" : "border-border-color"
-              }`}
+              className="w-full p-0 text-sm font-medium text-text-primary bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-text-muted/70"
               placeholder="Masukkan password Anda"
               autoComplete="current-password"
             />
@@ -210,14 +223,14 @@ function LoginFormContent() {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               tabIndex={-1}
-              className="absolute right-3 z-10 p-1 text-text-muted hover:text-text-primary transition cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 text-text-muted hover:text-text-primary rounded-md hover:bg-slate-100 transition cursor-pointer"
               aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
             >
-              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
           {passwordError && (
-            <div className="text-xs text-status-danger-text mt-1" role="alert">
+            <div className="text-xs text-status-danger-text mt-1 ml-0.5" role="alert">
               {passwordError}
             </div>
           )}

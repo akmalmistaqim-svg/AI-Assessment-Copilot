@@ -4,8 +4,8 @@ import { LoginForm } from "@/components/login-form";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Login | AI Assessment Copilot",
-    description: "Masuk ke akun AI Assessment Copilot Anda.",
+    title: "Login | DeXa Assessment",
+    description: "Masuk ke akun DeXa Assessment Anda.",
   };
 }
 
@@ -13,13 +13,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center py-8 px-4 bg-main-bg">
       <div className="w-full max-w-[440px]">
-        {/* Brand Header */}
-        <header className="text-center mb-7">
-          <BrandLogo />
-        </header>
-
         {/* Auth Card */}
         <main className="bg-card-bg rounded-2xl border border-border-color shadow-sm p-8 md:p-9">
+          {/* Brand Header inside Card */}
+          <header className="text-center mb-6">
+            <BrandLogo />
+          </header>
+
           <h1 className="text-[22px] font-bold text-text-primary tracking-tight mb-1.5">
             Welcome Back
           </h1>

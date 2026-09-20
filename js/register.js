@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function clearErrors() {
     alertBox.classList.remove('show', 'auth-alert-error', 'auth-alert-success');
     document.querySelectorAll('.form-control').forEach(el => el.classList.remove('input-error'));
+    document.querySelectorAll('.input-wrap').forEach(el => el.classList.remove('has-error'));
     document.querySelectorAll('.input-feedback').forEach(el => {
       el.textContent = '';
       el.classList.remove('show');
@@ -58,7 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function setFieldError(inputId, feedbackId, message) {
     const input = document.getElementById(inputId);
     const feedback = document.getElementById(feedbackId);
-    if (input) input.classList.add('input-error');
+    if (input) {
+      input.classList.add('input-error');
+      input.closest('.input-wrap')?.classList.add('has-error');
+    }
     if (feedback) {
       feedback.textContent = message;
       feedback.classList.add('show');

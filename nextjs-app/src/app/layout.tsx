@@ -4,8 +4,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "AI Assessment Copilot",
-    template: "%s | AI Assessment Copilot",
+    default: "DeXa Assessment",
+    template: "%s | DeXa Assessment",
   },
   description: "Smarter Assessment, Better Feedback",
 };
