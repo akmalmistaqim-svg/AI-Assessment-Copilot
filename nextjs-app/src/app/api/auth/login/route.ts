@@ -57,6 +57,7 @@ export async function POST(request: Request) {
     }
 
     console.log(`[Login API] Returning 200 OK with redirectTo: "${redirectTo}"`);
+    return NextResponse.json(responsePayload, { status: 200 });
   } catch (error) {
     console.error("[Login API] Unexpected server error during login:", error);
     const message =
