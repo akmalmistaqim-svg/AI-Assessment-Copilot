@@ -79,8 +79,32 @@ function LoginFormContent() {
         rawData = await res.json();
       } catch (jsonErr) {
         console.error("[LoginForm] Failed to parse JSON response from /api/auth/login:", jsonErr);
+        if (res.status === 401 || res.status === 302 || res.status === 403) {
+          setAlertType("error");
+          setAlertMessage(
+            "Vercel Deployment Protection aktif. Silakan nonaktifkan 'Vercel Authentication' di menu Settings > Deployment Protection pada Dashboard Vercel.",
+          );
+          setIsLoading(false);
+          return;
+        }
         setAlertType("error");
         setAlertMessage("Respon server tidak valid.");
+        setIsLoading(false);
+        return;
+      }
+
+      if (
+        typeof rawData === "object" &&
+        rawData !== null &&
+        "error" in rawData &&
+        typeof (rawData as Record<string, unknown>).error === "object" &&
+        ((rawData as Record<string, unknown>).error as Record<string, unknown>)?.message ===
+          "Protected deployment"
+      ) {
+        setAlertType("error");
+        setAlertMessage(
+          "Vercel Deployment Protection aktif. Silakan nonaktifkan 'Vercel Authentication' di menu Settings > Deployment Protection pada Dashboard Vercel.",
+        );
         setIsLoading(false);
         return;
       }
