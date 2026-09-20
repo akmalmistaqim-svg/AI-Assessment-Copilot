@@ -1,4 +1,5 @@
 import { CheckCheck } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LogoutButton } from "@/app/dashboard/logout-button";
@@ -87,10 +88,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
             href={`/dashboard/${session.role}`}
             className="flex items-center gap-3 no-underline"
           >
-            <img
+            <Image
               src="/dexa-logo.png"
               alt="DeXa Assessment Logo"
-              className="w-10 h-10 rounded-xl object-contain shadow-xs shrink-0"
+              width={40}
+              height={40}
+              className="rounded-xl object-contain shadow-xs shrink-0"
+              priority
             />
             <div className="flex flex-col">
               <span className="text-base font-bold text-text-primary tracking-tight leading-tight">

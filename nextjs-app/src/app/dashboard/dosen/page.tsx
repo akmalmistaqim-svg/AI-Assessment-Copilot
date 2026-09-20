@@ -20,12 +20,38 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function SectionSkeleton({ height = "h-32" }: { height?: string }) {
+function StatsGridSkeleton() {
   return (
-    <div
-      className={`bg-card-bg rounded-xl border border-border-color p-5 ${height} animate-pulse flex items-center justify-center`}
-    >
-      <div className="h-4 w-32 bg-border-color/50 rounded"></div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="bg-card-bg rounded-xl border border-border-color shadow-sm p-5 animate-pulse">
+          <div className="flex items-center justify-between">
+            <div className="h-4 w-24 bg-border-color/50 rounded"></div>
+            <div className="w-10 h-10 rounded-xl bg-border-color/40"></div>
+          </div>
+          <div className="h-9 w-16 bg-border-color/60 rounded-md mt-3"></div>
+          <div className="h-3 w-32 bg-border-color/40 rounded mt-1.5"></div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ActivitySkeleton() {
+  return (
+    <div className="space-y-4 animate-pulse">
+      <div className="h-6 w-32 bg-border-color/60 rounded"></div>
+      <div className="bg-card-bg rounded-xl border border-border-color p-5 space-y-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex gap-3 items-start">
+            <div className="w-8 h-8 rounded-full bg-border-color/50 shrink-0"></div>
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-full bg-border-color/50 rounded"></div>
+              <div className="h-3 w-20 bg-border-color/40 rounded"></div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -62,7 +88,7 @@ export default async function DosenDashboardPage() {
       />
 
       {/* Summary Stats Cards Server Component */}
-      <Suspense fallback={<SectionSkeleton height="h-28" />}>
+      <Suspense fallback={<StatsGridSkeleton />}>
         <DosenStatsSection />
       </Suspense>
 
@@ -72,7 +98,7 @@ export default async function DosenDashboardPage() {
           <ClassListSection />
         </div>
         <div>
-          <Suspense fallback={<SectionSkeleton height="h-64" />}>
+          <Suspense fallback={<ActivitySkeleton />}>
             <ActivityFeedSection />
           </Suspense>
         </div>
