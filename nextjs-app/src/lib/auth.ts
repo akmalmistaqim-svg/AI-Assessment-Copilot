@@ -1,5 +1,10 @@
 import { cookies } from "next/headers";
-import { decodeSessionPayload, encodeSessionPayload, type SessionPayload } from "@/types/auth";
+import {
+  decodeSessionPayload,
+  encodeSessionPayload,
+  type SessionPayload,
+  toUserId,
+} from "@/types/auth";
 
 // ============================================================
 // Types
@@ -92,7 +97,7 @@ const isSecureCookie =
  */
 export function buildSessionPayload(user: User): SessionPayload {
   return {
-    id: user.id,
+    id: toUserId(user.id),
     name: user.name,
     email: user.email,
     role: user.role,

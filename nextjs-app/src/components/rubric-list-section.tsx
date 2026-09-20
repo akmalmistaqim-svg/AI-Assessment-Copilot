@@ -4,6 +4,7 @@ import { AlertCircle, Edit2, Loader2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { RubricCard } from "@/components/cards/rubric-card";
 import { RubricModal } from "@/components/rubric-modal";
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useDeleteRubricMutation, useRubricsQuery } from "@/hooks/useRubricsQuery";
 import { useUIStore } from "@/store/useUIStore";
@@ -50,14 +51,10 @@ export function RubricListSection() {
               Standar dan kriteria penilaian terstruktur (TanStack Query + API Route)
             </p>
           </div>
-          <button
-            type="button"
-            onClick={handleCreate}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-green hover:bg-dark-green rounded-lg transition shadow-sm hover:shadow active:scale-95 cursor-pointer"
-          >
+          <Button onClick={handleCreate}>
             <Plus className="w-3.5 h-3.5" />
             Tambah Rubrik
-          </button>
+          </Button>
         </div>
 
         {/* Loading State */}

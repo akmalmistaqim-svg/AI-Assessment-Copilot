@@ -1,5 +1,6 @@
 import { FileText, Users } from "lucide-react";
 import type React from "react";
+import { Badge } from "@/components/ui/badge";
 import type { ClassItem } from "@/types/class";
 
 interface ClassCardProps {
@@ -12,9 +13,9 @@ export function ClassCard({ cls, actions }: ClassCardProps) {
     <div className="bg-card-bg rounded-xl border border-border-color p-5 hover:border-primary-green/40 hover:shadow-md transition group relative">
       <div className="flex items-start justify-between">
         <div>
-          <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-light-green text-dark-green mb-2">
+          <Badge variant={cls.status === "active" ? "success" : "secondary"} className="mb-2">
             {cls.status === "active" ? "Aktif" : "Arsip"}
-          </span>
+          </Badge>
           <h3 className="font-bold text-text-primary text-base group-hover:text-primary-green transition">
             {cls.name}
           </h3>

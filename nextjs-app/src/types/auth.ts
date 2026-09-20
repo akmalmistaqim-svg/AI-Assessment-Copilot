@@ -28,11 +28,24 @@ export const LoginResponseSchema = z.object({
 export type LoginResponse = z.infer<typeof LoginResponseSchema>;
 
 // ============================================================
+// Branded Types
+// ============================================================
+
+declare const __brand: unique symbol;
+export type Brand<K, T> = K & { readonly [__brand]: T };
+
+export type UserId = Brand<number, "UserId">;
+
+export function toUserId(id: number): UserId {
+  return id as UserId;
+}
+
+// ============================================================
 // Session Types & Decoder
 // ============================================================
 
 export interface SessionPayload {
-  id: number;
+  id: UserId;
   name: string;
   email: string;
   role: "dosen" | "mahasiswa";
@@ -74,7 +87,7 @@ export function decodeSessionPayload(cookieValue: string): SessionPayload | null
       const obj = parsed as Record<string, unknown>;
       if (obj.role === "dosen" || obj.role === "mahasiswa") {
         return {
-          id: Number(obj.id),
+          id: toUserId(Number(obj.id)),
           name: String(obj.name ?? ""),
           email: String(obj.email ?? ""),
           role: obj.role as "dosen" | "mahasiswa",

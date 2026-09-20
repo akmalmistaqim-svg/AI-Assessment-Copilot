@@ -4,6 +4,7 @@ import { AlertCircle, Edit2, Loader2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { ClassCard } from "@/components/cards/class-card";
 import { ClassModal } from "@/components/class-modal";
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useClassesQuery, useDeleteClassMutation } from "@/hooks/useClassesQuery";
 import { useUIStore } from "@/store/useUIStore";
@@ -45,19 +46,15 @@ export function ClassListSection() {
         {/* Section Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-text-primary">Kelas Anda</h2>
+            <h2 className="text-lg font-bold text-text-primary">Daftar Kelas</h2>
             <p className="text-xs text-text-secondary mt-0.5">
               Daftar mata kuliah yang diampu (TanStack Query + API Route)
             </p>
           </div>
-          <button
-            type="button"
-            onClick={handleCreate}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-green hover:bg-dark-green rounded-lg transition shadow-sm hover:shadow active:scale-95 cursor-pointer"
-          >
+          <Button onClick={handleCreate}>
             <Plus className="w-3.5 h-3.5" />
             Tambah Kelas
-          </button>
+          </Button>
         </div>
 
         {/* Loading State */}

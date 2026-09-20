@@ -1,5 +1,6 @@
 import { ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import type { AssignmentItem } from "@/types/assignment";
 
 interface MahasiswaAssignmentCardProps {
@@ -10,23 +11,11 @@ export function MahasiswaAssignmentCard({ assignment }: MahasiswaAssignmentCardP
   const getStatusBadge = (status: AssignmentItem["status"]) => {
     switch (status) {
       case "submitted":
-        return (
-          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-            Terkumpul
-          </span>
-        );
+        return <Badge variant="info">Terkumpul</Badge>;
       case "graded":
-        return (
-          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-light-green text-dark-green border border-emerald-200">
-            Dinilai
-          </span>
-        );
+        return <Badge variant="success">Dinilai</Badge>;
       default:
-        return (
-          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-            Belum Dikumpul
-          </span>
-        );
+        return <Badge variant="warning">Belum Dikumpul</Badge>;
     }
   };
 
