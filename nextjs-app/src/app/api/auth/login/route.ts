@@ -57,12 +57,12 @@ export async function POST(request: Request) {
     }
 
     console.log(`[Login API] Returning 200 OK with redirectTo: "${redirectTo}"`);
-    return NextResponse.json(responsePayload, { status: 200 });
   } catch (error) {
     console.error("[Login API] Unexpected server error during login:", error);
-    return NextResponse.json(
-      { success: false, message: "Terjadi kesalahan server." },
-      { status: 500 },
-    );
+    const message =
+      error instanceof Error && error.message.includes("SESSION_SECRET")
+        ? "Konfigurasi server belum lengkap: SESSION_SECRET belum diatur di Environment Variables Vercel."
+        : "Terjadi kesalahan server.";
+    return NextResponse.json({ success: false, message }, { status: 500 });
   }
 }
