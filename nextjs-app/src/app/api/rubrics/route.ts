@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { requireDosenRole } from "@/lib/auth-guard";
+import { requireAuthUser, requireDosenRole } from "@/lib/auth-guard";
 import { addRubricToStore, getRubricsStore } from "@/lib/rubricStore";
 import { CreateRubricInputSchema, type RubricItem, RubricSchema } from "@/types/rubric";
 
 // GET /api/rubrics
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { errorResponse } = await requireAuthUser(request);
+    if (errorResponse) return errorResponse;
+
     const rawRubrics = getRubricsStore();
     const validatedRubrics = z.array(RubricSchema).parse(rawRubrics);
     return NextResponse.json(validatedRubrics);

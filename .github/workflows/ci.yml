@@ -15,6 +15,9 @@ jobs:
       run:
         working-directory: nextjs-app
 
+    env:
+      SESSION_SECRET: ${{ secrets.SESSION_SECRET || 'ci-build-hmac-secret-key-32-characters-minimum' }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     const { email, password } = validation.data;
     console.log(`[Login API] Processing login attempt for: "${email}"`);
 
-    const user = authenticateUser(email, password);
+    const user = await authenticateUser(email, password);
 
     if (!user) {
       console.warn(`[Login API] Authentication failed for email: "${email}" (Invalid credentials)`);

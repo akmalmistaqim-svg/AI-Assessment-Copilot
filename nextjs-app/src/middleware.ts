@@ -1,12 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { decodeSessionPayload } from "@/types/auth";
+import { verifySessionToken } from "@/types/auth";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = request.cookies.get("session")?.value;
 
-  const session = sessionCookie ? decodeSessionPayload(sessionCookie) : null;
+  const session = sessionCookie ? await verifySessionToken(sessionCookie) : null;
 
   const isDashboardPath = pathname.startsWith("/dashboard");
   const isAuthPath = pathname === "/login" || pathname === "/register";

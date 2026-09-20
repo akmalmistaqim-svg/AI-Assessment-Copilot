@@ -1,9 +1,10 @@
+import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import {
-  decodeSessionPayload,
-  encodeSessionPayload,
   type SessionPayload,
+  signSessionPayload,
   toUserId,
+  verifySessionToken,
 } from "@/types/auth";
 
 // ============================================================
@@ -21,22 +22,25 @@ export interface User {
 }
 
 // ============================================================
-// In-Memory User Store (replaced by DB in production)
+// In-Memory User Store (with bcrypt hashed passwords)
 // ============================================================
+
+// Hash of "password123" with bcrypt salt rounds 10
+const DEMO_PASSWORD_HASH = "$2b$10$Gc4JSVHQmoZfSQuY1YZ7MevgB5yCwyGbRO2gilVjID2ahhj4uQnjC";
 
 const users: User[] = [
   {
     id: 1,
     name: "Dr. Budi Santoso, M.Kom",
     email: "dosen@example.com",
-    password: "password123",
+    password: DEMO_PASSWORD_HASH,
     role: "dosen",
   },
   {
     id: 2,
     name: "Andi Pratama",
     email: "mahasiswa@example.com",
-    password: "password123",
+    password: DEMO_PASSWORD_HASH,
     role: "mahasiswa",
   },
 ];
@@ -51,30 +55,35 @@ export function findUserByEmail(email: string): User | undefined {
 }
 
 /**
- * Authenticate user by email + password.
+ * Authenticate user by email + password using bcrypt.compare.
  * Returns user if match, otherwise undefined.
  */
-export function authenticateUser(email: string, password: string): User | undefined {
-  return users.find(
-    (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password,
-  );
+export async function authenticateUser(email: string, password: string): Promise<User | undefined> {
+  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  if (!user) return undefined;
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return undefined;
+
+  return user;
 }
 
 /**
- * Add a new user to the in-memory store.
+ * Add a new user with bcrypt-hashed password.
  * Returns the newly created user.
  */
-export function addUser(
+export async function addUser(
   name: string,
   email: string,
   password: string,
   role: "dosen" | "mahasiswa",
-): User {
+): Promise<User> {
+  const hashedPassword = await bcrypt.hash(password, 10);
   const newUser: User = {
     id: nextId++,
     name,
     email,
-    password,
+    password: hashedPassword,
     role,
   };
   users.push(newUser);
@@ -82,13 +91,11 @@ export function addUser(
 }
 
 // ============================================================
-// Cookie Session Helpers
+// Cookie Session Helpers (HMAC-SHA256 Signed)
 // ============================================================
 
 export const SESSION_COOKIE = "session";
 
-// Secure cookie should only be enabled in production environments that are served over HTTPS.
-// Never use secure: true in development or http://localhost.
 const isSecureCookie =
   process.env.NODE_ENV === "production" && process.env.COOKIE_INSECURE !== "true";
 
@@ -105,15 +112,14 @@ export function buildSessionPayload(user: User): SessionPayload {
 }
 
 /**
- * Set session cookie on the response (via Next.js cookies() API).
- * Must be called from a Route Handler or Server Action.
+ * Set session cookie on the response (via Next.js cookies() API) using HMAC-SHA256 signed token.
  */
 export async function createSession(user: User): Promise<void> {
   const payload = buildSessionPayload(user);
-  const encoded = encodeSessionPayload(payload);
+  const signedToken = await signSessionPayload(payload);
 
   const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE, encoded, {
+  cookieStore.set(SESSION_COOKIE, signedToken, {
     httpOnly: true,
     secure: isSecureCookie,
     sameSite: "lax",
@@ -123,13 +129,13 @@ export async function createSession(user: User): Promise<void> {
 }
 
 /**
- * Read session from the cookie. Returns null if not present or invalid.
+ * Read and verify HMAC session token from the cookie. Returns null if not present or invalid.
  */
 export async function getSession(): Promise<SessionPayload | null> {
   const cookieStore = await cookies();
   const cookie = cookieStore.get(SESSION_COOKIE);
   if (!cookie?.value) return null;
-  return decodeSessionPayload(cookie.value);
+  return await verifySessionToken(cookie.value);
 }
 
 /**

@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { SESSION_COOKIE } from "@/lib/auth";
-import { decodeSessionPayload, type SessionPayload } from "@/types/auth";
+import { type SessionPayload, verifySessionToken } from "@/types/auth";
 
 /**
  * Extracts and validates the session payload from the HTTP Request cookie header,
@@ -19,7 +19,7 @@ export async function getSessionFromRequest(request?: Request): Promise<SessionP
 
       if (match) {
         const rawValue = match.substring(SESSION_COOKIE.length + 1);
-        const decoded = decodeSessionPayload(decodeURIComponent(rawValue));
+        const decoded = await verifySessionToken(decodeURIComponent(rawValue));
         if (decoded) return decoded;
       }
     }
@@ -30,7 +30,7 @@ export async function getSessionFromRequest(request?: Request): Promise<SessionP
     const cookieStore = await cookies();
     const cookie = cookieStore.get(SESSION_COOKIE);
     if (cookie?.value) {
-      return decodeSessionPayload(cookie.value);
+      return await verifySessionToken(cookie.value);
     }
   } catch {
     // cookies() can only be called in Server Components or Route Handlers

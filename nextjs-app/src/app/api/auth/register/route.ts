@@ -1,50 +1,26 @@
 import { NextResponse } from "next/server";
 import { addUser, findUserByEmail } from "@/lib/auth";
-
-interface RegisterRequestBody {
-  name?: string;
-  email?: string;
-  password?: string;
-  role?: string;
-}
+import { RegisterRequestSchema } from "@/types/auth";
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as RegisterRequestBody;
-    const { name, email, password, role } = body;
-
-    // Validate required fields
-    if (!name || !email || !password || !role) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
       return NextResponse.json(
-        { success: false, message: "Semua field wajib diisi." },
+        { success: false, message: "Format request tidak valid (JSON corrupt)." },
         { status: 400 },
       );
     }
 
-    // Validate role
-    if (role !== "dosen" && role !== "mahasiswa") {
-      return NextResponse.json(
-        { success: false, message: "Role harus 'dosen' atau 'mahasiswa'." },
-        { status: 400 },
-      );
+    const validation = RegisterRequestSchema.safeParse(body);
+    if (!validation.success) {
+      const firstError = validation.error.issues[0]?.message ?? "Input tidak valid.";
+      return NextResponse.json({ success: false, message: firstError }, { status: 400 });
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { success: false, message: "Format email tidak valid." },
-        { status: 400 },
-      );
-    }
-
-    // Validate password length
-    if (password.length < 8) {
-      return NextResponse.json(
-        { success: false, message: "Password minimal 8 karakter." },
-        { status: 400 },
-      );
-    }
+    const { name, email, password, role } = validation.data;
 
     // Check for duplicate email
     const existing = findUserByEmail(email);
@@ -55,8 +31,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Add user to in-memory store (no auto-login)
-    addUser(name, email, password, role);
+    // Add user to in-memory store with bcrypt hashed password
+    await addUser(name, email, password, role);
 
     return NextResponse.json({
       success: true,

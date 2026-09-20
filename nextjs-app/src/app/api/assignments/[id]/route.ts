@@ -5,12 +5,15 @@ import {
   getAssignmentByIdFromStore,
   updateAssignmentInStore,
 } from "@/lib/assignmentStore";
-import { requireDosenRole } from "@/lib/auth-guard";
+import { requireAuthUser, requireDosenRole } from "@/lib/auth-guard";
 import { AssignmentSchema, UpdateAssignmentInputSchema } from "@/types/assignment";
 
 // GET /api/assignments/[id]
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { errorResponse } = await requireAuthUser(request);
+    if (errorResponse) return errorResponse;
+
     const { id } = await params;
     const assignment = getAssignmentByIdFromStore(id);
 

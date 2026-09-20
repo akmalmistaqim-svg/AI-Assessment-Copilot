@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { addAssessmentToStore, getAssessmentsStore } from "@/lib/assessmentStore";
-import { requireDosenRole } from "@/lib/auth-guard";
+import { requireAuthUser, requireDosenRole } from "@/lib/auth-guard";
 import {
   type AssessmentItem,
   AssessmentSchema,
@@ -9,8 +9,11 @@ import {
 } from "@/types/assessment";
 
 // GET /api/assessments
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { errorResponse } = await requireAuthUser(request);
+    if (errorResponse) return errorResponse;
+
     const rawAssessments = getAssessmentsStore();
     const validatedAssessments = z.array(AssessmentSchema).parse(rawAssessments);
     return NextResponse.json(validatedAssessments);
